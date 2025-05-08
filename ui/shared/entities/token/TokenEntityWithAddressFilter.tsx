@@ -11,7 +11,7 @@ interface Props extends TokenEntity.EntityProps {
 
 const TokenEntityWithAddressFilter = (props: Props) => {
   const defaultHref = route({
-    pathname: '/address/[hash]',
+    pathname: '/address/',
     query: {
       ...props.query,
       hash: props.addressHash,
@@ -21,9 +21,7 @@ const TokenEntityWithAddressFilter = (props: Props) => {
     },
   });
 
-  return (
-    <TokenEntity.default { ...props } href={ props.href ?? defaultHref }/>
-  );
+  return <TokenEntity.default { ...props } href={ props.href ?? defaultHref }/>;
 };
 
 export default chakra(TokenEntityWithAddressFilter);

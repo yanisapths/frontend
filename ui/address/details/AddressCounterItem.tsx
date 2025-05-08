@@ -24,8 +24,13 @@ const PROP_TO_TAB = {
   validations_count: 'blocks_validated',
 };
 
-const AddressCounterItem = ({ prop, query, address, isAddressQueryLoading, isDegradedData }: Props) => {
-
+const AddressCounterItem = ({
+  prop,
+  query,
+  address,
+  isAddressQueryLoading,
+  isDegradedData,
+}: Props) => {
   const handleClick = React.useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -56,7 +61,10 @@ const AddressCounterItem = ({ prop, query, address, isAddressQueryLoading, isDeg
 
       return (
         <LinkInternal
-          href={ route({ pathname: '/address/[hash]', query: { hash: address, tab: PROP_TO_TAB[prop] } }) }
+          href={ route({
+            pathname: '/address/',
+            query: { hash: address, tab: PROP_TO_TAB[prop] },
+          }) }
           scroll={ false }
           onClick={ handleClick }
         >

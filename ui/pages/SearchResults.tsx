@@ -1,4 +1,13 @@
-import { Box, chakra, Table, Tbody, Tr, Th, Show, Hide } from '@chakra-ui/react';
+import {
+  Box,
+  chakra,
+  Table,
+  Tbody,
+  Tr,
+  Th,
+  Show,
+  Hide,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import type { FormEvent } from 'react';
 import React from 'react';
@@ -33,8 +42,15 @@ import useSearchQuery from 'ui/snippets/searchBar/useSearchQuery';
 
 const SearchResultsPageContent = () => {
   const router = useRouter();
-  const withRedirectCheck = getQueryParamString(router.query.redirect) === 'true';
-  const { query, redirectCheckQuery, searchTerm, debouncedSearchTerm, handleSearchTermChange } = useSearchQuery(withRedirectCheck);
+  const withRedirectCheck =
+    getQueryParamString(router.query.redirect) === 'true';
+  const {
+    query,
+    redirectCheckQuery,
+    searchTerm,
+    debouncedSearchTerm,
+    handleSearchTermChange,
+  } = useSearchQuery(withRedirectCheck);
   const { data, isError, isPlaceholderData, pagination } = query;
   const [ showContent, setShowContent ] = React.useState(!withRedirectCheck);
 
@@ -51,30 +67,48 @@ const SearchResultsPageContent = () => {
       return;
     }
 
-    if (redirectCheckQuery.data?.redirect && redirectCheckQuery.data.parameter) {
+    if (
+      redirectCheckQuery.data?.redirect &&
+      redirectCheckQuery.data.parameter
+    ) {
       switch (redirectCheckQuery.data.type) {
         case 'block': {
-          router.replace({ pathname: '/block/[height_or_hash]', query: { height_or_hash: redirectCheckQuery.data.parameter } });
+          router.replace({
+            pathname: '/block/[height_or_hash]',
+            query: { height_or_hash: redirectCheckQuery.data.parameter },
+          });
           return;
         }
         case 'address': {
-          router.replace({ pathname: '/address/[hash]', query: { hash: redirectCheckQuery.data.parameter } });
+          router.replace({
+            pathname: '/address/',
+            query: { hash: redirectCheckQuery.data.parameter },
+          });
           return;
         }
         case 'transaction': {
-          router.replace({ pathname: '/tx/[hash]', query: { hash: redirectCheckQuery.data.parameter } });
+          router.replace({
+            pathname: '/tx/[hash]',
+            query: { hash: redirectCheckQuery.data.parameter },
+          });
           return;
         }
         case 'user_operation': {
           if (config.features.userOps.isEnabled) {
-            router.replace({ pathname: '/op/[hash]', query: { hash: redirectCheckQuery.data.parameter } });
+            router.replace({
+              pathname: '/op/[hash]',
+              query: { hash: redirectCheckQuery.data.parameter },
+            });
             return;
           }
           break;
         }
         case 'blob': {
           if (config.features.dataAvailability.isEnabled) {
-            router.replace({ pathname: '/blobs/[hash]', query: { hash: redirectCheckQuery.data.parameter } });
+            router.replace({
+              pathname: '/blobs/[hash]',
+              query: { hash: redirectCheckQuery.data.parameter },
+            });
             return;
           }
           break;
@@ -88,50 +122,77 @@ const SearchResultsPageContent = () => {
     }
   }, [ redirectCheckQuery, router, debouncedSearchTerm, showContent ]);
 
-  const handleSubmit = React.useCallback((event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  }, [ ]);
+  const handleSubmit = React.useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+    },
+    [],
+  );
 
   const isLoading = marketplaceApps.isPlaceholderData || isPlaceholderData;
 
-  const displayedItems: Array<SearchResultItem | SearchResultAppItem> = React.useMemo(() => {
-    const apiData = (data?.items || []).filter((item) => {
-      if (!SEARCH_RESULT_TYPES[item.type]) {
-        return false;
-      }
-      if (!config.features.userOps.isEnabled && item.type === 'user_operation') {
-        return false;
-      }
-      if (!config.features.dataAvailability.isEnabled && item.type === 'blob') {
-        return false;
-      }
-      if (!config.features.nameService.isEnabled && item.type === 'ens_domain') {
-        return false;
-      }
-      return true;
-    });
+  const displayedItems: Array<SearchResultItem | SearchResultAppItem> =
+    React.useMemo(() => {
+      const apiData = (data?.items || []).filter((item) => {
+        if (!SEARCH_RESULT_TYPES[item.type]) {
+          return false;
+        }
+        if (
+          !config.features.userOps.isEnabled &&
+          item.type === 'user_operation'
+        ) {
+          return false;
+        }
+        if (
+          !config.features.dataAvailability.isEnabled &&
+          item.type === 'blob'
+        ) {
+          return false;
+        }
+        if (
+          !config.features.nameService.isEnabled &&
+          item.type === 'ens_domain'
+        ) {
+          return false;
+        }
+        return true;
+      });
 
-    const futureBlockItem = !isPlaceholderData &&
-      pagination.page === 1 &&
-      !data?.next_page_params &&
-      apiData.length > 0 &&
-      !apiData.some(({ type }) => type === 'block') &&
-      regexp.BLOCK_HEIGHT.test(debouncedSearchTerm) ?
-      {
-        type: 'block' as const,
-        block_type: 'block' as const,
-        block_number: debouncedSearchTerm,
-        block_hash: '',
-        timestamp: undefined,
-      } : undefined;
+      const futureBlockItem =
+        !isPlaceholderData &&
+        pagination.page === 1 &&
+        !data?.next_page_params &&
+        apiData.length > 0 &&
+        !apiData.some(({ type }) => type === 'block') &&
+        regexp.BLOCK_HEIGHT.test(debouncedSearchTerm) ?
+          {
+            type: 'block' as const,
+            block_type: 'block' as const,
+            block_number: debouncedSearchTerm,
+            block_hash: '',
+            timestamp: undefined,
+          } :
+          undefined;
 
-    return [
-      ...(pagination.page === 1 && !isLoading ? marketplaceApps.displayedApps.map((item) => ({ type: 'app' as const, app: item })) : []),
-      futureBlockItem,
-      ...apiData,
-    ].filter(Boolean);
-
-  }, [ data?.items, data?.next_page_params, isPlaceholderData, pagination.page, debouncedSearchTerm, marketplaceApps.displayedApps, isLoading ]);
+      return [
+        ...(pagination.page === 1 && !isLoading ?
+          marketplaceApps.displayedApps.map((item) => ({
+            type: 'app' as const,
+            app: item,
+          })) :
+          []),
+        futureBlockItem,
+        ...apiData,
+      ].filter(Boolean);
+    }, [
+      data?.items,
+      data?.next_page_params,
+      isPlaceholderData,
+      pagination.page,
+      debouncedSearchTerm,
+      marketplaceApps.displayedApps,
+      isLoading,
+    ]);
 
   const content = (() => {
     if (isError) {
@@ -187,26 +248,45 @@ const SearchResultsPageContent = () => {
       return null;
     }
 
-    const resultsCount = pagination.page === 1 && !data?.next_page_params ? displayedItems.length : '50+';
+    const resultsCount =
+      pagination.page === 1 && !data?.next_page_params ?
+        displayedItems.length :
+        '50+';
 
-    const text = isLoading && pagination.page === 1 ? (
-      <Skeleton h={ 6 } w="280px" borderRadius="full" mb={ pagination.isVisible ? 0 : 6 }/>
-    ) : (
-      (
+    const text =
+      isLoading && pagination.page === 1 ? (
+        <Skeleton
+          h={ 6 }
+          w="280px"
+          borderRadius="full"
+          mb={ pagination.isVisible ? 0 : 6 }
+        />
+      ) : (
         <>
           <Box mb={ pagination.isVisible ? 0 : 6 } lineHeight="32px">
             <span>Found </span>
-            <chakra.span fontWeight={ 700 }>
-              { resultsCount }
-            </chakra.span>
-            <span> matching result{ (((displayedItems.length || 0) + marketplaceApps.displayedApps.length) > 1) || pagination.page > 1 ? 's' : '' } for </span>
+            <chakra.span fontWeight={ 700 }>{ resultsCount }</chakra.span>
+            <span>
+              { ' ' }
+              matching result
+              { (displayedItems.length || 0) +
+                marketplaceApps.displayedApps.length >
+                1 || pagination.page > 1 ?
+                's' :
+                '' }{ ' ' }
+              for{ ' ' }
+            </span>
             “<chakra.span fontWeight={ 700 }>{ debouncedSearchTerm }</chakra.span>”
           </Box>
-          { resultsCount === 0 && regexp.BLOCK_HEIGHT.test(debouncedSearchTerm) &&
-            <SearchBarSuggestBlockCountdown blockHeight={ debouncedSearchTerm } mt={ -4 }/> }
+          { resultsCount === 0 &&
+            regexp.BLOCK_HEIGHT.test(debouncedSearchTerm) && (
+            <SearchBarSuggestBlockCountdown
+              blockHeight={ debouncedSearchTerm }
+              mt={ -4 }
+            />
+          ) }
         </>
-      )
-    );
+      );
 
     if (!pagination.isVisible) {
       return text;
@@ -233,7 +313,9 @@ const SearchResultsPageContent = () => {
     );
   }, [ handleSearchTermChange, handleSubmit, searchTerm ]);
 
-  const pageContent = !showContent ? <ContentLoader/> : (
+  const pageContent = !showContent ? (
+    <ContentLoader/>
+  ) : (
     <>
       <PageTitle title="Search results"/>
       { bar }
@@ -250,9 +332,7 @@ const SearchResultsPageContent = () => {
           <HeaderAlert/>
           <HeaderDesktop renderSearchBar={ renderSearchBar }/>
           <AppErrorBoundary>
-            <Layout.Content flexGrow={ 0 }>
-              { pageContent }
-            </Layout.Content>
+            <Layout.Content flexGrow={ 0 }>{ pageContent }</Layout.Content>
           </AppErrorBoundary>
         </Layout.MainColumn>
       </Layout.MainArea>

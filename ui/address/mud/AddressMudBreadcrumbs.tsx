@@ -40,21 +40,32 @@ const BreadcrumbItem = ({ text, href, isLast }: BreadcrumbItemProps) => {
 
   if (isLast) {
     return (
-      <Grid gap={ 2 } overflow="hidden" templateColumns="auto 24px" alignItems="center">
-        <Box
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-        >
+      <Grid
+        gap={ 2 }
+        overflow="hidden"
+        templateColumns="auto 24px"
+        alignItems="center"
+      >
+        <Box overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
           { text }
         </Box>
-        <CopyToClipboard text={ currentUrl } type="link" mx={ 0 } color="text_secondary"/>
+        <CopyToClipboard
+          text={ currentUrl }
+          type="link"
+          mx={ 0 }
+          color="text_secondary"
+        />
       </Grid>
     );
   }
 
   return (
-    <Grid gap={ 2 } overflow="hidden" templateColumns="auto 24px" alignItems="center">
+    <Grid
+      gap={ 2 }
+      overflow="hidden"
+      templateColumns="auto 24px"
+      alignItems="center"
+    >
       <LinkInternal
         href={ href }
         onClick={ onLinkClick }
@@ -86,22 +97,35 @@ const AddressMudBreadcrumbs = (props: TableViewProps | RecordViewProps) => {
       width="fit-content"
       fontSize="sm"
     >
-      <IconSvg name="MUD" boxSize={ 5 } color={ addressQuery.data?.is_verified ? 'green.500' : 'text_secondary' }/>
+      <IconSvg
+        name="MUD"
+        boxSize={ 5 }
+        color={ addressQuery.data?.is_verified ? 'green.500' : 'text_secondary' }
+      />
       <BreadcrumbItem
         text="MUD World"
-        href={ route({ pathname: '/address/[hash]', query: queryParams }) }
+        href={ route({ pathname: '/address/', query: queryParams }) }
       />
       <BreadcrumbItem
         text={ props.tableName }
-        href={ route({ pathname: '/address/[hash]', query: { ...queryParams, table_id: props.tableId } }) }
+        href={ route({
+          pathname: '/address/',
+          query: { ...queryParams, table_id: props.tableId },
+        }) }
         isLast={ !('recordId' in props) }
       />
-      { ('recordId' in props) && (
+      { 'recordId' in props && (
         <BreadcrumbItem
           text={ props.recordName }
-          href={ route({ pathname: '/address/[hash]', query: { ...queryParams, table_id: props.tableId, record_id: props.recordId } }) }
+          href={ route({
+            pathname: '/address/',
+            query: {
+              ...queryParams,
+              table_id: props.tableId,
+              record_id: props.recordId,
+            },
+          }) }
           isLast
-
         />
       ) }
     </Box>

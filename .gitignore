@@ -39,6 +39,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env*.local
 /configs/envs/.env.secrets
 /configs/envs/.samples
@@ -60,3 +61,4 @@ yarn-error.log*
 
 # build outputs
 /tools/preset-sync/index.js
+

@@ -1,4 +1,15 @@
-import { Divider, Text, useBoolean, Flex, Link, VStack, chakra, Box, Grid, GridItem } from '@chakra-ui/react';
+import {
+  Divider,
+  Text,
+  useBoolean,
+  Flex,
+  Link,
+  VStack,
+  chakra,
+  Box,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -20,30 +31,41 @@ type Props = {
   hash: string;
 };
 
-const AddressMudTablesListItem = ({ item, isLoading, scrollRef, hash }: Props) => {
+const AddressMudTablesListItem = ({
+  item,
+  isLoading,
+  scrollRef,
+  hash,
+}: Props) => {
   const [ isOpened, setIsOpened ] = useBoolean(false);
 
   const router = useRouter();
 
-  const onTableClick = React.useCallback((e: React.MouseEvent) => {
-    if (e.metaKey || e.ctrlKey) {
-      // Allow opening in a new tab/window with right-click or ctrl/cmd+click
-      return;
-    }
+  const onTableClick = React.useCallback(
+    (e: React.MouseEvent) => {
+      if (e.metaKey || e.ctrlKey) {
+        // Allow opening in a new tab/window with right-click or ctrl/cmd+click
+        return;
+      }
 
-    e.preventDefault();
+      e.preventDefault();
 
-    const tableId = e.currentTarget.getAttribute('data-id');
-    if (tableId) {
-      router.push(
-        { pathname: '/address/[hash]', query: { hash, tab: 'mud', table_id: tableId } },
-        undefined,
-        { shallow: true },
-      );
-    }
+      const tableId = e.currentTarget.getAttribute('data-id');
+      if (tableId) {
+        router.push(
+          {
+            pathname: '/address/',
+            query: { hash, tab: 'mud', table_id: tableId },
+          },
+          undefined,
+          { shallow: true },
+        );
+      }
 
-    scrollRef?.current?.scrollIntoView();
-  }, [ router, scrollRef, hash ]);
+      scrollRef?.current?.scrollIntoView();
+    },
+    [ router, scrollRef, hash ],
+  );
 
   return (
     <ListItemMobile rowGap={ 3 } fontSize="sm" py={ 3 }>
@@ -62,13 +84,21 @@ const AddressMudTablesListItem = ({ item, isLoading, scrollRef, hash }: Props) =
           </Link>
         </Skeleton>
         <Box flexGrow="1">
-          <Flex justifyContent="space-between" height={ 6 } alignItems="center" mb={ 3 }>
+          <Flex
+            justifyContent="space-between"
+            height={ 6 }
+            alignItems="center"
+            mb={ 3 }
+          >
             <Skeleton isLoaded={ !isLoading }>
               <LinkInternal
                 onClick={ onTableClick }
                 data-id={ item.table.table_id }
                 fontWeight={ 500 }
-                href={ route({ pathname: '/address/[hash]', query: { hash, tab: 'mud', table_id: item.table.table_id } }) }
+                href={ route({
+                  pathname: '/address/',
+                  query: { hash, tab: 'mud', table_id: item.table.table_id },
+                }) }
               >
                 { item.table.table_full_name }
               </LinkInternal>
@@ -84,25 +114,38 @@ const AddressMudTablesListItem = ({ item, isLoading, scrollRef, hash }: Props) =
       </Flex>
 
       { isOpened && (
-        <Grid templateColumns="48px 1fr" gap="8px 24px" fontWeight={ 500 } w="100%">
+        <Grid
+          templateColumns="48px 1fr"
+          gap="8px 24px"
+          fontWeight={ 500 }
+          w="100%"
+        >
           { Boolean(item.schema.key_names.length) && (
             <>
               <Text lineHeight="24px">Key</Text>
               <VStack gap={ 1 } alignItems="start">
                 { item.schema.key_names.map((name, index) => (
                   <Tag key={ name }>
-                    <chakra.span fontWeight={ 700 }>{ item.schema.key_types[index] }</chakra.span> { name }
+                    <chakra.span fontWeight={ 700 }>
+                      { item.schema.key_types[index] }
+                    </chakra.span>{ ' ' }
+                    { name }
                   </Tag>
                 )) }
               </VStack>
             </>
           ) }
-          <GridItem colSpan={ 2 }><Divider/></GridItem>
+          <GridItem colSpan={ 2 }>
+            <Divider/>
+          </GridItem>
           <Text lineHeight="24px">Value</Text>
           <VStack gap={ 1 } alignItems="start">
             { item.schema.value_names.map((name, index) => (
               <Text key={ name }>
-                <chakra.span fontWeight={ 700 }>{ item.schema.value_types[index] }</chakra.span> { name }
+                <chakra.span fontWeight={ 700 }>
+                  { item.schema.value_types[index] }
+                </chakra.span>{ ' ' }
+                { name }
               </Text>
             )) }
           </VStack>

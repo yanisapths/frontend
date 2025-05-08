@@ -20,7 +20,9 @@ const ContractVerificationForAddress = () => {
   const router = useRouter();
 
   const hash = getQueryParamString(router.query.hash);
-  const method = getQueryParamString(router.query.method) as SmartContractVerificationMethod;
+  const method = getQueryParamString(
+    router.query.method,
+  ) as SmartContractVerificationMethod;
 
   const contractQuery = useApiQuery('contract', {
     pathParams: { hash },
@@ -35,17 +37,27 @@ const ContractVerificationForAddress = () => {
 
   React.useEffect(() => {
     if (method && hash) {
-      router.replace({ pathname: '/address/[hash]/contract-verification', query: { hash } }, undefined, { scroll: false, shallow: true });
+      router.replace(
+        { pathname: '/address//contract-verification', query: { hash } },
+        undefined,
+        { scroll: false, shallow: true },
+      );
     }
-  // onMount only
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ ]);
+    // onMount only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const isVerifiedContract = contractQuery.data?.is_verified && !contractQuery.data.is_partially_verified;
+  const isVerifiedContract =
+    contractQuery.data?.is_verified &&
+    !contractQuery.data.is_partially_verified;
 
   React.useEffect(() => {
     if (isVerifiedContract) {
-      router.push({ pathname: '/address/[hash]', query: { hash, tab: 'contract' } }, undefined, { scroll: false, shallow: true });
+      router.push(
+        { pathname: '/address/', query: { hash, tab: 'contract' } },
+        undefined,
+        { scroll: false, shallow: true },
+      );
     }
   }, [ hash, isVerifiedContract, router ]);
 
@@ -54,13 +66,21 @@ const ContractVerificationForAddress = () => {
       return <DataFetchAlert/>;
     }
 
-    if (configQuery.isPending || contractQuery.isPending || isVerifiedContract) {
+    if (
+      configQuery.isPending ||
+      contractQuery.isPending ||
+      isVerifiedContract
+    ) {
       return <ContentLoader/>;
     }
 
     return (
       <ContractVerificationForm
-        method={ method && configQuery.data.verification_options.includes(method) ? method as SmartContractVerificationMethodApi : undefined }
+        method={
+          method && configQuery.data.verification_options.includes(method) ?
+            (method as SmartContractVerificationMethodApi) :
+            undefined
+        }
         config={ configQuery.data }
         hash={ hash }
       />
@@ -68,7 +88,8 @@ const ContractVerificationForAddress = () => {
   })();
 
   const backLink = React.useMemo(() => {
-    const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/address');
+    const hasGoBackLink =
+      appProps.referrer && appProps.referrer.includes('/address');
 
     if (!hasGoBackLink) {
       return;
@@ -82,10 +103,7 @@ const ContractVerificationForAddress = () => {
 
   return (
     <>
-      <PageTitle
-        title="New smart contract verification"
-        backLink={ backLink }
-      />
+      <PageTitle title="New smart contract verification" backLink={ backLink }/>
       <AddressEntity
         address={{ hash, is_contract: true }}
         noLink

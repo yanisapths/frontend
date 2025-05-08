@@ -21,17 +21,28 @@ interface Props {
   sourceAddress?: string;
 }
 
-const ContractAbi = ({ abi, addressHash, sourceAddress, tab, visibleItems }: Props) => {
-  const [ expandedSections, setExpandedSections ] = React.useState<Array<number>>(abi.length === 1 ? [ 0 ] : []);
+const ContractAbi = ({
+  abi,
+  addressHash,
+  sourceAddress,
+  tab,
+  visibleItems,
+}: Props) => {
+  const [ expandedSections, setExpandedSections ] = React.useState<Array<number>>(
+    abi.length === 1 ? [ 0 ] : [],
+  );
   const [ id, setId ] = React.useState(0);
 
   useScrollToMethod(abi, setExpandedSections);
 
   const handleFormSubmit = useFormSubmit({ addressHash });
 
-  const handleAccordionStateChange = React.useCallback((newValue: Array<number>) => {
-    setExpandedSections(newValue);
-  }, []);
+  const handleAccordionStateChange = React.useCallback(
+    (newValue: Array<number>) => {
+      setExpandedSections(newValue);
+    },
+    [],
+  );
 
   const handleExpandAll = React.useCallback(() => {
     if (!abi) {
@@ -54,15 +65,24 @@ const ContractAbi = ({ abi, addressHash, sourceAddress, tab, visibleItems }: Pro
   return (
     <div>
       <Flex mb={ 3 }>
-        <Box fontWeight={ 500 } mr="auto">Contract information</Box>
+        <Box fontWeight={ 500 } mr="auto">
+          Contract information
+        </Box>
         { abi.length > 1 && (
           <Link onClick={ handleExpandAll }>
             { expandedSections.length === abi.length ? 'Collapse' : 'Expand' } all
           </Link>
         ) }
-        <Link onClick={ handleReset } ml={ 3 }>Reset</Link>
+        <Link onClick={ handleReset } ml={ 3 }>
+          Reset
+        </Link>
       </Flex>
-      <Accordion allowMultiple position="relative" onChange={ handleAccordionStateChange } index={ expandedSections }>
+      <Accordion
+        allowMultiple
+        position="relative"
+        onChange={ handleAccordionStateChange }
+        index={ expandedSections }
+      >
         { abi.map((item, index) => (
           <ContractAbiItem
             key={ index }
@@ -81,14 +101,18 @@ const ContractAbi = ({ abi, addressHash, sourceAddress, tab, visibleItems }: Pro
         <div>
           <div>Couldn{ apos }t find any method that matches your query.</div>
           <div>
-            You can use custom ABI for this contract without verifying the contract in the{ ' ' }
+            You can use custom ABI for this contract without verifying the
+            contract in the{ ' ' }
             <LinkInternal
-              href={ route({ pathname: '/address/[hash]', query: { hash: addressHash, tab: 'read_write_custom_methods' } }) }
+              href={ route({
+                pathname: '/address/',
+                query: { hash: addressHash, tab: 'read_write_custom_methods' },
+              }) }
               scroll={ false }
             >
               Custom ABI
-            </LinkInternal>
-            { ' ' }tab.
+            </LinkInternal>{ ' ' }
+            tab.
           </div>
         </div>
       ) }

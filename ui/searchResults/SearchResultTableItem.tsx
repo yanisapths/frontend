@@ -1,4 +1,14 @@
-import { chakra, Tr, Td, Text, Flex, Image, Box, useColorMode, Tag } from '@chakra-ui/react';
+import {
+  chakra,
+  Tr,
+  Td,
+  Text,
+  Flex,
+  Image,
+  Box,
+  useColorMode,
+  Tag,
+} from '@chakra-ui/react';
 import React from 'react';
 import xss from 'xss';
 
@@ -36,16 +46,23 @@ interface Props {
   addressFormat?: AddressFormat;
 }
 
-const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: Props) => {
-
-  const handleLinkClick = React.useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    saveToRecentKeywords(searchTerm);
-    mixpanel.logEvent(mixpanel.EventTypes.SEARCH_QUERY, {
-      'Search query': searchTerm,
-      'Source page type': 'Search results',
-      'Result URL': e.currentTarget.href,
-    });
-  }, [ searchTerm ]);
+const SearchResultTableItem = ({
+  data,
+  searchTerm,
+  isLoading,
+  addressFormat,
+}: Props) => {
+  const handleLinkClick = React.useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      saveToRecentKeywords(searchTerm);
+      mixpanel.logEvent(mixpanel.EventTypes.SEARCH_QUERY, {
+        'Search query': searchTerm,
+        'Source page type': 'Search results',
+        'Result URL': e.currentTarget.href,
+      });
+    },
+    [ searchTerm ],
+  );
 
   const { colorMode } = useColorMode();
 
@@ -53,15 +70,25 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
     switch (data.type) {
       case 'token': {
         const name = data.name + (data.symbol ? ` (${ data.symbol })` : '');
-        const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address) : data.address);
+        const hash =
+          data.filecoin_robust_address ||
+          (addressFormat === 'bech32' ?
+            toBech32Address(data.address) :
+            data.address);
 
         return (
           <>
             <Td fontSize="sm">
               <Flex alignItems="center">
-                <TokenEntity.Icon token={{ ...data, type: data.token_type }} isLoading={ isLoading }/>
+                <TokenEntity.Icon
+                  token={{ ...data, type: data.token_type }}
+                  isLoading={ isLoading }
+                />
                 <LinkInternal
-                  href={ route({ pathname: '/token/[hash]', query: { hash: data.address } }) }
+                  href={ route({
+                    pathname: '/token/[hash]',
+                    query: { hash: data.address },
+                  }) }
                   fontWeight={ 700 }
                   wordBreak="break-all"
                   overflow="hidden"
@@ -73,26 +100,72 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
                     overflow="hidden"
                     textOverflow="ellipsis"
                     whiteSpace="nowrap"
-                    dangerouslySetInnerHTML={{ __html: highlightText(name, searchTerm) }}
+                    dangerouslySetInnerHTML={{
+                      __html: highlightText(name, searchTerm),
+                    }}
                   />
                 </LinkInternal>
-                { data.certified && <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } ml={ 1 }/> }
-                { data.is_verified_via_admin_panel && !data.certified && <IconSvg name="certified" boxSize={ 4 } ml={ 1 } color="green.500"/> }
+                { data.certified && (
+                  <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } ml={ 1 }/>
+                ) }
+                { data.is_verified_via_admin_panel && !data.certified && (
+                  <IconSvg
+                    name="certified"
+                    boxSize={ 4 }
+                    ml={ 1 }
+                    color="green.500"
+                  />
+                ) }
               </Flex>
             </Td>
             <Td fontSize="sm" verticalAlign="middle">
-              <Skeleton isLoaded={ !isLoading } whiteSpace="nowrap" overflow="hidden" display="flex" alignItems="center">
-                <Box overflow="hidden" whiteSpace="nowrap" w={ data.is_smart_contract_verified ? 'calc(100%-28px)' : 'unset' }>
+              <Skeleton
+                isLoaded={ !isLoading }
+                whiteSpace="nowrap"
+                overflow="hidden"
+                display="flex"
+                alignItems="center"
+              >
+                <Box
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  w={
+                    data.is_smart_contract_verified ?
+                      'calc(100%-28px)' :
+                      'unset'
+                  }
+                >
                   <HashStringShortenDynamic hash={ hash }/>
                 </Box>
-                { data.is_smart_contract_verified && <IconSvg name="status/success" boxSize="14px" color="green.500" ml={ 1 } flexShrink={ 0 }/> }
+                { data.is_smart_contract_verified && (
+                  <IconSvg
+                    name="status/success"
+                    boxSize="14px"
+                    color="green.500"
+                    ml={ 1 }
+                    flexShrink={ 0 }
+                  />
+                ) }
               </Skeleton>
             </Td>
             <Td fontSize="sm" verticalAlign="middle" isNumeric>
-              <Skeleton isLoaded={ !isLoading } whiteSpace="nowrap" overflow="hidden">
-                <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" fontWeight={ 700 }>
-                  { data.token_type === 'ERC-20' && data.exchange_rate && `$${ Number(data.exchange_rate).toLocaleString() }` }
-                  { data.token_type !== 'ERC-20' && data.total_supply && `Items ${ Number(data.total_supply).toLocaleString() }` }
+              <Skeleton
+                isLoaded={ !isLoading }
+                whiteSpace="nowrap"
+                overflow="hidden"
+              >
+                <Text
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                  fontWeight={ 700 }
+                >
+                  { data.token_type === 'ERC-20' &&
+                    data.exchange_rate &&
+                    `$${ Number(data.exchange_rate).toLocaleString() }` }
+                  { data.token_type !== 'ERC-20' &&
+                    data.total_supply &&
+                    `Items ${ Number(data.total_supply).toLocaleString() }` }
                 </Text>
               </Skeleton>
             </Td>
@@ -116,18 +189,24 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
           implementations: null,
           ens_domain_name: null,
         };
-        const expiresText = data.ens_info?.expiry_date ? ` (expires ${ dayjs(data.ens_info.expiry_date).fromNow() })` : '';
-        const hash = addressFormat === 'bech32' ? toBech32Address(data.address) : data.address;
+        const expiresText = data.ens_info?.expiry_date ?
+          ` (expires ${ dayjs(data.ens_info.expiry_date).fromNow() })` :
+          '';
+        const hash =
+          addressFormat === 'bech32' ?
+            toBech32Address(data.address) :
+            data.address;
 
         return (
           <>
-            <Td fontSize="sm" colSpan={ (addressName || data.type === 'metadata_tag') ? 1 : 3 } verticalAlign="middle">
+            <Td
+              fontSize="sm"
+              colSpan={ addressName || data.type === 'metadata_tag' ? 1 : 3 }
+              verticalAlign="middle"
+            >
               <AddressEntity.Container>
                 <AddressEntity.Icon address={ address }/>
-                <AddressEntity.Link
-                  address={ address }
-                  onClick={ handleLinkClick }
-                >
+                <AddressEntity.Link address={ address } onClick={ handleLinkClick }>
                   <AddressEntity.Content
                     asProp={ shouldHighlightHash ? 'mark' : 'span' }
                     address={{ ...address, hash }}
@@ -140,34 +219,58 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
               </AddressEntity.Container>
             </Td>
             { addressName && (
-              <Td colSpan={ data.type === 'metadata_tag' ? 1 : 2 } fontSize="sm" verticalAlign="middle">
+              <Td
+                colSpan={ data.type === 'metadata_tag' ? 1 : 2 }
+                fontSize="sm"
+                verticalAlign="middle"
+              >
                 <Flex alignItems="center">
                   <Text
                     overflow="hidden"
                     whiteSpace="nowrap"
                     textOverflow="ellipsis"
                   >
-                    <span dangerouslySetInnerHTML={{ __html: shouldHighlightHash ? xss(addressName) : highlightText(addressName, searchTerm) }}/>
-                    { data.ens_info && (
-                      data.ens_info.names_count > 1 ? (
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: shouldHighlightHash ?
+                          xss(addressName) :
+                          highlightText(addressName, searchTerm),
+                      }}
+                    />
+                    { data.ens_info &&
+                      (data.ens_info.names_count > 1 ? (
                         <chakra.span color="text_secondary">
-                          { data.ens_info.names_count > 39 ? '40+' : `+${ data.ens_info.names_count - 1 }` }
+                          { data.ens_info.names_count > 39 ?
+                            '40+' :
+                            `+${ data.ens_info.names_count - 1 }` }
                         </chakra.span>
-                      ) :
-                        <chakra.span color="text_secondary">{ expiresText }</chakra.span>
-                    ) }
+                      ) : (
+                        <chakra.span color="text_secondary">
+                          { expiresText }
+                        </chakra.span>
+                      )) }
                   </Text>
-                  { data.certified && <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } mx={ 1 }/> }
+                  { data.certified && (
+                    <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } mx={ 1 }/>
+                  ) }
                 </Flex>
               </Td>
             ) }
             { data.type === 'metadata_tag' && (
-              <Td colSpan={ addressName ? 1 : 2 } fontSize="sm" verticalAlign="middle">
+              <Td
+                colSpan={ addressName ? 1 : 2 }
+                fontSize="sm"
+                verticalAlign="middle"
+              >
                 <Flex justifyContent="flex-end">
                   { /* we show regular tag because we don't need all meta info here, but need to highlight search term */ }
                   <Tag display="flex" alignItems="center">
                     <EntityTagIcon data={ data.metadata } iconColor="gray.400"/>
-                    <span dangerouslySetInnerHTML={{ __html: highlightText(data.metadata.name, searchTerm) }}/>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: highlightText(data.metadata.name, searchTerm),
+                      }}
+                    />
                   </Tag>
                 </Flex>
               </Td>
@@ -177,30 +280,62 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
       }
 
       case 'label': {
-        const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address) : data.address);
+        const hash =
+          data.filecoin_robust_address ||
+          (addressFormat === 'bech32' ?
+            toBech32Address(data.address) :
+            data.address);
 
         return (
           <>
             <Td fontSize="sm">
               <Flex alignItems="center">
-                <IconSvg name="publictags_slim" boxSize={ 6 } mr={ 2 } color="gray.500"/>
+                <IconSvg
+                  name="publictags_slim"
+                  boxSize={ 6 }
+                  mr={ 2 }
+                  color="gray.500"
+                />
                 <LinkInternal
-                  href={ route({ pathname: '/address/[hash]', query: { hash: data.address } }) }
+                  href={ route({
+                    pathname: '/address/',
+                    query: { hash: data.address },
+                  }) }
                   fontWeight={ 700 }
                   wordBreak="break-all"
                   isLoading={ isLoading }
                   onClick={ handleLinkClick }
                 >
-                  <span dangerouslySetInnerHTML={{ __html: highlightText(data.name, searchTerm) }}/>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: highlightText(data.name, searchTerm),
+                    }}
+                  />
                 </LinkInternal>
               </Flex>
             </Td>
             <Td fontSize="sm" verticalAlign="middle">
               <Flex alignItems="center" overflow="hidden">
-                <Box overflow="hidden" whiteSpace="nowrap" w={ data.is_smart_contract_verified ? 'calc(100%-28px)' : 'unset' }>
+                <Box
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  w={
+                    data.is_smart_contract_verified ?
+                      'calc(100%-28px)' :
+                      'unset'
+                  }
+                >
                   <HashStringShortenDynamic hash={ hash }/>
                 </Box>
-                { data.is_smart_contract_verified && <IconSvg name="status/success" boxSize="14px" color="green.500" ml={ 1 } flexShrink={ 0 }/> }
+                { data.is_smart_contract_verified && (
+                  <IconSvg
+                    name="status/success"
+                    boxSize="14px"
+                    color="green.500"
+                    ml={ 1 }
+                    flexShrink={ 0 }
+                  />
+                ) }
               </Flex>
             </Td>
             <Td></Td>
@@ -209,7 +344,13 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
       }
 
       case 'app': {
-        const title = <span dangerouslySetInnerHTML={{ __html: highlightText(data.app.title, searchTerm) }}/>;
+        const title = (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: highlightText(data.app.title, searchTerm),
+            }}
+          />
+        );
         return (
           <>
             <Td fontSize="sm">
@@ -218,13 +359,24 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
                   borderRadius="base"
                   boxSize={ 6 }
                   mr={ 2 }
-                  src={ colorMode === 'dark' && data.app.logoDarkMode ? data.app.logoDarkMode : data.app.logo }
+                  src={
+                    colorMode === 'dark' && data.app.logoDarkMode ?
+                      data.app.logoDarkMode :
+                      data.app.logo
+                  }
                   alt={ `${ data.app.title } app icon` }
                 />
                 <LinkInternal
-                  href={ data.app.external ?
-                    route({ pathname: '/apps', query: { selectedAppId: data.app.id } }) :
-                    route({ pathname: '/apps/[id]', query: { id: data.app.id } })
+                  href={
+                    data.app.external ?
+                      route({
+                        pathname: '/apps',
+                        query: { selectedAppId: data.app.id },
+                      }) :
+                      route({
+                        pathname: '/apps/[id]',
+                        query: { id: data.app.id },
+                      })
                   }
                   fontWeight={ 700 }
                   wordBreak="break-all"
@@ -249,11 +401,20 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
       }
 
       case 'block': {
-        const shouldHighlightHash = data.block_hash.toLowerCase() === searchTerm.toLowerCase();
+        const shouldHighlightHash =
+          data.block_hash.toLowerCase() === searchTerm.toLowerCase();
         const isFutureBlock = data.timestamp === undefined && !isLoading;
         const href = isFutureBlock ?
-          route({ pathname: '/block/countdown/[height]', query: { height: String(data.block_number) } }) :
-          route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: data.block_hash ?? String(data.block_number) } });
+          route({
+            pathname: '/block/countdown/[height]',
+            query: { height: String(data.block_number) },
+          }) :
+          route({
+            pathname: '/block/[height_or_hash]',
+            query: {
+              height_or_hash: data.block_hash ?? String(data.block_number),
+            },
+          });
 
         return (
           <>
@@ -276,14 +437,30 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
                 </BlockEntity.Link>
               </BlockEntity.Container>
             </Td>
-            <Td fontSize="sm" verticalAlign="middle" colSpan={ isFutureBlock ? 2 : 1 }>
+            <Td
+              fontSize="sm"
+              verticalAlign="middle"
+              colSpan={ isFutureBlock ? 2 : 1 }
+            >
               { isFutureBlock ? (
-                <Skeleton isLoaded={ !isLoading }>Learn estimated time for this block to be created.</Skeleton>
+                <Skeleton isLoaded={ !isLoading }>
+                  Learn estimated time for this block to be created.
+                </Skeleton>
               ) : (
                 <Flex columnGap={ 2 } alignItems="center">
-                  { data.block_type === 'reorg' && !isLoading && <Tag flexShrink={ 0 }>Reorg</Tag> }
-                  { data.block_type === 'uncle' && !isLoading && <Tag flexShrink={ 0 }>Uncle</Tag> }
-                  <Skeleton isLoaded={ !isLoading } overflow="hidden" whiteSpace="nowrap" as={ shouldHighlightHash ? 'mark' : 'span' } display="block">
+                  { data.block_type === 'reorg' && !isLoading && (
+                    <Tag flexShrink={ 0 }>Reorg</Tag>
+                  ) }
+                  { data.block_type === 'uncle' && !isLoading && (
+                    <Tag flexShrink={ 0 }>Uncle</Tag>
+                  ) }
+                  <Skeleton
+                    isLoaded={ !isLoading }
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    as={ shouldHighlightHash ? 'mark' : 'span' }
+                    display="block"
+                  >
                     <HashStringShortenDynamic hash={ data.block_hash }/>
                   </Skeleton>
                 </Flex>
@@ -322,7 +499,9 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
               </TxEntity.Container>
             </Td>
             <Td fontSize="sm" verticalAlign="middle" isNumeric>
-              <Text variant="secondary">{ dayjs(data.timestamp).format('llll') }</Text>
+              <Text variant="secondary">
+                { dayjs(data.timestamp).format('llll') }
+              </Text>
             </Td>
           </>
         );
@@ -373,15 +552,23 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
               </UserOpEntity.Container>
             </Td>
             <Td fontSize="sm" verticalAlign="middle" isNumeric>
-              <Text variant="secondary">{ dayjs(data.timestamp).format('llll') }</Text>
+              <Text variant="secondary">
+                { dayjs(data.timestamp).format('llll') }
+              </Text>
             </Td>
           </>
         );
       }
 
       case 'ens_domain': {
-        const expiresText = data.ens_info?.expiry_date ? ` expires ${ dayjs(data.ens_info.expiry_date).fromNow() }` : '';
-        const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address) : data.address);
+        const expiresText = data.ens_info?.expiry_date ?
+          ` expires ${ dayjs(data.ens_info.expiry_date).fromNow() }` :
+          '';
+        const hash =
+          data.filecoin_robust_address ||
+          (addressFormat === 'bech32' ?
+            toBech32Address(data.address) :
+            data.address);
 
         return (
           <>
@@ -389,7 +576,10 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
               <EnsEntity.Container>
                 <EnsEntity.Icon protocol={ data.ens_info.protocol }/>
                 <LinkInternal
-                  href={ route({ pathname: '/address/[hash]', query: { hash: data.address } }) }
+                  href={ route({
+                    pathname: '/address/',
+                    query: { hash: data.address },
+                  }) }
                   fontWeight={ 700 }
                   wordBreak="break-all"
                   isLoading={ isLoading }
@@ -398,7 +588,9 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
                 >
                   <Skeleton
                     isLoaded={ !isLoading }
-                    dangerouslySetInnerHTML={{ __html: highlightText(data.ens_info.name, searchTerm) }}
+                    dangerouslySetInnerHTML={{
+                      __html: highlightText(data.ens_info.name, searchTerm),
+                    }}
                     whiteSpace="nowrap"
                     overflow="hidden"
                     textOverflow="ellipsis"
@@ -408,16 +600,41 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
             </Td>
             <Td>
               <Flex alignItems="center" overflow="hidden">
-                <Box overflow="hidden" whiteSpace="nowrap" w={ data.is_smart_contract_verified ? 'calc(100%-28px)' : 'unset' }>
+                <Box
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  w={
+                    data.is_smart_contract_verified ?
+                      'calc(100%-28px)' :
+                      'unset'
+                  }
+                >
                   <HashStringShortenDynamic hash={ hash }/>
                 </Box>
-                { data.is_smart_contract_verified && <IconSvg name="status/success" boxSize="14px" color="green.500" ml={ 1 } flexShrink={ 0 }/> }
+                { data.is_smart_contract_verified && (
+                  <IconSvg
+                    name="status/success"
+                    boxSize="14px"
+                    color="green.500"
+                    ml={ 1 }
+                    flexShrink={ 0 }
+                  />
+                ) }
               </Flex>
             </Td>
             <Td>
-              { data.ens_info.names_count > 1 ?
-                <chakra.span color="text_secondary"> ({ data.ens_info.names_count > 39 ? '40+' : `+${ data.ens_info.names_count - 1 }` })</chakra.span> :
-                <chakra.span color="text_secondary">{ expiresText }</chakra.span> }
+              { data.ens_info.names_count > 1 ? (
+                <chakra.span color="text_secondary">
+                  { ' ' }
+                  (
+                  { data.ens_info.names_count > 39 ?
+                    '40+' :
+                    `+${ data.ens_info.names_count - 1 }` }
+                  )
+                </chakra.span>
+              ) : (
+                <chakra.span color="text_secondary">{ expiresText }</chakra.span>
+              ) }
             </Td>
           </>
         );
@@ -431,7 +648,11 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
     <Tr>
       { content }
       <Td fontSize="sm" textTransform="capitalize" verticalAlign="middle">
-        <Skeleton isLoaded={ !isLoading } color="text_secondary" display="inline-block">
+        <Skeleton
+          isLoaded={ !isLoading }
+          color="text_secondary"
+          display="inline-block"
+        >
           <span>{ category ? searchItemTitles[category].itemTitle : '' }</span>
         </Skeleton>
       </Td>

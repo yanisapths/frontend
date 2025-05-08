@@ -11,7 +11,11 @@ interface Props {
   isPartiallyVerified: boolean;
 }
 
-const ContractDetailsVerificationButton = ({ isLoading, addressHash, isPartiallyVerified }: Props) => {
+const ContractDetailsVerificationButton = ({
+  isLoading,
+  addressHash,
+  isPartiallyVerified,
+}: Props) => {
   if (isLoading) {
     return (
       <Skeleton
@@ -31,7 +35,10 @@ const ContractDetailsVerificationButton = ({ isLoading, addressHash, isPartially
       ml={ isPartiallyVerified ? 0 : 'auto' }
       flexShrink={ 0 }
       as="a"
-      href={ route({ pathname: '/address/[hash]/contract-verification', query: { hash: addressHash } }) }
+      href={ route({
+        pathname: '/address//contract-verification',
+        query: { hash: addressHash },
+      }) }
     >
       Verify & publish
     </Button>
