@@ -30,14 +30,21 @@ const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
 
   return (
     <>
-      <Heading as="h4" size="sm" mb={ 6 }>Additional info </Heading>
+      <Heading as="h4" size="sm" mb={ 6 }>
+        Additional info{ ' ' }
+      </Heading>
       { tx.blob_versioned_hashes && tx.blob_versioned_hashes.length > 0 && (
         <Box { ...sectionProps } mb={ 4 }>
           <Flex alignItems="center" justifyContent="space-between">
-            <Text { ...sectionTitleProps }>Blobs: { tx.blob_versioned_hashes.length }</Text>
+            <Text { ...sectionTitleProps }>
+              Blobs: { tx.blob_versioned_hashes.length }
+            </Text>
             { tx.blob_versioned_hashes.length > 3 && (
               <LinkInternal
-                href={ route({ pathname: '/tx/[hash]', query: { hash: tx.hash, tab: 'blobs' } }) }
+                href={ route({
+                  pathname: '/tx/',
+                  query: { hash: tx.hash, tab: 'blobs' },
+                }) }
                 mb={ 3 }
               >
                 view all
@@ -71,30 +78,54 @@ const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
             <Text>{ BigNumber(tx.gas_used).toFormat() }</Text>
             <TextSeparator/>
             <Text>{ BigNumber(tx.gas_limit).toFormat() }</Text>
-            <Utilization ml={ 4 } value={ Number(BigNumber(tx.gas_used).dividedBy(BigNumber(tx.gas_limit)).toFixed(2)) }/>
+            <Utilization
+              ml={ 4 }
+              value={ Number(
+                BigNumber(tx.gas_used)
+                  .dividedBy(BigNumber(tx.gas_limit))
+                  .toFixed(2),
+              ) }
+            />
           </Flex>
         </Box>
       ) }
       { !config.UI.views.tx.hiddenFields?.gas_fees &&
-        (tx.base_fee_per_gas !== null || tx.max_fee_per_gas !== null || tx.max_priority_fee_per_gas !== null) && (
+        (tx.base_fee_per_gas !== null ||
+          tx.max_fee_per_gas !== null ||
+          tx.max_priority_fee_per_gas !== null) && (
         <Box { ...sectionProps } mb={ 4 }>
           <Text { ...sectionTitleProps }>Gas fees ({ currencyUnits.gwei })</Text>
           { tx.base_fee_per_gas !== null && (
             <Box>
-              <Text as="span" fontWeight="500">Base: </Text>
-              <Text fontWeight="700" as="span">{ getValueWithUnit(tx.base_fee_per_gas, 'gwei').toFormat() }</Text>
+              <Text as="span" fontWeight="500">
+                Base:{ ' ' }
+              </Text>
+              <Text fontWeight="700" as="span">
+                { getValueWithUnit(tx.base_fee_per_gas, 'gwei').toFormat() }
+              </Text>
             </Box>
           ) }
           { tx.max_fee_per_gas !== null && (
             <Box mt={ 1 }>
-              <Text as="span" fontWeight="500">Max: </Text>
-              <Text fontWeight="700" as="span">{ getValueWithUnit(tx.max_fee_per_gas, 'gwei').toFormat() }</Text>
+              <Text as="span" fontWeight="500">
+                Max:{ ' ' }
+              </Text>
+              <Text fontWeight="700" as="span">
+                { getValueWithUnit(tx.max_fee_per_gas, 'gwei').toFormat() }
+              </Text>
             </Box>
           ) }
           { tx.max_priority_fee_per_gas !== null && (
             <Box mt={ 1 }>
-              <Text as="span" fontWeight="500">Max priority: </Text>
-              <Text fontWeight="700" as="span">{ getValueWithUnit(tx.max_priority_fee_per_gas, 'gwei').toFormat() }</Text>
+              <Text as="span" fontWeight="500">
+                Max priority:{ ' ' }
+              </Text>
+              <Text fontWeight="700" as="span">
+                { getValueWithUnit(
+                  tx.max_priority_fee_per_gas,
+                  'gwei',
+                ).toFormat() }
+              </Text>
             </Box>
           ) }
         </Box>
@@ -103,21 +134,41 @@ const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
         <Box { ...sectionProps } mb={ 4 }>
           <Text { ...sectionTitleProps }>Others</Text>
           <Box>
-            <Text as="span" fontWeight="500">Txn type: </Text>
-            <Text fontWeight="600" as="span">{ tx.type }</Text>
-            { tx.type === 2 && <Text fontWeight="400" as="span" ml={ 1 } color="gray.500">(EIP-1559)</Text> }
+            <Text as="span" fontWeight="500">
+              Txn type:{ ' ' }
+            </Text>
+            <Text fontWeight="600" as="span">
+              { tx.type }
+            </Text>
+            { tx.type === 2 && (
+              <Text fontWeight="400" as="span" ml={ 1 } color="gray.500">
+                (EIP-1559)
+              </Text>
+            ) }
           </Box>
           <Box mt={ 1 }>
-            <Text as="span" fontWeight="500">Nonce: </Text>
-            <Text fontWeight="600" as="span">{ tx.nonce }</Text>
+            <Text as="span" fontWeight="500">
+              Nonce:{ ' ' }
+            </Text>
+            <Text fontWeight="600" as="span">
+              { tx.nonce }
+            </Text>
           </Box>
           <Box mt={ 1 }>
-            <Text as="span" fontWeight="500">Position: </Text>
-            <Text fontWeight="600" as="span">{ tx.position }</Text>
+            <Text as="span" fontWeight="500">
+              Position:{ ' ' }
+            </Text>
+            <Text fontWeight="600" as="span">
+              { tx.position }
+            </Text>
           </Box>
         </Box>
       ) }
-      <LinkInternal href={ route({ pathname: '/tx/[hash]', query: { hash: tx.hash } }) }>More details</LinkInternal>
+      <LinkInternal
+        href={ route({ pathname: '/tx/', query: { hash: tx.hash } }) }
+      >
+        More details
+      </LinkInternal>
     </>
   );
 };

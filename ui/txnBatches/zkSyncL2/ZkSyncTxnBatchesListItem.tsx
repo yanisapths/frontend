@@ -25,8 +25,9 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
 
   return (
     <ListItemMobileGrid.Container gridTemplateColumns="110px auto">
-
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Batch #</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Batch #
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <BatchEntityL2
           isLoading={ isLoading }
@@ -37,12 +38,16 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Status</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Status
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <ZkSyncL2TxnBatchStatus status={ item.status } isLoading={ isLoading }/>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Age</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Age
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <TimeAgoWithTooltip
           timestamp={ item.timestamp }
@@ -52,10 +57,15 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Txn count</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Txn count
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
           isLoading={ isLoading }
           fontWeight={ 600 }
         >
@@ -65,7 +75,9 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
         </LinkInternal>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Commit tx</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Commit tx
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.commit_transaction_hash ? (
           <TxEntityL1
@@ -75,10 +87,14 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
             lineHeight={ 5 }
             truncation="constant_long"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Prove tx</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Prove tx
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.prove_transaction_hash ? (
           <TxEntityL1
@@ -88,9 +104,10 @@ const ZkSyncTxnBatchesListItem = ({ item, isLoading }: Props) => {
             lineHeight={ 5 }
             truncation="constant_long"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </ListItemMobileGrid.Value>
-
     </ListItemMobileGrid.Container>
   );
 };

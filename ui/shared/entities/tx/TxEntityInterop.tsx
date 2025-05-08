@@ -1,4 +1,10 @@
-import { Box, Image, Tooltip, chakra, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Image,
+  Tooltip,
+  chakra,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React from 'react';
 
 import type { ChainInfo } from 'types/api/interop';
@@ -45,18 +51,26 @@ const IconStub = ({ isLoading }: { isLoading?: boolean }) => {
 const TxEntityInterop = ({ chain, hash, ...props }: Props) => {
   const partsProps = distributeEntityProps(props);
 
-  const href = (chain?.instance_url && hash) ? stripTrailingSlash(chain.instance_url) + route({
-    pathname: '/tx/[hash]',
-    query: {
-      ...props.query,
-      hash: hash,
-    },
-  }) : null;
+  const href =
+    chain?.instance_url && hash ?
+      stripTrailingSlash(chain.instance_url) +
+        route({
+          pathname: '/tx/',
+          query: {
+            ...props.query,
+            hash: hash,
+          },
+        }) :
+      null;
 
   return (
     <TxEntity.Container { ...partsProps.container }>
       { chain && (
-        <Tooltip label={ `${ chain.chain_name ? chain.chain_name : 'External chain' } (chain id ${ chain.chain_id })` }>
+        <Tooltip
+          label={ `${
+            chain.chain_name ? chain.chain_name : 'External chain'
+          } (chain id ${ chain.chain_id })` }
+        >
           <Box>
             { chain.chain_logo ? (
               <Image
@@ -73,13 +87,16 @@ const TxEntityInterop = ({ chain, hash, ...props }: Props) => {
           </Box>
         </Tooltip>
       ) }
-      { !chain && (
-        <IconStub/>
-      ) }
+      { !chain && <IconStub/> }
       { hash && (
         <>
           { href ? (
-            <TxEntity.Link { ...partsProps.link } hash={ hash } href={ href } isExternal>
+            <TxEntity.Link
+              { ...partsProps.link }
+              hash={ hash }
+              href={ href }
+              isExternal
+            >
               <TxEntity.Content { ...partsProps.content } hash={ hash }/>
             </TxEntity.Link>
           ) : (
@@ -88,9 +105,7 @@ const TxEntityInterop = ({ chain, hash, ...props }: Props) => {
           <TxEntity.Copy { ...partsProps.copy } hash={ hash }/>
         </>
       ) }
-      { !hash && (
-        'N/A'
-      ) }
+      { !hash && 'N/A' }
     </TxEntity.Container>
   );
 };

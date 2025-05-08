@@ -34,20 +34,28 @@ test.describe('with multiple items', () => {
   });
 
   test('base view with styles', async({ render, page }) => {
-    const component = await render(<AccountActionsMenu m={ 2 } outline="1px solid lightpink"/>, { hooksConfig });
+    const component = await render(
+      <AccountActionsMenu m={ 2 } outline="1px solid lightpink"/>,
+      { hooksConfig },
+    );
     await component.getByRole('button').click();
 
     await expect(page).toHaveScreenshot();
   });
 
   test('loading', async({ render }) => {
-    const component = await render(<AccountActionsMenu isLoading/>, { hooksConfig });
+    const component = await render(<AccountActionsMenu isLoading/>, {
+      hooksConfig,
+    });
 
     await expect(component).toHaveScreenshot();
   });
 
   test('loading with styles', async({ render }) => {
-    const component = await render(<AccountActionsMenu isLoading m={ 2 } outline="1px solid lightpink"/>, { hooksConfig });
+    const component = await render(
+      <AccountActionsMenu isLoading m={ 2 } outline="1px solid lightpink"/>,
+      { hooksConfig },
+    );
 
     await expect(component).toHaveScreenshot();
   });
@@ -57,7 +65,7 @@ test.describe('with one item', () => {
   const hooksConfig = {
     router: {
       query: { hash: '<hash>' },
-      pathname: '/tx/[hash]',
+      pathname: '/tx/',
       isReady: true,
     },
   };
@@ -70,14 +78,19 @@ test.describe('with one item', () => {
   });
 
   test('base view with styles', async({ render, page }) => {
-    const component = await render(<AccountActionsMenu m={ 2 } outline="1px solid lightpink"/>, { hooksConfig });
+    const component = await render(
+      <AccountActionsMenu m={ 2 } outline="1px solid lightpink"/>,
+      { hooksConfig },
+    );
     await component.getByRole('button').hover();
 
     await expect(page).toHaveScreenshot();
   });
 
   test('loading', async({ render }) => {
-    const component = await render(<AccountActionsMenu isLoading/>, { hooksConfig });
+    const component = await render(<AccountActionsMenu isLoading/>, {
+      hooksConfig,
+    });
 
     await expect(component).toHaveScreenshot();
   });

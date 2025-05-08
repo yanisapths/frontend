@@ -5,7 +5,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { scroller, Element } from 'react-scroll';
 
-import { ZKSYNC_L2_TX_BATCH_STATUSES, type ZkSyncBatch } from 'types/api/zkSyncL2';
+import {
+  ZKSYNC_L2_TX_BATCH_STATUSES,
+  type ZkSyncBatch,
+} from 'types/api/zkSyncL2';
 
 import { route } from 'nextjs-routes';
 
@@ -37,16 +40,22 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
 
   const { data, isPlaceholderData, isError, error } = query;
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
-    const increment = direction === 'next' ? +1 : -1;
-    const nextId = String(data.number + increment);
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.number + increment);
 
-    router.push({ pathname: '/batches/[number]', query: { number: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push(
+        { pathname: '/batches/number', query: { number: nextId } },
+        undefined,
+      );
+    },
+    [ data, router ],
+  );
 
   const handleCutClick = React.useCallback(() => {
     setIsExpanded((flag) => !flag);
@@ -74,7 +83,10 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 3, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(min-content, 200px) minmax(0, 1fr)' }}
+      templateColumns={{
+        base: 'minmax(0, 1fr)',
+        lg: 'minmax(min-content, 200px) minmax(0, 1fr)',
+      }}
       overflow="hidden"
     >
       <DetailsInfoItem.Label
@@ -84,9 +96,7 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
         Txn batch number
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.number }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.number }</Skeleton>
         <PrevNext
           ml={ 6 }
           onClick={ handlePrevNextClick }
@@ -104,7 +114,11 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
         Status
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <VerificationSteps steps={ ZKSYNC_L2_TX_BATCH_STATUSES.slice(1) } currentStep={ data.status } isLoading={ isPlaceholderData }/>
+        <VerificationSteps
+          steps={ ZKSYNC_L2_TX_BATCH_STATUSES.slice(1) }
+          currentStep={ data.status }
+          isLoading={ isPlaceholderData }
+        />
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
@@ -114,7 +128,14 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
         Timestamp
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        { data.timestamp ? <DetailsTimestamp timestamp={ data.timestamp } isLoading={ isPlaceholderData }/> : 'Undefined' }
+        { data.timestamp ? (
+          <DetailsTimestamp
+            timestamp={ data.timestamp }
+            isLoading={ isPlaceholderData }
+          />
+        ) : (
+          'Undefined'
+        ) }
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
@@ -125,7 +146,12 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !isPlaceholderData }>
-          <LinkInternal href={ route({ pathname: '/batches/[number]', query: { number: data.number.toString(), tab: 'txs' } }) }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.number.toString(), tab: 'txs' },
+            }) }
+          >
             { txNum } transaction{ txNum === 1 ? '' : 's' }
           </LinkInternal>
         </Skeleton>
@@ -153,39 +179,48 @@ const ZkSyncL2TxnBatchDetails = ({ query }: Props) => {
 
       { isExpanded && (
         <>
-          <GridItem colSpan={{ base: undefined, lg: 2 }} mt={{ base: 1, lg: 4 }}/>
+          <GridItem
+            colSpan={{ base: undefined, lg: 2 }}
+            mt={{ base: 1, lg: 4 }}
+          />
 
-          <DetailsInfoItem.Label
-            hint="L1 batch root is a hash that summarizes batch data and submitted to the L1"
-          >
+          <DetailsInfoItem.Label hint="L1 batch root is a hash that summarizes batch data and submitted to the L1">
             Root hash
           </DetailsInfoItem.Label>
-          <DetailsInfoItem.Value
-            flexWrap="nowrap"
-            alignSelf="flex-start"
-          >
+          <DetailsInfoItem.Value flexWrap="nowrap" alignSelf="flex-start">
             <TruncatedValue value={ data.root_hash }/>
             <CopyToClipboard text={ data.root_hash }/>
           </DetailsInfoItem.Value>
 
-          <DetailsInfoItem.Label
-            hint="Gas price for the batch settlement transaction on L1"
-          >
+          <DetailsInfoItem.Label hint="Gas price for the batch settlement transaction on L1">
             L1 gas price
           </DetailsInfoItem.Label>
           <DetailsInfoItem.Value>
-            <Text mr={ 1 }>{ BigNumber(data.l1_gas_price).dividedBy(WEI).toFixed() } { currencyUnits.ether }</Text>
-            <Text variant="secondary">({ BigNumber(data.l1_gas_price).dividedBy(WEI_IN_GWEI).toFixed() } { currencyUnits.gwei })</Text>
+            <Text mr={ 1 }>
+              { BigNumber(data.l1_gas_price).dividedBy(WEI).toFixed() }{ ' ' }
+              { currencyUnits.ether }
+            </Text>
+            <Text variant="secondary">
+              ({ BigNumber(data.l1_gas_price).dividedBy(WEI_IN_GWEI).toFixed() }{ ' ' }
+              { currencyUnits.gwei })
+            </Text>
           </DetailsInfoItem.Value>
 
-          <DetailsInfoItem.Label
-            hint='The gas price below which the "baseFee" of the batch should not fall'
-          >
+          <DetailsInfoItem.Label hint='The gas price below which the "baseFee" of the batch should not fall'>
             L2 fair gas price
           </DetailsInfoItem.Label>
           <DetailsInfoItem.Value>
-            <Text mr={ 1 }>{ BigNumber(data.l2_fair_gas_price).dividedBy(WEI).toFixed() } { currencyUnits.ether }</Text>
-            <Text variant="secondary">({ BigNumber(data.l2_fair_gas_price).dividedBy(WEI_IN_GWEI).toFixed() } { currencyUnits.gwei })</Text>
+            <Text mr={ 1 }>
+              { BigNumber(data.l2_fair_gas_price).dividedBy(WEI).toFixed() }{ ' ' }
+              { currencyUnits.ether }
+            </Text>
+            <Text variant="secondary">
+              (
+              { BigNumber(data.l2_fair_gas_price)
+                .dividedBy(WEI_IN_GWEI)
+                .toFixed() }{ ' ' }
+              { currencyUnits.gwei })
+            </Text>
           </DetailsInfoItem.Value>
         </>
       ) }

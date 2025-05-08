@@ -88,7 +88,7 @@ const SearchResultsPageContent = () => {
         }
         case 'transaction': {
           router.replace({
-            pathname: '/tx/[hash]',
+            pathname: '/tx/',
             query: { hash: redirectCheckQuery.data.parameter },
           });
           return;
@@ -106,7 +106,7 @@ const SearchResultsPageContent = () => {
         case 'blob': {
           if (config.features.dataAvailability.isEnabled) {
             router.replace({
-              pathname: '/blobs/[hash]',
+              pathname: '/blobs/',
               query: { hash: redirectCheckQuery.data.parameter },
             });
             return;

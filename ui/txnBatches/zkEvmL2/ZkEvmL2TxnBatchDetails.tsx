@@ -32,16 +32,22 @@ const ZkEvmL2TxnBatchDetails = ({ query }: Props) => {
 
   const { data, isPlaceholderData, isError, error } = query;
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
-    const increment = direction === 'next' ? +1 : -1;
-    const nextId = String(data.number + increment);
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.number + increment);
 
-    router.push({ pathname: '/batches/[number]', query: { number: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push(
+        { pathname: '/batches/number', query: { number: nextId } },
+        undefined,
+      );
+    },
+    [ data, router ],
+  );
 
   if (isError) {
     if (isCustomAppError(error)) {
@@ -59,18 +65,17 @@ const ZkEvmL2TxnBatchDetails = ({ query }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 3, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(min-content, 200px) minmax(0, 1fr)' }}
+      templateColumns={{
+        base: 'minmax(0, 1fr)',
+        lg: 'minmax(min-content, 200px) minmax(0, 1fr)',
+      }}
       overflow="hidden"
     >
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Txn batch number
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.number }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.number }</Skeleton>
         <PrevNext
           ml={ 6 }
           onClick={ handlePrevNextClick }
@@ -81,27 +86,32 @@ const ZkEvmL2TxnBatchDetails = ({ query }: Props) => {
         />
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Status
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <VerificationSteps steps={ ZKEVM_L2_TX_BATCH_STATUSES } currentStep={ data.status } isLoading={ isPlaceholderData }/>
+        <VerificationSteps
+          steps={ ZKEVM_L2_TX_BATCH_STATUSES }
+          currentStep={ data.status }
+          isLoading={ isPlaceholderData }
+        />
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Timestamp
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        { data.timestamp ? <DetailsTimestamp timestamp={ data.timestamp } isLoading={ isPlaceholderData }/> : 'Undefined' }
+        { data.timestamp ? (
+          <DetailsTimestamp
+            timestamp={ data.timestamp }
+            isLoading={ isPlaceholderData }
+          />
+        ) : (
+          'Undefined'
+        ) }
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Verify tx hash
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
@@ -111,55 +121,57 @@ const ZkEvmL2TxnBatchDetails = ({ query }: Props) => {
             hash={ data.verify_transaction_hash }
             maxW="100%"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Transactions
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !isPlaceholderData }>
-          <LinkInternal href={ route({ pathname: '/batches/[number]', query: { number: data.number.toString(), tab: 'txs' } }) }>
-            { data.transactions.length } transaction{ data.transactions.length === 1 ? '' : 's' }
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.number.toString(), tab: 'txs' },
+            }) }
+          >
+            { data.transactions.length } transaction
+            { data.transactions.length === 1 ? '' : 's' }
           </LinkInternal>
         </Skeleton>
       </DetailsInfoItem.Value>
 
       <DetailsInfoItemDivider/>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Global exit root
       </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value
-        flexWrap="nowrap"
-      >
+      <DetailsInfoItem.Value flexWrap="nowrap">
         <Skeleton isLoaded={ !isPlaceholderData } overflow="hidden">
           <HashStringShortenDynamic hash={ data.global_exit_root }/>
         </Skeleton>
-        <CopyToClipboard text={ data.global_exit_root } isLoading={ isPlaceholderData }/>
+        <CopyToClipboard
+          text={ data.global_exit_root }
+          isLoading={ isPlaceholderData }
+        />
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Acc input hash
       </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value
-        flexWrap="nowrap"
-      >
+      <DetailsInfoItem.Value flexWrap="nowrap">
         <Skeleton isLoaded={ !isPlaceholderData } overflow="hidden">
           <HashStringShortenDynamic hash={ data.acc_input_hash }/>
         </Skeleton>
-        <CopyToClipboard text={ data.acc_input_hash } isLoading={ isPlaceholderData }/>
+        <CopyToClipboard
+          text={ data.acc_input_hash }
+          isLoading={ isPlaceholderData }
+        />
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         Sequence tx hash
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
@@ -169,17 +181,15 @@ const ZkEvmL2TxnBatchDetails = ({ query }: Props) => {
             hash={ data.sequence_transaction_hash }
             maxW="100%"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </DetailsInfoItem.Value>
 
-      <DetailsInfoItem.Label
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem.Label isLoading={ isPlaceholderData }>
         State root
       </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value
-        flexWrap="nowrap"
-      >
+      <DetailsInfoItem.Value flexWrap="nowrap">
         <Skeleton isLoaded={ !isPlaceholderData } overflow="hidden">
           <HashStringShortenDynamic hash={ data.state_root }/>
         </Skeleton>

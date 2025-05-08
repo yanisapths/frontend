@@ -49,7 +49,7 @@ const SearchBarSuggestItem = ({
       }
       case 'transaction': {
         return route({
-          pathname: '/tx/[hash]',
+          pathname: '/tx/',
           query: { hash: data.transaction_hash },
         });
       }
@@ -57,7 +57,7 @@ const SearchBarSuggestItem = ({
         const isFutureBlock = data.timestamp === undefined;
         if (isFutureBlock) {
           return route({
-            pathname: '/block/countdown/[height]',
+            pathname: '/block/countdown/height',
             query: { height: String(data.block_number) },
           });
         }
@@ -75,7 +75,7 @@ const SearchBarSuggestItem = ({
       }
       case 'blob': {
         return route({
-          pathname: '/blobs/[hash]',
+          pathname: '/blobs/',
           query: { hash: data.blob_hash },
         });
       }

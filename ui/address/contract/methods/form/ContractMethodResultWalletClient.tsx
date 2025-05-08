@@ -15,12 +15,19 @@ interface Props {
 }
 
 const ContractMethodResultWalletClient = ({ data, onSettle }: Props) => {
-  const txHash = data && 'hash' in data ? data.hash as `0x${ string }` : undefined;
+  const txHash =
+    data && 'hash' in data ? (data.hash as `0x${ string }`) : undefined;
   const txInfo = useWaitForTransactionReceipt({
     hash: txHash,
   });
 
-  return <ContractMethodResultWalletClientDumb data={ data } onSettle={ onSettle } txInfo={ txInfo }/>;
+  return (
+    <ContractMethodResultWalletClientDumb
+      data={ data }
+      onSettle={ onSettle }
+      txInfo={ txInfo }
+    />
+  );
 };
 
 export interface PropsDumb {
@@ -29,7 +36,11 @@ export interface PropsDumb {
   txInfo: UseWaitForTransactionReceiptReturnType;
 }
 
-export const ContractMethodResultWalletClientDumb = ({ data, onSettle, txInfo }: PropsDumb) => {
+export const ContractMethodResultWalletClientDumb = ({
+  data,
+  onSettle,
+  txInfo,
+}: PropsDumb) => {
   const txHash = data && 'hash' in data ? data.hash : undefined;
 
   React.useEffect(() => {
@@ -45,16 +56,14 @@ export const ContractMethodResultWalletClientDumb = ({ data, onSettle, txInfo }:
   const isErrorResult = 'message' in data;
 
   const txLink = txHash ? (
-    <LinkInternal href={ route({ pathname: '/tx/[hash]', query: { hash: txHash } }) }>View transaction details</LinkInternal>
+    <LinkInternal href={ route({ pathname: '/tx/', query: { hash: txHash } }) }>
+      View transaction details
+    </LinkInternal>
   ) : null;
 
   const content = (() => {
     if (isErrorResult) {
-      return (
-        <Alert status="error">
-          { data.message }
-        </Alert>
-      );
+      return <Alert status="error">{ data.message }</Alert>;
     }
 
     switch (txInfo.status) {
@@ -81,8 +90,15 @@ export const ContractMethodResultWalletClientDumb = ({ data, onSettle, txInfo }:
 
       case 'error': {
         return (
-          <Alert status="error" flexDir="column" alignItems="flex-start" rowGap={ 1 }>
-            Error: { txInfo.error ? txInfo.error.message : 'Something went wrong' } { txLink }
+          <Alert
+            status="error"
+            flexDir="column"
+            alignItems="flex-start"
+            rowGap={ 1 }
+          >
+            Error:{ ' ' }
+            { txInfo.error ? txInfo.error.message : 'Something went wrong' }{ ' ' }
+            { txLink }
           </Alert>
         );
       }

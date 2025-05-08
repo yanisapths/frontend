@@ -26,8 +26,9 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
 
   return (
     <ListItemMobileGrid.Container gridTemplateColumns="110px auto">
-
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Batch #</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Batch #
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <BatchEntityL2
           isLoading={ isLoading }
@@ -38,17 +39,31 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Data availability</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Data availability
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <ScrollL2TxnBatchDA container={ item.data_availability.batch_data_container } isLoading={ isLoading }/>
+        <ScrollL2TxnBatchDA
+          container={ item.data_availability.batch_data_container }
+          isLoading={ isLoading }
+        />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Status</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Status
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <ScrollL2TxnBatchStatus status={ item.confirmation_transaction.hash ? 'Finalized' : 'Committed' } isLoading={ isLoading }/>
+        <ScrollL2TxnBatchStatus
+          status={
+            item.confirmation_transaction.hash ? 'Finalized' : 'Committed'
+          }
+          isLoading={ isLoading }
+        />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Committed block</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Committed block
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <BlockEntityL1
           number={ item.commitment_transaction.block_number }
@@ -58,7 +73,9 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Committed txn hash</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Committed txn hash
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <TxEntityL1
           hash={ item.commitment_transaction.hash }
@@ -68,7 +85,9 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Age</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Age
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <TimeAgoWithTooltip
           timestamp={ item.commitment_transaction.timestamp }
@@ -78,7 +97,9 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Finalized block</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Finalized block
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.confirmation_transaction.block_number ? (
           <BlockEntityL1
@@ -87,10 +108,16 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
             fontSize="sm"
             lineHeight={ 5 }
           />
-        ) : <Skeleton isLoaded={ !isLoading } display="inline-block">Pending</Skeleton> }
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Finalized txn hash</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Finalized txn hash
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.confirmation_transaction.hash ? (
           <TxEntityL1
@@ -99,13 +126,22 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
             fontSize="sm"
             lineHeight={ 5 }
           />
-        ) : <Skeleton isLoaded={ !isLoading } display="inline-block">Pending</Skeleton> }
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Blocks count</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Blocks count
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'blocks' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'blocks' },
+          }) }
           isLoading={ isLoading }
           fontWeight={ 600 }
         >
@@ -115,10 +151,15 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         </LinkInternal>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Txn count</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Txn count
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
           isLoading={ isLoading }
           fontWeight={ 600 }
         >
@@ -127,7 +168,6 @@ const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
           </Skeleton>
         </LinkInternal>
       </ListItemMobileGrid.Value>
-
     </ListItemMobileGrid.Container>
   );
 };

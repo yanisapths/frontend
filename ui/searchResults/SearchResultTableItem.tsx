@@ -406,7 +406,7 @@ const SearchResultTableItem = ({
         const isFutureBlock = data.timestamp === undefined && !isLoading;
         const href = isFutureBlock ?
           route({
-            pathname: '/block/countdown/[height]',
+            pathname: '/block/countdown/height',
             query: { height: String(data.block_number) },
           }) :
           route({

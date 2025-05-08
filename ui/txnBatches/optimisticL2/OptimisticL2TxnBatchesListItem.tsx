@@ -23,8 +23,9 @@ const OptimisticL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
 
   return (
     <ListItemMobileGrid.Container gridTemplateColumns="100px auto">
-
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Batch ID</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Batch ID
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <BatchEntityL2 number={ item.internal_id } isLoading={ isLoading }/>
       </ListItemMobileGrid.Value>
@@ -35,12 +36,17 @@ const OptimisticL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
             Storage
           </ListItemMobileGrid.Label>
           <ListItemMobileGrid.Value>
-            <OptimisticL2TxnBatchDA container={ item.batch_data_container } isLoading={ isLoading }/>
+            <OptimisticL2TxnBatchDA
+              container={ item.batch_data_container }
+              isLoading={ isLoading }
+            />
           </ListItemMobileGrid.Value>
         </>
       ) }
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Age</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Age
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <TimeAgoWithTooltip
           timestamp={ item.l1_timestamp }
@@ -49,17 +55,24 @@ const OptimisticL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>L1 txn count</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        L1 txn count
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <Skeleton isLoaded={ !isLoading } minW="40px">
           { item.l1_transaction_hashes.length }
         </Skeleton>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>L2 blocks</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        L2 blocks
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.internal_id.toString(), tab: 'blocks' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.internal_id.toString(), tab: 'blocks' },
+          }) }
           isLoading={ isLoading }
         >
           <Skeleton isLoaded={ !isLoading } minW="40px">
@@ -68,10 +81,15 @@ const OptimisticL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
         </LinkInternal>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Txn</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Txn
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.internal_id.toString(), tab: 'txs' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.internal_id.toString(), tab: 'txs' },
+          }) }
           isLoading={ isLoading }
         >
           <Skeleton isLoaded={ !isLoading } minW="40px">
@@ -79,7 +97,6 @@ const OptimisticL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
           </Skeleton>
         </LinkInternal>
       </ListItemMobileGrid.Value>
-
     </ListItemMobileGrid.Container>
   );
 };

@@ -225,7 +225,7 @@ const SearchResultListItem = ({
         const isFutureBlock = data.timestamp === undefined;
         const href = isFutureBlock ?
           route({
-            pathname: '/block/countdown/[height]',
+            pathname: '/block/countdown/height',
             query: { height: String(data.block_number) },
           }) :
           route({

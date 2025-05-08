@@ -1,4 +1,10 @@
-import { Box, IconButton, MenuButton, MenuList, chakra } from '@chakra-ui/react';
+import {
+  Box,
+  IconButton,
+  MenuButton,
+  MenuList,
+  chakra,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -22,16 +28,22 @@ interface Props {
   showUpdateMetadataItem?: boolean;
 }
 
-const AccountActionsMenu = ({ isLoading, className, showUpdateMetadataItem }: Props) => {
+const AccountActionsMenu = ({
+  isLoading,
+  className,
+  showUpdateMetadataItem,
+}: Props) => {
   const router = useRouter();
 
   const hash = getQueryParamString(router.query.hash);
   const isTokenPage = router.pathname === '/token/[hash]';
   const isTokenInstancePage = router.pathname === '/token/[hash]/instance/[id]';
-  const isTxPage = router.pathname === '/tx/[hash]';
+  const isTxPage = router.pathname === '/tx/';
 
   const handleButtonClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Address actions (more button)' });
+    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+      Type: 'Address actions (more button)',
+    });
   }, []);
 
   const items = [
@@ -41,15 +53,26 @@ const AccountActionsMenu = ({ isLoading, className, showUpdateMetadataItem }: Pr
     },
     {
       render: (props: ItemProps) => <TokenInfoMenuItem { ...props }/>,
-      enabled: config.features.account.isEnabled && isTokenPage && config.features.addressVerification.isEnabled,
+      enabled:
+        config.features.account.isEnabled &&
+        isTokenPage &&
+        config.features.addressVerification.isEnabled,
     },
     {
-      render: (props: ItemProps) => <PrivateTagMenuItem { ...props } entityType={ isTxPage ? 'tx' : 'address' }/>,
+      render: (props: ItemProps) => (
+        <PrivateTagMenuItem
+          { ...props }
+          entityType={ isTxPage ? 'tx' : 'address' }
+        />
+      ),
       enabled: config.features.account.isEnabled,
     },
     {
       render: (props: ItemProps) => <PublicTagMenuItem { ...props }/>,
-      enabled: config.features.account.isEnabled && !isTxPage && config.features.publicTagsSubmission.isEnabled,
+      enabled:
+        config.features.account.isEnabled &&
+        !isTxPage &&
+        config.features.publicTagsSubmission.isEnabled,
     },
   ].filter(({ enabled }) => enabled);
 
@@ -58,7 +81,9 @@ const AccountActionsMenu = ({ isLoading, className, showUpdateMetadataItem }: Pr
   }
 
   if (isLoading) {
-    return <Skeleton w="36px" h="32px" borderRadius="base" className={ className }/>;
+    return (
+      <Skeleton w="36px" h="32px" borderRadius="base" className={ className }/>
+    );
   }
 
   if (items.length === 1) {

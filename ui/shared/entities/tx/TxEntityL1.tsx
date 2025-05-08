@@ -14,12 +14,16 @@ const TxEntityL1 = (props: TxEntity.EntityProps) => {
     return null;
   }
 
-  const defaultHref = rollupFeature.parentChain.baseUrl + route({
-    pathname: '/tx/[hash]',
-    query: { hash: props.hash },
-  });
+  const defaultHref =
+    rollupFeature.parentChain.baseUrl +
+    route({
+      pathname: '/tx/',
+      query: { hash: props.hash },
+    });
 
-  return <TxEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>;
+  return (
+    <TxEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>
+  );
 };
 
 export default chakra(TxEntityL1);

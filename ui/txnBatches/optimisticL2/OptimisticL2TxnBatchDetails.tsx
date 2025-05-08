@@ -31,16 +31,22 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
 
   const { data, isError, error, isPlaceholderData } = query;
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
-    const increment = direction === 'next' ? +1 : -1;
-    const nextId = String(data.internal_id + increment);
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.internal_id + increment);
 
-    router.push({ pathname: '/batches/[number]', query: { number: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push(
+        { pathname: '/batches/number', query: { number: nextId } },
+        undefined,
+      );
+    },
+    [ data, router ],
+  );
 
   if (isError) {
     if (isCustomAppError(error)) {
@@ -60,7 +66,10 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 3, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(min-content, 200px) minmax(0, 1fr)' }}
+      templateColumns={{
+        base: 'minmax(0, 1fr)',
+        lg: 'minmax(min-content, 200px) minmax(0, 1fr)',
+      }}
       overflow="hidden"
     >
       <DetailsInfoItem.Label
@@ -70,9 +79,7 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         Batch ID
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.internal_id }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.internal_id }</Skeleton>
         <PrevNext
           ml={ 6 }
           onClick={ handlePrevNextClick }
@@ -90,10 +97,14 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         Timestamp
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        { data.l1_timestamp ?
-          <DetailsTimestamp timestamp={ data.l1_timestamp }isLoading={ isPlaceholderData }/> :
+        { data.l1_timestamp ? (
+          <DetailsTimestamp
+            timestamp={ data.l1_timestamp }
+            isLoading={ isPlaceholderData }
+          />
+        ) : (
           'Undefined'
-        }
+        ) }
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
@@ -104,10 +115,16 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !isPlaceholderData }>
-          <LinkInternal href={ route({ pathname: '/batches/[number]', query: { number: data.internal_id.toString(), tab: 'txs' } }) }>
-            { data.transaction_count.toLocaleString() } transaction{ data.transaction_count === 1 ? '' : 's' }
-          </LinkInternal>
-          { ' ' }in this batch
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.internal_id.toString(), tab: 'txs' },
+            }) }
+          >
+            { data.transaction_count.toLocaleString() } transaction
+            { data.transaction_count === 1 ? '' : 's' }
+          </LinkInternal>{ ' ' }
+          in this batch
         </Skeleton>
       </DetailsInfoItem.Value>
 
@@ -119,10 +136,15 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !isPlaceholderData }>
-          <LinkInternal href={ route({ pathname: '/batches/[number]', query: { number: data.internal_id.toString(), tab: 'blocks' } }) }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.internal_id.toString(), tab: 'blocks' },
+            }) }
+          >
             { blocksCount.toLocaleString() } block{ blocksCount === 1 ? '' : 's' }
-          </LinkInternal>
-          { ' ' }in this batch
+          </LinkInternal>{ ' ' }
+          in this batch
         </Skeleton>
       </DetailsInfoItem.Value>
 
@@ -132,10 +154,21 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
       >
         Batch data container
       </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value flexDir="column" alignItems="flex-start" rowGap={ 2 }>
-        <OptimisticL2TxnBatchDA container={ data.batch_data_container } isLoading={ isPlaceholderData }/>
-        { data.batch_data_container === 'in_blob4844' && data.blobs &&
-          <OptimisticL2TxnBatchBlobEip4844 blobs={ data.blobs } isLoading={ isPlaceholderData }/> }
+      <DetailsInfoItem.Value
+        flexDir="column"
+        alignItems="flex-start"
+        rowGap={ 2 }
+      >
+        <OptimisticL2TxnBatchDA
+          container={ data.batch_data_container }
+          isLoading={ isPlaceholderData }
+        />
+        { data.batch_data_container === 'in_blob4844' && data.blobs && (
+          <OptimisticL2TxnBatchBlobEip4844
+            blobs={ data.blobs }
+            isLoading={ isPlaceholderData }
+          />
+        ) }
         { data.batch_data_container === 'in_calldata' && (
           <OptimisticL2TxnBatchBlobCallData
             l1TxHashes={ data.l1_transaction_hashes }
@@ -143,8 +176,12 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
             isLoading={ isPlaceholderData }
           />
         ) }
-        { data.batch_data_container === 'in_celestia' && data.blobs &&
-          <OptimisticL2TxnBatchBlobCelestia blobs={ data.blobs } isLoading={ isPlaceholderData }/> }
+        { data.batch_data_container === 'in_celestia' && data.blobs && (
+          <OptimisticL2TxnBatchBlobCelestia
+            blobs={ data.blobs }
+            isLoading={ isPlaceholderData }
+          />
+        ) }
       </DetailsInfoItem.Value>
     </Grid>
   );

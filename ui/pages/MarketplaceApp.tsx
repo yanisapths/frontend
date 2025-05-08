@@ -65,8 +65,7 @@ const MarketplaceAppContent = ({ address, data, isPending, appUrl }: Props) => {
           config.app.baseUrl +
           route({ pathname: '/address/', query: { hash: '' } }),
         blockscoutTransactionExplorerUrl:
-          config.app.baseUrl +
-          route({ pathname: '/tx/[hash]', query: { hash: '' } }),
+          config.app.baseUrl + route({ pathname: '/tx/', query: { hash: '' } }),
         blockscoutNetworkName: config.chain.name,
         blockscoutNetworkId: Number(config.chain.id),
         blockscoutNetworkCurrency: config.chain.currency,

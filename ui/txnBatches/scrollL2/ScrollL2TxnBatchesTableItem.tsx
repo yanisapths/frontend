@@ -37,10 +37,18 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         />
       </Td>
       <Td verticalAlign="middle">
-        <ScrollL2TxnBatchDA container={ item.data_availability?.batch_data_container } isLoading={ isLoading }/>
+        <ScrollL2TxnBatchDA
+          container={ item.data_availability?.batch_data_container }
+          isLoading={ isLoading }
+        />
       </Td>
       <Td verticalAlign="middle">
-        <ScrollL2TxnBatchStatus status={ item.confirmation_transaction.hash ? 'Finalized' : 'Committed' } isLoading={ isLoading }/>
+        <ScrollL2TxnBatchStatus
+          status={
+            item.confirmation_transaction.hash ? 'Finalized' : 'Committed'
+          }
+          isLoading={ isLoading }
+        />
       </Td>
       <Td verticalAlign="middle">
         <BlockEntityL1
@@ -75,7 +83,11 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
             fontSize="sm"
             lineHeight={ 5 }
           />
-        ) : <Skeleton isLoaded={ !isLoading } display="inline-block">Pending</Skeleton> }
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
       </Td>
       <Td verticalAlign="middle">
         { item.confirmation_transaction.hash ? (
@@ -86,11 +98,18 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
             lineHeight={ 5 }
             truncation="constant_long"
           />
-        ) : <Skeleton isLoaded={ !isLoading } display="inline-block">Pending</Skeleton> }
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
       </Td>
       <Td verticalAlign="middle" isNumeric>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'blocks' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'blocks' },
+          }) }
           isLoading={ isLoading }
         >
           <Skeleton isLoaded={ !isLoading }>
@@ -100,7 +119,10 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
       </Td>
       <Td verticalAlign="middle" isNumeric>
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
           isLoading={ isLoading }
         >
           <Skeleton isLoaded={ !isLoading }>

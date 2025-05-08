@@ -30,12 +30,12 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/apps/[id]", { "id": string }>
     | StaticRoute<"/apps">
     | StaticRoute<"/auth/profile">
-    | DynamicRoute<"/batches/[number]", { "number": string }>
+    | DynamicRoute<"/batches/number", { "number": string }>
     | DynamicRoute<"/batches/celestia/[height]/[commitment]", { "height": string; "commitment": string }>
     | StaticRoute<"/batches">
-    | DynamicRoute<"/blobs/[hash]", { "hash": string }>
-    | DynamicRoute<"/block/[height_or_hash]", { "height_or_hash": string }>
-    | DynamicRoute<"/block/countdown/[height]", { "height": string }>
+    | DynamicRoute<"/blobs/", { "hash": string }>
+    | DynamicRoute<"/block/", { "height_or_hash": string }>
+    | DynamicRoute<"/block/countdown/height", { "height": string }>
     | StaticRoute<"/block/countdown">
     | StaticRoute<"/blocks">
     | StaticRoute<"/contract-verification">
@@ -65,7 +65,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/token/[hash]/instance/[id]", { "hash": string; "id": string }>
     | StaticRoute<"/token-transfers">
     | StaticRoute<"/tokens">
-    | DynamicRoute<"/tx/[hash]", { "hash": string }>
+    | DynamicRoute<"/tx/", { "hash": string }>
     | StaticRoute<"/txn-withdrawals">
     | StaticRoute<"/txs">
     | DynamicRoute<"/txs/kettle/[hash]", { "hash": string }>

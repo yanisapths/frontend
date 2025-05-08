@@ -1,7 +1,4 @@
-import {
-  Box,
-  Flex,
-} from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -20,7 +17,13 @@ type Props = {
   isLoading: boolean;
 };
 
-const LatestBatchItem = ({ number, timestamp, txCount, status, isLoading }: Props) => {
+const LatestBatchItem = ({
+  number,
+  timestamp,
+  txCount,
+  status,
+  isLoading,
+}: Props) => {
   return (
     <Box
       as={ motion.div }
@@ -56,16 +59,24 @@ const LatestBatchItem = ({ number, timestamp, txCount, status, isLoading }: Prop
           ml={ 2 }
         />
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between" w="100%" flexWrap="wrap">
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        w="100%"
+        flexWrap="wrap"
+      >
         <Flex alignItems="center">
-          <Skeleton isLoaded={ !isLoading } mr={ 2 }>Txn</Skeleton>
+          <Skeleton isLoaded={ !isLoading } mr={ 2 }>
+            Txn
+          </Skeleton>
           <LinkInternal
-            href={ route({ pathname: '/batches/[number]', query: { number: number.toString(), tab: 'txs' } }) }
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: number.toString(), tab: 'txs' },
+            }) }
             isLoading={ isLoading }
           >
-            <Skeleton isLoaded={ !isLoading }>
-              { txCount }
-            </Skeleton>
+            <Skeleton isLoaded={ !isLoading }>{ txCount }</Skeleton>
           </LinkInternal>
         </Flex>
         { status }

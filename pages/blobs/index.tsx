@@ -1,20 +1,17 @@
 import type { NextPage } from 'next';
-import dynamic from 'next/dynamic';
 import React from 'react';
 
 import type { Props } from 'nextjs/getServerSideProps';
 import PageNextJs from 'nextjs/PageNextJs';
 
-const Blob = dynamic(() => import('ui/pages/Blob'), { ssr: false });
+import Blob from 'ui/pages/Transaction';
 
 const Page: NextPage<Props> = (props: Props) => {
   return (
-    <PageNextJs pathname="/blobs/[hash]" query={ props.query }>
+    <PageNextJs pathname="/blobs/" query={ props.query }>
       <Blob/>
     </PageNextJs>
   );
 };
 
 export default Page;
-
-export { dataAvailability as getServerSideProps } from 'nextjs/getServerSideProps';

@@ -47,7 +47,10 @@ const ZkSyncTxnBatchesTableItem = ({ item, isLoading }: Props) => {
       </Td>
       <Td verticalAlign="middle">
         <LinkInternal
-          href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
           isLoading={ isLoading }
         >
           <Skeleton isLoaded={ !isLoading } minW="40px" my={ 1 }>
@@ -65,7 +68,9 @@ const ZkSyncTxnBatchesTableItem = ({ item, isLoading }: Props) => {
             truncation="constant_long"
             noIcon
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </Td>
       <Td verticalAlign="middle">
         { item.prove_transaction_hash ? (
@@ -77,7 +82,9 @@ const ZkSyncTxnBatchesTableItem = ({ item, isLoading }: Props) => {
             truncation="constant_long"
             noIcon
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </Td>
     </Tr>
   );
