@@ -103,6 +103,7 @@ const TokenInstanceContent = () => {
             id: tokenInstanceQuery.data.id,
           },
         },
+        // @ts-ignore
         { symbol: tokenQuery.data.symbol ?? '' },
       );
     }

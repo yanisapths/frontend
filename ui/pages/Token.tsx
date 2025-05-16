@@ -128,6 +128,7 @@ const TokenPageContent = () => {
     ) {
       metadata.update(
         { pathname: '/token', query: { hash: tokenQuery.data.address } },
+        // @ts-ignore
         tokenQuery.data,
       );
     }
