@@ -43,30 +43,36 @@ const AddressDetails = ({ addressQuery }: Props) => {
     addressQuery,
   });
 
-  const error404Data = React.useMemo(() => ({
-    hash: addressHash || '',
-    is_contract: false,
-    implementations: null,
-    token: null,
-    watchlist_address_id: null,
-    watchlist_names: null,
-    creation_transaction_hash: null,
-    block_number_balance_updated_at: null,
-    name: null,
-    exchange_rate: null,
-    coin_balance: null,
-    has_tokens: true,
-    has_token_transfers: true,
-    has_validated_blocks: false,
-    filecoin: undefined,
-    creator_filecoin_robust_address: null,
-    creator_address_hash: null,
-  }), [ addressHash ]);
+  const error404Data = React.useMemo(
+    () => ({
+      hash: addressHash || '',
+      is_contract: false,
+      implementations: null,
+      token: null,
+      watchlist_address_id: null,
+      watchlist_names: null,
+      creation_transaction_hash: null,
+      block_number_balance_updated_at: null,
+      name: null,
+      exchange_rate: null,
+      coin_balance: null,
+      has_tokens: true,
+      has_token_transfers: true,
+      has_validated_blocks: false,
+      filecoin: undefined,
+      creator_filecoin_robust_address: null,
+      creator_address_hash: null,
+    }),
+    [ addressHash ],
+  );
 
   // error handling (except 404 codes)
   if (addressQuery.isError) {
     if (isCustomAppError(addressQuery.error)) {
-      const is404Error = addressQuery.isError && 'status' in addressQuery.error && addressQuery.error.status === 404;
+      const is404Error =
+        addressQuery.isError &&
+        'status' in addressQuery.error &&
+        addressQuery.error.status === 404;
       if (!is404Error) {
         throwOnResourceLoadError(addressQuery);
       }
@@ -85,19 +91,26 @@ const AddressDetails = ({ addressQuery }: Props) => {
 
   return (
     <>
-      { addressQuery.isDegradedData && <ServiceDegradationWarning isLoading={ addressQuery.isPlaceholderData } mb={ 6 }/> }
+      { addressQuery.isDegradedData && (
+        <ServiceDegradationWarning
+          isLoading={ addressQuery.isPlaceholderData }
+          mb={ 6 }
+        />
+      ) }
       <Grid
         columnGap={ 8 }
         rowGap={{ base: 1, lg: 3 }}
-        templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }} overflow="hidden"
+        templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }}
+        overflow="hidden"
       >
-        <AddressAlternativeFormat isLoading={ addressQuery.isPlaceholderData } addressHash={ addressHash }/>
+        <AddressAlternativeFormat
+          isLoading={ addressQuery.isPlaceholderData }
+          addressHash={ addressHash }
+        />
 
         { data.filecoin?.id && (
           <>
-            <DetailsInfoItem.Label
-              hint="Short identifier of an address that may change with chain state updates"
-            >
+            <DetailsInfoItem.Label hint="Short identifier of an address that may change with chain state updates">
               ID
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value>
@@ -109,9 +122,7 @@ const AddressDetails = ({ addressQuery }: Props) => {
 
         { data.filecoin?.actor_type && (
           <>
-            <DetailsInfoItem.Label
-              hint="Identifies the purpose and behavior of the address on the Filecoin network"
-            >
+            <DetailsInfoItem.Label hint="Identifies the purpose and behavior of the address on the Filecoin network">
               Actor
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value>
@@ -120,26 +131,27 @@ const AddressDetails = ({ addressQuery }: Props) => {
           </>
         ) }
 
-        { (data.filecoin?.actor_type === 'evm' || data.filecoin?.actor_type === 'ethaccount') && data?.filecoin?.robust && (
+        { (data.filecoin?.actor_type === 'evm' ||
+          data.filecoin?.actor_type === 'ethaccount') &&
+          data?.filecoin?.robust && (
           <>
-            <DetailsInfoItem.Label
-              hint="0x-style address to which the Filecoin address is assigned by the Ethereum Address Manager"
-            >
+            <DetailsInfoItem.Label hint="0x-style address to which the Filecoin address is assigned by the Ethereum Address Manager">
               Ethereum Address
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value flexWrap="nowrap">
-              <AddressEntity
-                address={{ hash: data.hash }}
-                noIcon
-                noLink
-              />
+              <AddressEntity address={{ hash: data.hash }} noIcon noLink/>
             </DetailsInfoItem.Value>
           </>
         ) }
 
-        <AddressNameInfo data={ data } isLoading={ addressQuery.isPlaceholderData }/>
+        <AddressNameInfo
+          data={ data }
+          isLoading={ addressQuery.isPlaceholderData }
+        />
 
-        { data.is_contract && data.creation_transaction_hash && (creatorAddressHash) && (
+        { data.is_contract &&
+          data.creation_transaction_hash &&
+          creatorAddressHash && (
           <>
             <DetailsInfoItem.Label
               hint="Transaction and address of creation"
@@ -149,30 +161,42 @@ const AddressDetails = ({ addressQuery }: Props) => {
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value>
               <AddressEntity
-                address={{ hash: creatorAddressHash, filecoin: { robust: data.creator_filecoin_robust_address } }}
+                address={{
+                  hash: creatorAddressHash,
+                  filecoin: { robust: data.creator_filecoin_robust_address },
+                }}
                 truncation="constant"
                 noIcon
               />
               <Text whiteSpace="pre"> at txn </Text>
-              <TxEntity hash={ data.creation_transaction_hash } truncation="constant" noIcon noCopy={ false }/>
+              <TxEntity
+                hash={ data.creation_transaction_hash }
+                truncation="constant"
+                noIcon
+                noCopy={ false }
+              />
             </DetailsInfoItem.Value>
           </>
         ) }
-        { data.is_contract && data.implementations && data.implementations?.length > 0 && (
+        { data.is_contract &&
+          data.implementations &&
+          data.implementations?.length > 0 && (
           <AddressImplementations
             data={ data.implementations }
             isLoading={ addressQuery.isPlaceholderData }
+            // @ts-ignore
             proxyType={ data.proxy_type }
           />
         ) }
 
-        <AddressBalance data={ data } isLoading={ addressQuery.isPlaceholderData }/>
+        <AddressBalance
+          data={ data }
+          isLoading={ addressQuery.isPlaceholderData }
+        />
 
         { data.has_tokens && (
           <>
-            <DetailsInfoItem.Label
-              hint="All tokens in the account and total value"
-            >
+            <DetailsInfoItem.Label hint="All tokens in the account and total value">
               Tokens
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value py={ addressQuery.data ? 0 : undefined }>
@@ -180,7 +204,8 @@ const AddressDetails = ({ addressQuery }: Props) => {
             </DetailsInfoItem.Value>
           </>
         ) }
-        { (config.features.multichainButton.isEnabled || (data.exchange_rate && data.has_tokens)) && (
+        { (config.features.multichainButton.isEnabled ||
+          (data.exchange_rate && data.has_tokens)) && (
           <>
             <DetailsInfoItem.Label
               hint="Total net worth in USD of all tokens for the address"
@@ -189,15 +214,20 @@ const AddressDetails = ({ addressQuery }: Props) => {
               Net worth
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value alignSelf="center" py={ 0 }>
-              <AddressNetWorth addressData={ addressQuery.data } addressHash={ addressHash } isLoading={ addressQuery.isPlaceholderData }/>
+              <AddressNetWorth
+                addressData={ addressQuery.data }
+                addressHash={ addressHash }
+                isLoading={ addressQuery.isPlaceholderData }
+              />
             </DetailsInfoItem.Value>
           </>
-        )
-        }
+        ) }
 
         <DetailsInfoItem.Label
           hint="Number of transactions related to this address"
-          isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
+          isLoading={
+            addressQuery.isPlaceholderData || countersQuery.isPlaceholderData
+          }
         >
           Transactions
         </DetailsInfoItem.Label>
@@ -210,15 +240,19 @@ const AddressDetails = ({ addressQuery }: Props) => {
               isAddressQueryLoading={ addressQuery.isPlaceholderData }
               isDegradedData={ addressQuery.isDegradedData }
             />
-          ) :
-            0 }
+          ) : (
+            0
+          ) }
         </DetailsInfoItem.Value>
 
         { data.has_token_transfers && (
           <>
             <DetailsInfoItem.Label
               hint="Number of transfers to/from this address"
-              isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
+              isLoading={
+                addressQuery.isPlaceholderData ||
+                countersQuery.isPlaceholderData
+              }
             >
               Transfers
             </DetailsInfoItem.Label>
@@ -231,8 +265,9 @@ const AddressDetails = ({ addressQuery }: Props) => {
                   isAddressQueryLoading={ addressQuery.isPlaceholderData }
                   isDegradedData={ addressQuery.isDegradedData }
                 />
-              ) :
-                0 }
+              ) : (
+                0
+              ) }
             </DetailsInfoItem.Value>
           </>
         ) }
@@ -241,7 +276,10 @@ const AddressDetails = ({ addressQuery }: Props) => {
           <>
             <DetailsInfoItem.Label
               hint="Gas used by the address"
-              isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
+              isLoading={
+                addressQuery.isPlaceholderData ||
+                countersQuery.isPlaceholderData
+              }
             >
               Gas used
             </DetailsInfoItem.Label>
@@ -254,9 +292,11 @@ const AddressDetails = ({ addressQuery }: Props) => {
                   isAddressQueryLoading={ addressQuery.isPlaceholderData }
                   isDegradedData={ addressQuery.isDegradedData }
                 />
-              ) :
-                0 }
-              { !countersQuery.isPlaceholderData && countersQuery.data?.gas_usage_count && (
+              ) : (
+                0
+              ) }
+              { !countersQuery.isPlaceholderData &&
+                countersQuery.data?.gas_usage_count && (
                 <AddressSaveOnGas
                   gasUsed={ countersQuery.data.gas_usage_count }
                   address={ data.hash }
@@ -270,7 +310,10 @@ const AddressDetails = ({ addressQuery }: Props) => {
           <>
             <DetailsInfoItem.Label
               hint={ `Number of blocks ${ getNetworkValidationActionText() } by this ${ getNetworkValidatorTitle() }` }
-              isLoading={ addressQuery.isPlaceholderData || countersQuery.isPlaceholderData }
+              isLoading={
+                addressQuery.isPlaceholderData ||
+                countersQuery.isPlaceholderData
+              }
             >
               { `Blocks ${ getNetworkValidationActionText() }` }
             </DetailsInfoItem.Label>
@@ -283,8 +326,9 @@ const AddressDetails = ({ addressQuery }: Props) => {
                   isAddressQueryLoading={ addressQuery.isPlaceholderData }
                   isDegradedData={ addressQuery.isDegradedData }
                 />
-              ) :
-                0 }
+              ) : (
+                0
+              ) }
             </DetailsInfoItem.Value>
           </>
         ) }

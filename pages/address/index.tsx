@@ -7,7 +7,7 @@ import Address from 'ui/pages/Address';
 
 const Page: NextPage = () => {
   return (
-    <PageNextJs pathname="/address/">
+    <PageNextJs pathname="/address">
       <Address/>
     </PageNextJs>
   );

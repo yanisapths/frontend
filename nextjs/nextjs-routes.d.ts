@@ -5,6 +5,11 @@
 
 // prettier-ignore
 declare module "nextjs-routes" {
+  import type {
+    GetServerSidePropsContext as NextGetServerSidePropsContext,
+    GetServerSidePropsResult as NextGetServerSidePropsResult
+  } from "nextjs";
+
   export type Route =
     | StaticRoute<"/404">
     | StaticRoute<"/account/api-key">
@@ -14,9 +19,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/account/verified-addresses">
     | StaticRoute<"/account/watchlist">
     | StaticRoute<"/accounts">
-    | StaticRoute<"/accounts/label", { "slug": string }>
-    | StaticRoute<"/address/contract-verification", { "hash": string }>
-    | StaticRoute<"/address", { "hash": string }>
+    | StaticRoute<"/accounts/label">
+    | StaticRoute<"/address/contract-verification">
+    | StaticRoute<"/address">
     | StaticRoute<"/advanced-filter">
     | StaticRoute<"/api/config">
     | StaticRoute<"/api/csrf">
@@ -27,16 +32,16 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/monitoring/invalid-api-schema">
     | StaticRoute<"/api/proxy">
     | StaticRoute<"/api-docs">
-    | StaticRoute<"/apps/id/", { "id": string }>
+    | StaticRoute<"/apps/id">
     | StaticRoute<"/apps">
     | StaticRoute<"/auth/profile">
-    | StaticRoute<"/batches/number", { "number": string }>
-    | StaticRoute<"/batches/celestia/height", { "height": string; "commitment": string }>
+    | StaticRoute<"/batches/celestia/height">
     | StaticRoute<"/batches">
-    | StaticRoute<"/blobs/", { "hash": string }>
-    | StaticRoute<"/block", { "height_or_hash": string }>
-    | StaticRoute<"/block/countdown/height", { "height": string }>
+    | StaticRoute<"/batches/number">
+    | StaticRoute<"/blobs">
+    | StaticRoute<"/block/countdown/height">
     | StaticRoute<"/block/countdown">
+    | StaticRoute<"/block">
     | StaticRoute<"/blocks">
     | StaticRoute<"/contract-verification">
     | StaticRoute<"/csv-export">
@@ -49,27 +54,27 @@ declare module "nextjs-routes" {
     | StaticRoute<"/interop-messages">
     | StaticRoute<"/login">
     | StaticRoute<"/mud-worlds">
-    | StaticRoute<"/name-domains/name", { "name": string }>
     | StaticRoute<"/name-domains">
-    | StaticRoute<"/op/", { "hash": string }>
+    | StaticRoute<"/name-domains/name">
+    | StaticRoute<"/op">
     | StaticRoute<"/ops">
     | StaticRoute<"/output-roots">
-    | StaticRoute<"/pools/hash", { "hash": string }>
+    | StaticRoute<"/pools/hash">
     | StaticRoute<"/pools">
     | StaticRoute<"/public-tags/submit">
     | StaticRoute<"/search-results">
     | StaticRoute<"/sprite">
-    | StaticRoute<"/stats", { "id": string }>
     | StaticRoute<"/stats">
-    | StaticRoute<"/token", { "hash": string }>
-    | StaticRoute<"/token/instance", { "hash": string; "id": string }>
+    | StaticRoute<"/stats">
+    | StaticRoute<"/token">
+    | StaticRoute<"/token/instance">
     | StaticRoute<"/token-transfers">
     | StaticRoute<"/tokens">
-    | StaticRoute<"/tx/", { "hash": string }>
+    | StaticRoute<"/tx">
     | StaticRoute<"/txn-withdrawals">
     | StaticRoute<"/txs">
-    | StaticRoute<"/txs/kettle", { "hash": string }>
-    | StaticRoute<"/validators/id", { "id": string }>
+    | StaticRoute<"/txs/kettle">
+    | StaticRoute<"/validators/id">
     | StaticRoute<"/validators">
     | StaticRoute<"/verified-contracts">
     | StaticRoute<"/visualize/sol2uml">
@@ -81,11 +86,11 @@ declare module "nextjs-routes" {
     hash?: string | null | undefined;
   }
 
-  // interface StaticRoute<Pathname, Parameters> {
-  //   pathname: Pathname;
-  //   query: Parameters & Query;
-  //   hash?: string | null | undefined;
-  // }
+  interface DynamicRoute<Pathname, Parameters> {
+    pathname: Pathname;
+    query: Parameters & Query;
+    hash?: string | null | undefined;
+  }
 
   interface Query {
     [key: string]: string | string[] | undefined;
@@ -104,6 +109,33 @@ declare module "nextjs-routes" {
    * route({ pathname: "/foos/[foo]", query: { foo: "bar" }}) will produce "/foos/bar".
    */
   export declare function route(r: Route): string;
+
+  /**
+   * Nearly identical to GetServerSidePropsContext from next, but further narrows
+   * types based on nextjs-route's route data.
+   */
+  export type GetServerSidePropsContext<
+    Pathname extends Route["pathname"] = Route["pathname"],
+    Preview extends NextGetServerSidePropsContext["previewData"] = NextGetServerSidePropsContext["previewData"]
+  > = Omit<NextGetServerSidePropsContext, 'params' | 'query' | 'defaultLocale' | 'locale' | 'locales'> & {
+    params: Extract<Route, { pathname: Pathname }>["query"];
+    query: Query;
+    defaultLocale?: undefined;
+    locale?: Locale;
+    locales?: undefined;
+  };
+
+  /**
+   * Nearly identical to GetServerSideProps from next, but further narrows
+   * types based on nextjs-route's route data.
+   */
+  export type GetServerSideProps<
+    Props extends { [key: string]: any } = { [key: string]: any },
+    Pathname extends Route["pathname"] = Route["pathname"],
+    Preview extends NextGetServerSideProps["previewData"] = NextGetServerSideProps["previewData"]
+  > = (
+    context: GetServerSidePropsContext<Pathname, Preview>
+  ) => Promise<NextGetServerSidePropsResult<Props>>
 }
 
 // prettier-ignore
@@ -118,13 +150,12 @@ declare module "next/link" {
   } from "react";
   export * from "next/dist/client/link";
 
-  type Query = { query?: { [key: string]: string | string[] | undefined } };
   type StaticRoute = Exclude<Route, { query: any }>["pathname"];
 
   export interface LinkProps
     extends Omit<NextLinkProps, "href" | "locale">,
       AnchorHTMLAttributes<HTMLAnchorElement> {
-    href: Route | StaticRoute | Query;
+    href: Route | StaticRoute | Omit<Route, "pathname">
     locale?: false;
   }
 
@@ -152,7 +183,6 @@ declare module "next/router" {
 
   type NextTransitionOptions = NonNullable<Parameters<Router["push"]>[2]>;
   type StaticRoute = Exclude<Route, { query: any }>["pathname"];
-  type Query = { query?: { [key: string]: string | string[] | undefined } };
 
   interface TransitionOptions extends Omit<NextTransitionOptions, "locale"> {
     locale?: false;
@@ -174,12 +204,12 @@ declare module "next/router" {
         locale?: Locale;
         locales?: undefined;
         push(
-          url: Route | StaticRoute | Query,
+          url: Route | StaticRoute | Omit<Route, "pathname">,
           as?: string,
           options?: TransitionOptions
         ): Promise<boolean>;
         replace(
-          url: Route | StaticRoute | Query,
+          url: Route | StaticRoute | Omit<Route, "pathname">,
           as?: string,
           options?: TransitionOptions
         ): Promise<boolean>;

@@ -1,6 +1,10 @@
 import type { TestFixture, Page } from '@playwright/test';
 import { isEqual } from 'es-toolkit';
-import { encodeFunctionData, encodeFunctionResult, type AbiFunction } from 'viem';
+import {
+  encodeFunctionData,
+  encodeFunctionResult,
+  type AbiFunction,
+} from 'viem';
 
 import { getEnvValue } from 'configs/app/utils';
 
@@ -13,7 +17,10 @@ interface Params {
 
 export type MockContractReadResponseFixture = (params: Params) => Promise<void>;
 
-const fixture: TestFixture<MockContractReadResponseFixture, { page: Page }> = async({ page }, use) => {
+const fixture: TestFixture<
+  MockContractReadResponseFixture,
+  { page: Page }
+> = async({ page }, use) => {
   await use(async({ abiItem, args = [], address, result }) => {
     const rpcUrl = getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL');
 
@@ -37,6 +44,7 @@ const fixture: TestFixture<MockContractReadResponseFixture, { page: Page }> = as
         data: encodeFunctionData({
           abi: [ abiItem ],
           functionName: abiItem.name,
+          // @ts-ignore
           args,
         }),
         to: address,
@@ -49,9 +57,11 @@ const fixture: TestFixture<MockContractReadResponseFixture, { page: Page }> = as
           json: {
             id,
             jsonrpc: '2.0',
+            // @ts-ignore
             result: encodeFunctionResult({
               abi: [ abiItem ],
               functionName: abiItem.name,
+              // @ts-ignore
               result,
             }),
           },
