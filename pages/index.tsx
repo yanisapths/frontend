@@ -16,13 +16,7 @@ const Page: NextPageWithLayout = () => {
 };
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <LayoutHome>
-      { page }
-    </LayoutHome>
-  );
+  return <LayoutHome>{ page }</LayoutHome>;
 };
 
 export default Page;
-
-export { base as getServerSideProps } from 'nextjs/getServerSideProps';
