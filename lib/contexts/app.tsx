@@ -13,15 +13,14 @@ const AppContext = createContext<PageProps>({
   referrer: '',
   query: {},
   adBannerProvider: null,
+  // @ts-ignore
   apiData: null,
   uuid: '',
 });
 
 export function AppContextProvider({ children, pageProps }: Props) {
   return (
-    <AppContext.Provider value={ pageProps }>
-      { children }
-    </AppContext.Provider>
+    <AppContext.Provider value={ pageProps }>{ children }</AppContext.Provider>
   );
 }
 
