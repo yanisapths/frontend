@@ -40,7 +40,10 @@ const TokenInfoMenuItem = ({ className, hash, type }: ItemProps) => {
   });
 
   const handleAddApplicationClick = React.useCallback(async() => {
-    router.push({ pathname: '/account/verified-addresses', query: { address: hash } });
+    router.push({
+      pathname: '/account/verified-addresses',
+      query: { address: hash },
+    });
   }, [ hash, router ]);
 
   const handleVerifiedAddressSubmit = React.useCallback(async() => {
@@ -53,26 +56,42 @@ const TokenInfoMenuItem = ({ className, hash, type }: ItemProps) => {
 
   const element = (() => {
     const icon = <IconSvg name="edit" boxSize={ 6 } p={ 1 }/>;
-    const isVerifiedAddress = verifiedAddressesQuery.data?.verifiedAddresses
-      .find(({ contractAddress }) => contractAddress.toLowerCase() === hash.toLowerCase());
-    const hasApplication = applicationsQuery.data?.submissions.some(({ tokenAddress }) => tokenAddress.toLowerCase() === hash.toLowerCase());
+    const isVerifiedAddress =
+      verifiedAddressesQuery.data?.verifiedAddresses.find(
+        ({ contractAddress }) =>
+          contractAddress.toLowerCase() === hash.toLowerCase(),
+      );
+    const hasApplication = applicationsQuery.data?.submissions.some(
+      ({ tokenAddress }) => tokenAddress.toLowerCase() === hash.toLowerCase(),
+    );
 
     const label = (() => {
       if (!isVerifiedAddress) {
-        return tokenInfoQuery.data?.tokenAddress ? 'Update token info' : 'Add token info';
+        return tokenInfoQuery.data?.tokenAddress ?
+          'Update token info' :
+          'Add token info';
       }
 
-      return hasApplication || tokenInfoQuery.data?.tokenAddress ? 'Update token info' : 'Add token info';
+      return hasApplication || tokenInfoQuery.data?.tokenAddress ?
+        'Update token info' :
+        'Add token info';
     })();
 
-    const onAuthSuccess = isVerifiedAddress ? handleAddApplicationClick : modal.onOpen;
+    const onAuthSuccess = isVerifiedAddress ?
+      handleAddApplicationClick :
+      modal.onOpen;
 
     switch (type) {
       case 'button': {
         return (
           <AuthGuard onAuthSuccess={ onAuthSuccess } ensureEmail>
             { ({ onClick }) => (
-              <ButtonItem label={ label } icon={ icon } onClick={ onClick } className={ className }/>
+              <ButtonItem
+                label={ label }
+                icon={ icon }
+                onClick={ onClick }
+                className={ className }
+              />
             ) }
           </AuthGuard>
         );
@@ -97,7 +116,7 @@ const TokenInfoMenuItem = ({ className, hash, type }: ItemProps) => {
       { element }
       <AddressVerificationModal
         defaultAddress={ hash }
-        pageType={ PAGE_TYPE_DICT['/token/[hash]'] }
+        pageType={ PAGE_TYPE_DICT['/token'] }
         isOpen={ modal.isOpen }
         onClose={ modal.onClose }
         onSubmit={ handleVerifiedAddressSubmit }

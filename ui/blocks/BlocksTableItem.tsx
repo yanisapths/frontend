@@ -1,4 +1,11 @@
-import { Tr, Td, Flex, Box, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import {
+  Tr,
+  Td,
+  Flex,
+  Box,
+  Tooltip,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import { motion } from 'framer-motion';
 import React from 'react';
@@ -51,10 +58,19 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
         <Flex columnGap={ 2 } alignItems="center" mb={ 2 }>
           { data.celo?.is_epoch_block && (
             <Tooltip label={ `Finalized epoch #${ data.celo.epoch_number }` }>
-              <IconSvg name="checkered_flag" boxSize={ 5 } p="1px" isLoading={ isLoading } flexShrink={ 0 }/>
+              <IconSvg
+                name="checkered_flag"
+                boxSize={ 5 }
+                p="1px"
+                isLoading={ isLoading }
+                flexShrink={ 0 }
+              />
             </Tooltip>
           ) }
-          <Tooltip isDisabled={ data.type !== 'reorg' } label="Chain reorganizations">
+          <Tooltip
+            isDisabled={ data.type !== 'reorg' }
+            label="Chain reorganizations"
+          >
             <BlockEntity
               isLoading={ isLoading }
               number={ data.height }
@@ -93,17 +109,23 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       <Td isNumeric fontSize="sm">
         { data.transaction_count > 0 ? (
           <Skeleton isLoaded={ !isLoading } display="inline-block">
-            <LinkInternal href={ route({
-              pathname: '/block/[height_or_hash]',
-              query: { height_or_hash: String(data.height), tab: 'txs' },
-            }) }>
+            <LinkInternal
+              href={ route({
+                pathname: '/block',
+                query: { height_or_hash: String(data.height), tab: 'txs' },
+              }) }
+            >
               { data.transaction_count }
             </LinkInternal>
           </Skeleton>
-        ) : data.transaction_count }
+        ) : (
+          data.transaction_count
+        ) }
       </Td>
       <Td fontSize="sm">
-        <Skeleton isLoaded={ !isLoading } display="inline-block">{ BigNumber(data.gas_used || 0).toFormat() }</Skeleton>
+        <Skeleton isLoaded={ !isLoading } display="inline-block">
+          { BigNumber(data.gas_used || 0).toFormat() }
+        </Skeleton>
         <Flex mt={ 2 }>
           <BlockGasUsed
             gasUsed={ data.gas_used }
@@ -123,21 +145,39 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       { !isRollup && !config.UI.views.block.hiddenFields?.burnt_fees && (
         <Td fontSize="sm">
           <Flex alignItems="center" columnGap={ 2 }>
-            <IconSvg name="flame" boxSize={ 5 } color={ burntFeesIconColor } isLoading={ isLoading }/>
+            <IconSvg
+              name="flame"
+              boxSize={ 5 }
+              color={ burntFeesIconColor }
+              isLoading={ isLoading }
+            />
             <Skeleton isLoaded={ !isLoading } display="inline-block">
               { burntFees.dividedBy(WEI).toFixed(8) }
             </Skeleton>
           </Flex>
-          <Tooltip label={ isLoading ? undefined : 'Burnt fees / Txn fees * 100%' }>
+          <Tooltip
+            label={ isLoading ? undefined : 'Burnt fees / Txn fees * 100%' }
+          >
             <Box w="min-content">
-              <Utilization mt={ 2 } value={ burntFees.div(txFees).toNumber() } isLoading={ isLoading }/>
+              <Utilization
+                mt={ 2 }
+                value={ burntFees.div(txFees).toNumber() }
+                isLoading={ isLoading }
+              />
             </Box>
           </Tooltip>
         </Td>
       ) }
-      { !isRollup && !config.UI.views.block.hiddenFields?.base_fee && Boolean(baseFeeValue) && (
+      { !isRollup &&
+        !config.UI.views.block.hiddenFields?.base_fee &&
+        Boolean(baseFeeValue) && (
         <Td fontSize="sm" isNumeric>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre-wrap" wordBreak="break-word">
+          <Skeleton
+            isLoaded={ !isLoading }
+            display="inline-block"
+            whiteSpace="pre-wrap"
+            wordBreak="break-word"
+          >
             { baseFeeValue }
           </Skeleton>
         </Td>

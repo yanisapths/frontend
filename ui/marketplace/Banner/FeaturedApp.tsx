@@ -1,4 +1,12 @@
-import { Link, useColorModeValue, LinkBox, Flex, Image, LinkOverlay, IconButton } from '@chakra-ui/react';
+import {
+  Link,
+  useColorModeValue,
+  LinkBox,
+  Flex,
+  Image,
+  LinkOverlay,
+  IconButton,
+} from '@chakra-ui/react';
 import type { MouseEvent } from 'react';
 import React, { useCallback } from 'react';
 
@@ -23,22 +31,43 @@ type FeaturedAppProps = {
 };
 
 const FeaturedApp = ({
-  app, isFavorite, isLoading, onAppClick,
-  onInfoClick, onFavoriteClick,
+  app,
+  isFavorite,
+  isLoading,
+  onAppClick,
+  onInfoClick,
+  onFavoriteClick,
 }: FeaturedAppProps) => {
   const isMobile = useIsMobile();
 
-  const { id, url, external, title, logo, logoDarkMode, shortDescription, categories, internalWallet } = app;
+  const {
+    id,
+    url,
+    external,
+    title,
+    logo,
+    logoDarkMode,
+    shortDescription,
+    categories,
+    internalWallet,
+  } = app;
   const logoUrl = useColorModeValue(logo, logoDarkMode || logo);
   const categoriesLabel = categories.join(', ');
 
   const backgroundColor = useColorModeValue('purple.50', 'whiteAlpha.100');
 
-  const handleInfoClick = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'More button', Info: id, Source: 'Banner' });
-    onInfoClick(id);
-  }, [ onInfoClick, id ]);
+  const handleInfoClick = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+        Type: 'More button',
+        Info: id,
+        Source: 'Banner',
+      });
+      onInfoClick(id);
+    },
+    [ onInfoClick, id ],
+  );
 
   const handleFavoriteClick = useCallback(() => {
     onFavoriteClick(id, isFavorite, 'Banner');
@@ -97,13 +126,18 @@ const FeaturedApp = ({
                   { title }
                 </LinkOverlay>
               ) : (
-                <NextLink href={{ pathname: '/apps/[id]', query: { id } }} passHref legacyBehavior>
-                  <LinkOverlay marginRight={ 2 }>
-                    { title }
-                  </LinkOverlay>
+                <NextLink
+                  href={{ pathname: '/apps/id/', query: { id } }}
+                  passHref
+                  legacyBehavior
+                >
+                  <LinkOverlay marginRight={ 2 }>{ title }</LinkOverlay>
                 </NextLink>
               ) }
-              <MarketplaceAppIntegrationIcon external={ external } internalWallet={ internalWallet }/>
+              <MarketplaceAppIntegrationIcon
+                external={ external }
+                internalWallet={ internalWallet }
+              />
             </Skeleton>
 
             <Skeleton

@@ -36,42 +36,56 @@ const TokenDetails = ({ tokenQuery }: Props) => {
 
   const tokenCountersQuery = useApiQuery('token_counters', {
     pathParams: { hash },
-    queryOptions: { enabled: Boolean(router.query.hash), placeholderData: TOKEN_COUNTERS },
+    queryOptions: {
+      enabled: Boolean(router.query.hash),
+      placeholderData: TOKEN_COUNTERS,
+    },
   });
 
   const appActionData = useAppActionData(hash);
 
-  const changeUrlAndScroll = useCallback((tab: TokenTabs) => () => {
-    router.push(
-      { pathname: '/token/[hash]', query: { hash: hash || '', tab } },
-      undefined,
-      { shallow: true },
-    );
-    scroller.scrollTo('token-tabs', {
-      duration: 500,
-      smooth: true,
-    });
-  }, [ hash, router ]);
+  const changeUrlAndScroll = useCallback(
+    (tab: TokenTabs) => () => {
+      router.push(
+        { pathname: '/token', query: { hash: hash || '', tab } },
+        undefined,
+        { shallow: true },
+      );
+      scroller.scrollTo('token-tabs', {
+        duration: 500,
+        smooth: true,
+      });
+    },
+    [ hash, router ],
+  );
 
-  const countersItem = useCallback((item: 'token_holders_count' | 'transfers_count') => {
-    const itemValue = tokenCountersQuery.data?.[item];
-    if (!itemValue) {
-      return 'N/A';
-    }
-    if (itemValue === '0') {
-      return itemValue;
-    }
+  const countersItem = useCallback(
+    (item: 'token_holders_count' | 'transfers_count') => {
+      const itemValue = tokenCountersQuery.data?.[item];
+      if (!itemValue) {
+        return 'N/A';
+      }
+      if (itemValue === '0') {
+        return itemValue;
+      }
 
-    const tab: TokenTabs = item === 'token_holders_count' ? 'holders' : 'token_transfers';
+      const tab: TokenTabs =
+        item === 'token_holders_count' ? 'holders' : 'token_transfers';
 
-    return (
-      <Skeleton isLoaded={ !tokenCountersQuery.isPlaceholderData }>
-        <Link onClick={ changeUrlAndScroll(tab) }>
-          { Number(itemValue).toLocaleString() }
-        </Link>
-      </Skeleton>
-    );
-  }, [ tokenCountersQuery.data, tokenCountersQuery.isPlaceholderData, changeUrlAndScroll ]);
+      return (
+        <Skeleton isLoaded={ !tokenCountersQuery.isPlaceholderData }>
+          <Link onClick={ changeUrlAndScroll(tab) }>
+            { Number(itemValue).toLocaleString() }
+          </Link>
+        </Skeleton>
+      );
+    },
+    [
+      tokenCountersQuery.data,
+      tokenCountersQuery.isPlaceholderData,
+      changeUrlAndScroll,
+    ],
+  );
 
   throwOnResourceLoadError(tokenQuery);
 
@@ -91,7 +105,15 @@ const TokenDetails = ({ tokenQuery }: Props) => {
   let totalSupplyValue;
 
   if (decimals) {
-    const totalValue = totalSupply ? getCurrencyValue({ value: totalSupply, accuracy: 3, accuracyUsd: 2, exchangeRate, decimals }) : undefined;
+    const totalValue = totalSupply ?
+      getCurrencyValue({
+        value: totalSupply,
+        accuracy: 3,
+        accuracyUsd: 2,
+        exchangeRate,
+        decimals,
+      }) :
+      undefined;
     totalSupplyValue = totalValue?.valueStr;
   } else {
     totalSupplyValue = Number(totalSupply).toLocaleString();
@@ -101,7 +123,8 @@ const TokenDetails = ({ tokenQuery }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 1, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }} overflow="hidden"
+      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }}
+      overflow="hidden"
     >
       { exchangeRate && (
         <>
@@ -112,8 +135,13 @@ const TokenDetails = ({ tokenQuery }: Props) => {
             Price
           </DetailsInfoItem.Label>
           <DetailsInfoItem.Value>
-            <Skeleton isLoaded={ !tokenQuery.isPlaceholderData } display="inline-block">
-              <span>{ `$${ Number(exchangeRate).toLocaleString(undefined, { minimumSignificantDigits: 4 }) }` }</span>
+            <Skeleton
+              isLoaded={ !tokenQuery.isPlaceholderData }
+              display="inline-block"
+            >
+              <span>{ `$${ Number(exchangeRate).toLocaleString(undefined, {
+                minimumSignificantDigits: 4,
+              }) }` }</span>
             </Skeleton>
           </DetailsInfoItem.Value>
         </>
@@ -128,7 +156,10 @@ const TokenDetails = ({ tokenQuery }: Props) => {
             Fully diluted market cap
           </DetailsInfoItem.Label>
           <DetailsInfoItem.Value>
-            <Skeleton isLoaded={ !tokenQuery.isPlaceholderData } display="inline-block">
+            <Skeleton
+              isLoaded={ !tokenQuery.isPlaceholderData }
+              display="inline-block"
+            >
               <span>{ `$${ BigNumber(marketCap).toFormat() }` }</span>
             </Skeleton>
           </DetailsInfoItem.Value>
@@ -146,8 +177,16 @@ const TokenDetails = ({ tokenQuery }: Props) => {
         wordBreak="break-word"
         whiteSpace="pre-wrap"
       >
-        <Skeleton isLoaded={ !tokenQuery.isPlaceholderData } w="100%" display="flex">
-          <TruncatedValue value={ totalSupplyValue || '0' } maxW="80%" flexShrink={ 0 }/>
+        <Skeleton
+          isLoaded={ !tokenQuery.isPlaceholderData }
+          w="100%"
+          display="flex"
+        >
+          <TruncatedValue
+            value={ totalSupplyValue || '0' }
+            maxW="80%"
+            flexShrink={ 0 }
+          />
           <Box flexShrink={ 0 }> </Box>
           <TruncatedValue value={ symbol || '' }/>
         </Skeleton>
@@ -202,17 +241,19 @@ const TokenDetails = ({ tokenQuery }: Props) => {
         />
       ) }
 
-      { (type !== 'ERC-20' && config.UI.views.nft.marketplaces.length === 0 && appActionData) && (
+      { type !== 'ERC-20' &&
+        config.UI.views.nft.marketplaces.length === 0 &&
+        appActionData && (
         <>
-          <DetailsInfoItem.Label
-            hint="Link to the dapp"
-          >
+          <DetailsInfoItem.Label hint="Link to the dapp">
             Dapp
           </DetailsInfoItem.Label>
-          <DetailsInfoItem.Value
-            py="1px"
-          >
-            <AppActionButton data={ appActionData } height="30px" source="NFT collection"/>
+          <DetailsInfoItem.Value py="1px">
+            <AppActionButton
+              data={ appActionData }
+              height="30px"
+              source="NFT collection"
+            />
           </DetailsInfoItem.Value>
         </>
       ) }

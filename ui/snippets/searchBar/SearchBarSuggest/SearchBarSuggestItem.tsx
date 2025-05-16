@@ -37,7 +37,7 @@ const SearchBarSuggestItem = ({
     switch (data.type) {
       case 'token': {
         return route({
-          pathname: '/token/[hash]',
+          pathname: '/token',
           query: { hash: data.address },
         });
       }
@@ -63,13 +63,13 @@ const SearchBarSuggestItem = ({
         }
 
         return route({
-          pathname: '/block/[height_or_hash]',
+          pathname: '/block',
           query: { height_or_hash: String(data.block_hash) },
         });
       }
       case 'user_operation': {
         return route({
-          pathname: '/op/[hash]',
+          pathname: '/op',
           query: { hash: data.user_operation_hash },
         });
       }

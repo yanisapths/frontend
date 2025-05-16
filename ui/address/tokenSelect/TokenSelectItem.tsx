@@ -16,22 +16,30 @@ interface Props {
 }
 
 const TokenSelectItem = ({ data }: Props) => {
-
   const secondRow = (() => {
     switch (data.token.type) {
       case 'ERC-20': {
         const tokenDecimals = Number(data.token.decimals ?? 18);
-        const text = `${ BigNumber(data.value).dividedBy(10 ** tokenDecimals).dp(8).toFormat() } ${ data.token.symbol || '' }`;
+        const text = `${ BigNumber(data.value)
+          .dividedBy(10 ** tokenDecimals)
+          .dp(8)
+          .toFormat() } ${ data.token.symbol || '' }`;
 
         return (
           <>
             <TruncatedValue value={ text }/>
-            { data.token.exchange_rate && <chakra.span ml={ 2 }>@{ Number(data.token.exchange_rate).toLocaleString() }</chakra.span> }
+            { data.token.exchange_rate && (
+              <chakra.span ml={ 2 }>
+                @{ Number(data.token.exchange_rate).toLocaleString() }
+              </chakra.span>
+            ) }
           </>
         );
       }
       case 'ERC-721': {
-        const text = `${ BigNumber(data.value).toFormat() } ${ data.token.symbol || '' }`;
+        const text = `${ BigNumber(data.value).toFormat() } ${
+          data.token.symbol || ''
+        }`;
         return <TruncatedValue value={ text }/>;
       }
       case 'ERC-1155': {
@@ -40,9 +48,7 @@ const TokenSelectItem = ({ data }: Props) => {
             <chakra.span textOverflow="ellipsis" overflow="hidden" mr={ 6 }>
               #{ data.token_id || 0 }
             </chakra.span>
-            <span>
-              { BigNumber(data.value).toFormat() }
-            </span>
+            <span>{ BigNumber(data.value).toFormat() }</span>
           </>
         );
       }
@@ -57,9 +63,12 @@ const TokenSelectItem = ({ data }: Props) => {
             { data.value !== null && (
               <span>
                 { data.token.decimals ?
-                  getCurrencyValue({ value: data.value, decimals: data.token.decimals, accuracy: 2 }).valueStr :
-                  BigNumber(data.value).toFormat()
-                }
+                  getCurrencyValue({
+                    value: data.value,
+                    decimals: data.token.decimals,
+                    accuracy: 2,
+                  }).valueStr :
+                  BigNumber(data.value).toFormat() }
               </span>
             ) }
           </>
@@ -68,7 +77,10 @@ const TokenSelectItem = ({ data }: Props) => {
     }
   })();
 
-  const url = route({ pathname: '/token/[hash]', query: { hash: data.token.address } });
+  const url = route({
+    pathname: '/token',
+    query: { hash: data.token.address },
+  });
 
   return (
     <LinkInternal
@@ -96,10 +108,21 @@ const TokenSelectItem = ({ data }: Props) => {
           mr={ 2 }
         />
         { data.usd && (
-          <TruncatedValue value={ `$${ data.usd.toFormat(2) }` } fontWeight={ 700 } minW="120px" ml="auto" textAlign="right"/>
+          <TruncatedValue
+            value={ `$${ data.usd.toFormat(2) }` }
+            fontWeight={ 700 }
+            minW="120px"
+            ml="auto"
+            textAlign="right"
+          />
         ) }
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between" w="100%" whiteSpace="nowrap">
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        w="100%"
+        whiteSpace="nowrap"
+      >
         { secondRow }
       </Flex>
     </LinkInternal>

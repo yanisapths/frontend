@@ -51,7 +51,13 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
           />
           { data.celo?.is_epoch_block && (
             <Tooltip label={ `Finalized epoch #${ data.celo.epoch_number }` }>
-              <IconSvg name="checkered_flag" boxSize={ 5 } p="1px" isLoading={ isLoading } flexShrink={ 0 }/>
+              <IconSvg
+                name="checkered_flag"
+                boxSize={ 5 }
+                p="1px"
+                isLoading={ isLoading }
+                flexShrink={ 0 }
+              />
             </Tooltip>
           ) }
         </Flex>
@@ -66,7 +72,11 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       </Flex>
       <Flex columnGap={ 2 }>
         <Text fontWeight={ 500 }>Size</Text>
-        <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary">
+        <Skeleton
+          isLoaded={ !isLoading }
+          display="inline-block"
+          color="text_secondary"
+        >
           <span>{ data.size.toLocaleString() } bytes</span>
         </Skeleton>
       </Flex>
@@ -84,18 +94,28 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
         <Text fontWeight={ 500 }>Txn</Text>
         { data.transaction_count > 0 ? (
           <Skeleton isLoaded={ !isLoading } display="inline-block">
-            <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: String(data.height), tab: 'txs' } }) }>
+            <LinkInternal
+              href={ route({
+                pathname: '/block',
+                query: { height_or_hash: String(data.height), tab: 'txs' },
+              }) }
+            >
               { data.transaction_count }
             </LinkInternal>
           </Skeleton>
-        ) :
+        ) : (
           <Text variant="secondary">{ data.transaction_count }</Text>
-        }
+        ) }
       </Flex>
       <Box>
         <Text fontWeight={ 500 }>Gas used</Text>
         <Flex mt={ 2 }>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary" mr={ 4 }>
+          <Skeleton
+            isLoaded={ !isLoading }
+            display="inline-block"
+            color="text_secondary"
+            mr={ 4 }
+          >
             <span>{ BigNumber(data.gas_used || 0).toFormat() }</span>
           </Skeleton>
           <BlockGasUsed
@@ -109,7 +129,11 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       { !isRollup && !config.UI.views.block.hiddenFields?.total_reward && (
         <Flex columnGap={ 2 }>
           <Text fontWeight={ 500 }>Reward { currencyUnits.ether }</Text>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary">
+          <Skeleton
+            isLoaded={ !isLoading }
+            display="inline-block"
+            color="text_secondary"
+          >
             <span>{ totalReward.toFixed() }</span>
           </Skeleton>
         </Flex>
@@ -119,19 +143,39 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
           <Text fontWeight={ 500 }>Burnt fees</Text>
           <Flex columnGap={ 4 } mt={ 2 }>
             <Flex>
-              <IconSvg name="flame" boxSize={ 5 } color="gray.500" isLoading={ isLoading }/>
-              <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary" ml={ 2 }>
+              <IconSvg
+                name="flame"
+                boxSize={ 5 }
+                color="gray.500"
+                isLoading={ isLoading }
+              />
+              <Skeleton
+                isLoaded={ !isLoading }
+                display="inline-block"
+                color="text_secondary"
+                ml={ 2 }
+              >
                 <span>{ burntFees.div(WEI).toFixed() }</span>
               </Skeleton>
             </Flex>
-            <Utilization ml={ 4 } value={ burntFees.div(txFees).toNumber() } isLoading={ isLoading }/>
+            <Utilization
+              ml={ 4 }
+              value={ burntFees.div(txFees).toNumber() }
+              isLoading={ isLoading }
+            />
           </Flex>
         </Box>
       ) }
-      { !isRollup && !config.UI.views.block.hiddenFields?.base_fee && baseFeeValue && (
+      { !isRollup &&
+        !config.UI.views.block.hiddenFields?.base_fee &&
+        baseFeeValue && (
         <Flex columnGap={ 2 }>
           <Text fontWeight={ 500 }>Base fee</Text>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary">
+          <Skeleton
+            isLoaded={ !isLoading }
+            display="inline-block"
+            color="text_secondary"
+          >
             <span>{ baseFeeValue }</span>
           </Skeleton>
         </Flex>

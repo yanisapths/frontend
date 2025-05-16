@@ -41,21 +41,34 @@ type Props = {
   isNoves?: boolean;
 };
 
-type NonStringTxInterpretationVariable = Exclude<TxInterpretationVariable, TxInterpretationVariableString>;
+type NonStringTxInterpretationVariable = Exclude<
+  TxInterpretationVariable,
+  TxInterpretationVariableString
+>;
 
-const TxInterpretationElementByType = (
-  { variable, addressDataMap }: { variable?: NonStringTxInterpretationVariable; addressDataMap?: Record<string, AddressParam> },
-) => {
+const TxInterpretationElementByType = ({
+  variable,
+  addressDataMap,
+}: {
+  variable?: NonStringTxInterpretationVariable;
+  addressDataMap?: Record<string, AddressParam>;
+}) => {
   const onAddressClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, { Type: 'Address click' });
+    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, {
+      Type: 'Address click',
+    });
   }, []);
 
   const onTokenClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, { Type: 'Token click' });
+    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, {
+      Type: 'Token click',
+    });
   }, []);
 
   const onDomainClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, { Type: 'Domain click' });
+    mixpanel.logEvent(mixpanel.EventTypes.TX_INTERPRETATION_INTERACTION, {
+      Type: 'Domain click',
+    });
   }, []);
 
   if (!variable) {
@@ -66,7 +79,11 @@ const TxInterpretationElementByType = (
   switch (type) {
     case 'address': {
       return (
-        <chakra.span display="inline-block" verticalAlign="top" _notFirst={{ marginLeft: 1 }}>
+        <chakra.span
+          display="inline-block"
+          verticalAlign="top"
+          _notFirst={{ marginLeft: 1 }}
+        >
           <AddressEntity
             address={ addressDataMap?.[value.hash] || value }
             icon={{ marginRight: 1 }}
@@ -79,7 +96,11 @@ const TxInterpretationElementByType = (
     }
     case 'token':
       return (
-        <chakra.span display="inline-block" verticalAlign="top" _notFirst={{ marginLeft: 1 }}>
+        <chakra.span
+          display="inline-block"
+          verticalAlign="top"
+          _notFirst={{ marginLeft: 1 }}
+        >
           <TokenEntity
             token={ value }
             icon={{ marginRight: 1 }}
@@ -96,7 +117,11 @@ const TxInterpretationElementByType = (
     case 'domain': {
       if (config.features.nameService.isEnabled) {
         return (
-          <chakra.span display="inline-block" verticalAlign="top" _notFirst={{ marginLeft: 1 }}>
+          <chakra.span
+            display="inline-block"
+            verticalAlign="top"
+            _notFirst={{ marginLeft: 1 }}
+          >
             <EnsEntity
               domain={ value }
               icon={{ marginRight: 1 }}
@@ -108,7 +133,11 @@ const TxInterpretationElementByType = (
           </chakra.span>
         );
       }
-      return <chakra.span color="text_secondary" whiteSpace="pre">{ value + ' ' }</chakra.span>;
+      return (
+        <chakra.span color="text_secondary" whiteSpace="pre">
+          { value + ' ' }
+        </chakra.span>
+      );
     }
     case 'currency': {
       let numberString = '';
@@ -124,7 +153,11 @@ const TxInterpretationElementByType = (
       return <chakra.span>{ numberString + ' ' }</chakra.span>;
     }
     case 'timestamp': {
-      return <chakra.span color="text_secondary" whiteSpace="pre">{ dayjs(Number(value) * 1000).format('MMM DD YYYY') }</chakra.span>;
+      return (
+        <chakra.span color="text_secondary" whiteSpace="pre">
+          { dayjs(Number(value) * 1000).format('MMM DD YYYY') }
+        </chakra.span>
+      );
     }
     case 'external_link': {
       return <LinkExternal href={ value.link }>{ value.name }</LinkExternal>;
@@ -148,24 +181,29 @@ const TxInterpretationElementByType = (
         if (value.app_id && config.features.marketplace.isEnabled) {
           return (
             <LinkInternal
-              href={ route({ pathname: '/apps/[id]', query: { id: value.app_id } }) }
+              href={ route({
+                pathname: '/apps/id/',
+                query: { id: value.app_id },
+              }) }
             >
               { value.name }
             </LinkInternal>
           );
         }
         if (value.url) {
-          return (
-            <LinkExternal href={ value.url }>
-              { value.name }
-            </LinkExternal>
-          );
+          return <LinkExternal href={ value.url }>{ value.name }</LinkExternal>;
         }
         return value.name;
       })();
 
       return (
-        <chakra.span display="inline-flex" alignItems="center" verticalAlign="top" _notFirst={{ marginLeft: 1 }} gap={ 1 }>
+        <chakra.span
+          display="inline-flex"
+          alignItems="center"
+          verticalAlign="top"
+          _notFirst={{ marginLeft: 1 }}
+          gap={ 1 }
+        >
           { icon && <Image src={ icon } alt={ value.name } width={ 5 } height={ 5 }/> }
           { name }
         </chakra.span>
@@ -174,8 +212,17 @@ const TxInterpretationElementByType = (
   }
 };
 
-const TxInterpretation = ({ summary, isLoading, addressDataMap, className, isNoves }: Props) => {
-  const novesLogoUrl = useColorModeValue('/static/noves-logo.svg', '/static/noves-logo-dark.svg');
+const TxInterpretation = ({
+  summary,
+  isLoading,
+  addressDataMap,
+  className,
+  isNoves,
+}: Props) => {
+  const novesLogoUrl = useColorModeValue(
+    '/static/noves-logo.svg',
+    '/static/noves-logo-dark.svg',
+  );
   if (!summary) {
     return null;
   }
@@ -193,9 +240,20 @@ const TxInterpretation = ({ summary, isLoading, addressDataMap, className, isNov
   const chunks = getStringChunks(intermediateResult);
 
   return (
-    <Skeleton isLoaded={ !isLoading } className={ className } fontWeight={ 500 } whiteSpace="pre-wrap">
+    <Skeleton
+      isLoaded={ !isLoading }
+      className={ className }
+      fontWeight={ 500 }
+      whiteSpace="pre-wrap"
+    >
       <Tooltip label="Transaction summary">
-        <IconSvg name="lightning" boxSize={ 5 } color="text_secondary" mr={ 1 } verticalAlign="text-top"/>
+        <IconSvg
+          name="lightning"
+          boxSize={ 5 }
+          color="text_secondary"
+          mr={ 1 }
+          verticalAlign="text-top"
+        />
       </Tooltip>
       { chunks.map((chunk, index) => {
         let content = null;
@@ -206,21 +264,34 @@ const TxInterpretation = ({ summary, isLoading, addressDataMap, className, isNov
         } else {
           content = (
             <TxInterpretationElementByType
-              variable={ variables[variablesNames[index]] as NonStringTxInterpretationVariable }
+              variable={
+                variables[
+                  variablesNames[index]
+                ] as NonStringTxInterpretationVariable
+              }
               addressDataMap={ addressDataMap }
             />
           );
         }
         return (
           <chakra.span key={ chunk + index }>
-            <chakra.span color="text_secondary">{ chunk.trim() + (chunk.trim() && variablesNames[index] ? ' ' : '') }</chakra.span>
+            <chakra.span color="text_secondary">
+              { chunk.trim() +
+                (chunk.trim() && variablesNames[index] ? ' ' : '') }
+            </chakra.span>
             { index < variablesNames.length && content }
           </chakra.span>
         );
       }) }
       { isNoves && (
         <Tooltip label="Human readable transaction provided by Noves.fi">
-          <Tag ml={ 2 } display="inline-flex" alignItems="center" verticalAlign="unset" transform="translateY(-2px)">
+          <Tag
+            ml={ 2 }
+            display="inline-flex"
+            alignItems="center"
+            verticalAlign="unset"
+            transform="translateY(-2px)"
+          >
             by
             <Image src={ novesLogoUrl } alt="Noves logo" h="12px" ml={ 1.5 }/>
           </Tag>

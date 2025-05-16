@@ -1,4 +1,10 @@
-import { Button, Image, Text, useColorModeValue, chakra } from '@chakra-ui/react';
+import {
+  Button,
+  Image,
+  Text,
+  useColorModeValue,
+  chakra,
+} from '@chakra-ui/react';
 import React from 'react';
 
 import type { AddressMetadataTagFormatted } from 'types/client/addressMetadata';
@@ -21,14 +27,27 @@ const AppActionButton = ({ data, className, txHash, source }: Props) => {
   const defaultTextColor = useColorModeValue('blue.600', 'blue.300');
   const defaultBg = useColorModeValue('gray.100', 'gray.700');
 
-  const { appID, textColor, bgColor, appActionButtonText, appLogoURL, appMarketplaceURL } = data;
+  const {
+    appID,
+    textColor,
+    bgColor,
+    appActionButtonText,
+    appLogoURL,
+    appMarketplaceURL,
+  } = data;
 
-  const actionURL = appMarketplaceURL?.replace('{chainId}', config.chain.id || '').replace('{txHash}', txHash || '');
+  const actionURL = appMarketplaceURL
+    ?.replace('{chainId}', config.chain.id || '')
+    .replace('{txHash}', txHash || '');
 
   const handleClick = React.useCallback(() => {
     const info = appID || actionURL;
     if (info) {
-      mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Action button', Info: info, Source: source });
+      mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+        Type: 'Action button',
+        Info: info,
+        Source: source,
+      });
     }
   }, [ source, appID, actionURL ]);
 
@@ -57,7 +76,14 @@ const AppActionButton = ({ data, className, txHash, source }: Props) => {
     <Button
       className={ className }
       as="a"
-      href={ route({ pathname: '/apps/[id]', query: { id: appID, action: 'connect', ...(actionURL ? { url: actionURL } : {}) } }) }
+      href={ route({
+        pathname: '/apps/id/',
+        query: {
+          id: appID,
+          action: 'connect',
+          ...(actionURL ? { url: actionURL } : {}),
+        },
+      }) }
       onClick={ handleClick }
       display="flex"
       size="sm"

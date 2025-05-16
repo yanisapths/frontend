@@ -74,7 +74,7 @@ const SearchResultsPageContent = () => {
       switch (redirectCheckQuery.data.type) {
         case 'block': {
           router.replace({
-            pathname: '/block/[height_or_hash]',
+            pathname: '/block',
             query: { height_or_hash: redirectCheckQuery.data.parameter },
           });
           return;
@@ -96,7 +96,7 @@ const SearchResultsPageContent = () => {
         case 'user_operation': {
           if (config.features.userOps.isEnabled) {
             router.replace({
-              pathname: '/op/[hash]',
+              pathname: '/op',
               query: { hash: redirectCheckQuery.data.parameter },
             });
             return;

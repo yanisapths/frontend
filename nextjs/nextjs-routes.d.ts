@@ -14,9 +14,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/account/verified-addresses">
     | StaticRoute<"/account/watchlist">
     | StaticRoute<"/accounts">
-    | DynamicRoute<"/accounts/label/", { "slug": string }>
-    | DynamicRoute<"/address/contract-verification", { "hash": string }>
-    | DynamicRoute<"/address/", { "hash": string }>
+    | StaticRoute<"/accounts/label", { "slug": string }>
+    | StaticRoute<"/address/contract-verification", { "hash": string }>
+    | StaticRoute<"/address", { "hash": string }>
     | StaticRoute<"/advanced-filter">
     | StaticRoute<"/api/config">
     | StaticRoute<"/api/csrf">
@@ -27,15 +27,15 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/monitoring/invalid-api-schema">
     | StaticRoute<"/api/proxy">
     | StaticRoute<"/api-docs">
-    | DynamicRoute<"/apps/[id]", { "id": string }>
+    | StaticRoute<"/apps/id/", { "id": string }>
     | StaticRoute<"/apps">
     | StaticRoute<"/auth/profile">
-    | DynamicRoute<"/batches/number", { "number": string }>
-    | DynamicRoute<"/batches/celestia/[height]/[commitment]", { "height": string; "commitment": string }>
+    | StaticRoute<"/batches/number", { "number": string }>
+    | StaticRoute<"/batches/celestia/height", { "height": string; "commitment": string }>
     | StaticRoute<"/batches">
-    | DynamicRoute<"/blobs/", { "hash": string }>
-    | DynamicRoute<"/block/", { "height_or_hash": string }>
-    | DynamicRoute<"/block/countdown/height", { "height": string }>
+    | StaticRoute<"/blobs/", { "hash": string }>
+    | StaticRoute<"/block", { "height_or_hash": string }>
+    | StaticRoute<"/block/countdown/height", { "height": string }>
     | StaticRoute<"/block/countdown">
     | StaticRoute<"/blocks">
     | StaticRoute<"/contract-verification">
@@ -49,27 +49,27 @@ declare module "nextjs-routes" {
     | StaticRoute<"/interop-messages">
     | StaticRoute<"/login">
     | StaticRoute<"/mud-worlds">
-    | DynamicRoute<"/name-domains/[name]", { "name": string }>
+    | StaticRoute<"/name-domains/name", { "name": string }>
     | StaticRoute<"/name-domains">
-    | DynamicRoute<"/op/[hash]", { "hash": string }>
+    | StaticRoute<"/op/", { "hash": string }>
     | StaticRoute<"/ops">
     | StaticRoute<"/output-roots">
-    | DynamicRoute<"/pools/[hash]", { "hash": string }>
+    | StaticRoute<"/pools/hash", { "hash": string }>
     | StaticRoute<"/pools">
     | StaticRoute<"/public-tags/submit">
     | StaticRoute<"/search-results">
     | StaticRoute<"/sprite">
-    | DynamicRoute<"/stats/[id]", { "id": string }>
+    | StaticRoute<"/stats", { "id": string }>
     | StaticRoute<"/stats">
-    | DynamicRoute<"/token/[hash]", { "hash": string }>
-    | DynamicRoute<"/token/[hash]/instance/[id]", { "hash": string; "id": string }>
+    | StaticRoute<"/token", { "hash": string }>
+    | StaticRoute<"/token/instance", { "hash": string; "id": string }>
     | StaticRoute<"/token-transfers">
     | StaticRoute<"/tokens">
-    | DynamicRoute<"/tx/", { "hash": string }>
+    | StaticRoute<"/tx/", { "hash": string }>
     | StaticRoute<"/txn-withdrawals">
     | StaticRoute<"/txs">
-    | DynamicRoute<"/txs/kettle/[hash]", { "hash": string }>
-    | DynamicRoute<"/validators/[id]", { "id": string }>
+    | StaticRoute<"/txs/kettle", { "hash": string }>
+    | StaticRoute<"/validators/id", { "id": string }>
     | StaticRoute<"/validators">
     | StaticRoute<"/verified-contracts">
     | StaticRoute<"/visualize/sol2uml">
@@ -81,11 +81,11 @@ declare module "nextjs-routes" {
     hash?: string | null | undefined;
   }
 
-  interface DynamicRoute<Pathname, Parameters> {
-    pathname: Pathname;
-    query: Parameters & Query;
-    hash?: string | null | undefined;
-  }
+  // interface StaticRoute<Pathname, Parameters> {
+  //   pathname: Pathname;
+  //   query: Parameters & Query;
+  //   hash?: string | null | undefined;
+  // }
 
   interface Query {
     [key: string]: string | string[] | undefined;

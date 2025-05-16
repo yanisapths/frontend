@@ -14,12 +14,20 @@ const BlockEntityL1 = (props: BlockEntity.EntityProps) => {
     return null;
   }
 
-  const defaultHref = rollupFeature.parentChain.baseUrl + route({
-    pathname: '/block/[height_or_hash]',
-    query: { height_or_hash: props.hash ?? String(props.number) },
-  });
+  const defaultHref =
+    rollupFeature.parentChain.baseUrl +
+    route({
+      pathname: '/block',
+      query: { height_or_hash: props.hash ?? String(props.number) },
+    });
 
-  return <BlockEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>;
+  return (
+    <BlockEntity.default
+      { ...props }
+      href={ props.href ?? defaultHref }
+      isExternal
+    />
+  );
 };
 
 export default chakra(BlockEntityL1);

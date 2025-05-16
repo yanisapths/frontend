@@ -36,8 +36,8 @@ const AccountActionsMenu = ({
   const router = useRouter();
 
   const hash = getQueryParamString(router.query.hash);
-  const isTokenPage = router.pathname === '/token/[hash]';
-  const isTokenInstancePage = router.pathname === '/token/[hash]/instance/[id]';
+  const isTokenPage = router.pathname === '/token';
+  const isTokenInstancePage = router.pathname === '/token/instance';
   const isTxPage = router.pathname === '/tx/';
 
   const handleButtonClick = React.useCallback(() => {

@@ -28,15 +28,10 @@ const Batch = dynamic(
 
 const Page: NextPage<Props> = (props: Props) => {
   return (
-    <PageNextJs
-      pathname="/batches/numbercelestia/[height]/[commitment]"
-      query={ props.query }
-    >
+    <PageNextJs pathname="/batches/numbercelestia/height" query={ props.query }>
       <Batch/>
     </PageNextJs>
   );
 };
 
 export default Page;
-
-export { batchCelestia as getServerSideProps } from 'nextjs/getServerSideProps';

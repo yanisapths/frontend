@@ -17,7 +17,7 @@ test.describe('with multiple items', () => {
   const hooksConfig = {
     router: {
       query: { hash: '<hash>' },
-      pathname: '/token/[hash]',
+      pathname: '/token',
       isReady: true,
     },
   };

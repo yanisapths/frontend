@@ -86,7 +86,7 @@ const SearchResultTableItem = ({
                 />
                 <LinkInternal
                   href={ route({
-                    pathname: '/token/[hash]',
+                    pathname: '/token',
                     query: { hash: data.address },
                   }) }
                   fontWeight={ 700 }
@@ -374,7 +374,7 @@ const SearchResultTableItem = ({
                         query: { selectedAppId: data.app.id },
                       }) :
                       route({
-                        pathname: '/apps/[id]',
+                        pathname: '/apps/id/',
                         query: { id: data.app.id },
                       })
                   }
@@ -410,7 +410,7 @@ const SearchResultTableItem = ({
             query: { height: String(data.block_number) },
           }) :
           route({
-            pathname: '/block/[height_or_hash]',
+            pathname: '/block',
             query: {
               height_or_hash: data.block_hash ?? String(data.block_number),
             },

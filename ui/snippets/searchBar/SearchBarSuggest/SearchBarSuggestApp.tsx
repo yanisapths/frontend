@@ -16,7 +16,12 @@ interface Props {
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => {
+const SearchBarSuggestApp = ({
+  data,
+  isMobile,
+  searchTerm,
+  onClick,
+}: Props) => {
   const router = useRouter();
   const logo = (
     <Image
@@ -40,9 +45,21 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
               textOverflow="ellipsis"
               ml={ 2 }
             >
-              <span dangerouslySetInnerHTML={{ __html: highlightText(data.title, searchTerm) }}/>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: highlightText(data.title, searchTerm),
+                }}
+              />
             </Text>
-            { data.external && <IconSvg name="link_external" color="icon_link_external" boxSize={ 3 } verticalAlign="middle" flexShrink={ 0 }/> }
+            { data.external && (
+              <IconSvg
+                name="link_external"
+                color="icon_link_external"
+                boxSize={ 3 }
+                verticalAlign="middle"
+                flexShrink={ 0 }
+              />
+            ) }
           </Flex>
           <Text
             variant="secondary"
@@ -70,7 +87,11 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
           w="200px"
           flexShrink={ 0 }
         >
-          <span dangerouslySetInnerHTML={{ __html: highlightText(data.title, searchTerm) }}/>
+          <span
+            dangerouslySetInnerHTML={{
+              __html: highlightText(data.title, searchTerm),
+            }}
+          />
         </Text>
         <Text
           variant="secondary"
@@ -111,12 +132,15 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
           { content }
         </SearchBarSuggestItemLink>
       </NextLink>
-
     );
   }
 
   return (
-    <NextLink href={{ pathname: '/apps/[id]', query: { id: data.id } }} passHref legacyBehavior>
+    <NextLink
+      href={{ pathname: '/apps/id/', query: { id: data.id } }}
+      passHref
+      legacyBehavior
+    >
       <SearchBarSuggestItemLink onClick={ onClick }>
         { content }
       </SearchBarSuggestItemLink>

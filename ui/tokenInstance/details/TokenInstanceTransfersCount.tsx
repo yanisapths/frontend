@@ -32,9 +32,13 @@ const TokenInstanceTransfersCount = ({ hash, id, onClick }: Props) => {
     return null;
   }
 
-  const url = transfersCountQuery.data.transfers_count > 0 ?
-    route({ pathname: '/token/[hash]/instance/[id]', query: { hash, id, tab: 'token_transfers' } }) :
-    undefined;
+  const url =
+    transfersCountQuery.data.transfers_count > 0 ?
+      route({
+        pathname: '/token/instance',
+        query: { hash, id, tab: 'token_transfers' },
+      }) :
+      undefined;
 
   return (
     <>
@@ -45,10 +49,15 @@ const TokenInstanceTransfersCount = ({ hash, id, onClick }: Props) => {
         Transfers
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
-        <Skeleton isLoaded={ !transfersCountQuery.isPlaceholderData } display="inline-block">
+        <Skeleton
+          isLoaded={ !transfersCountQuery.isPlaceholderData }
+          display="inline-block"
+        >
           <LinkInternal
             href={ url }
-            onClick={ transfersCountQuery.data.transfers_count > 0 ? onClick : undefined }
+            onClick={
+              transfersCountQuery.data.transfers_count > 0 ? onClick : undefined
+            }
           >
             { transfersCountQuery.data.transfers_count.toLocaleString() }
           </LinkInternal>

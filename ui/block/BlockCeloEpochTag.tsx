@@ -22,9 +22,12 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
 
   if (!blockQuery.data.celo.is_epoch_block) {
     const celoConfig = config.features.celo;
-    const epochBlockNumber = celoConfig.isEnabled && celoConfig.L2UpgradeBlock && blockQuery.data.height <= celoConfig.L2UpgradeBlock ?
-      blockQuery.data.celo.epoch_number * celoConfig.BLOCKS_PER_EPOCH :
-      undefined;
+    const epochBlockNumber =
+      celoConfig.isEnabled &&
+      celoConfig.L2UpgradeBlock &&
+      blockQuery.data.height <= celoConfig.L2UpgradeBlock ?
+        blockQuery.data.celo.epoch_number * celoConfig.BLOCKS_PER_EPOCH :
+        undefined;
     const tag = (
       <Tag
         colorScheme={ epochBlockNumber ? 'gray-blue' : 'gray' }
@@ -36,10 +39,17 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
       </Tag>
     );
     const content = epochBlockNumber ? (
-      <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: String(epochBlockNumber) } }) }>
+      <LinkInternal
+        href={ route({
+          pathname: '/block',
+          query: { height_or_hash: String(epochBlockNumber) },
+        }) }
+      >
         { tag }
       </LinkInternal>
-    ) : tag;
+    ) : (
+      tag
+    );
 
     return (
       <Tooltip
@@ -62,7 +72,13 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
       isOpen={ isOpen }
       onClose={ onClose }
     >
-      <Tag bgColor="celo" color="blackAlpha.800" onClick={ onToggle } onMouseEnter={ onOpen } onMouseLeave={ onClose }>
+      <Tag
+        bgColor="celo"
+        color="blackAlpha.800"
+        onClick={ onToggle }
+        onMouseEnter={ onOpen }
+        onMouseLeave={ onClose }
+      >
         Finalized epoch #{ blockQuery.data.celo.epoch_number }
       </Tag>
     </Tooltip>

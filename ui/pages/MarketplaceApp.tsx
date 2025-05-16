@@ -155,7 +155,7 @@ const MarketplaceApp = () => {
   useEffect(() => {
     if (data) {
       metadata.update(
-        { pathname: '/apps/[id]', query: { id: data.id } },
+        { pathname: '/apps/id/', query: { id: data.id } },
         { app_name: data.title },
       );
       setIsAutoConnectDisabled(!data.internalWallet);

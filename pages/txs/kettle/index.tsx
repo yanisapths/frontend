@@ -1,20 +1,16 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import React from 'react';
 
-import type { Props } from 'nextjs/getServerSideProps';
 import PageNextJs from 'nextjs/PageNextJs';
 
 const KettleTxs = dynamic(() => import('ui/pages/KettleTxs'), { ssr: false });
 
-const Page: NextPage<Props> = (props: Props) => {
+const Page: NextPage = () => {
   return (
-    <PageNextJs pathname="/txs/kettle/[hash]" query={ props.query }>
+    <PageNextJs pathname="/txs/kettle">
       <KettleTxs/>
     </PageNextJs>
   );
 };
 
 export default Page;
-
-export { suave as getServerSideProps } from 'nextjs/getServerSideProps';

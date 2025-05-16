@@ -29,12 +29,20 @@ const NameDomainDetails = ({ query }: Props) => {
   const isLoading = query.isPlaceholderData;
 
   const otherAddresses = Object.entries(query.data?.other_addresses ?? {});
-  const hasExpired = query.data?.expiry_date && dayjs(query.data.expiry_date).isBefore(dayjs());
+  const hasExpired =
+    query.data?.expiry_date && dayjs(query.data.expiry_date).isBefore(dayjs());
 
   return (
     <>
       <NameDomainDetailsAlert data={ query.data }/>
-      <Grid columnGap={ 8 } rowGap={ 3 } templateColumns={{ base: 'minmax(0, 1fr)', lg: 'max-content minmax(728px, auto)' }}>
+      <Grid
+        columnGap={ 8 }
+        rowGap={ 3 }
+        templateColumns={{
+          base: 'minmax(0, 1fr)',
+          lg: 'max-content minmax(728px, auto)',
+        }}
+      >
         { query.data?.registration_date && (
           <>
             <DetailsInfoItem.Label
@@ -44,8 +52,20 @@ const NameDomainDetails = ({ query }: Props) => {
               Registration date
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value>
-              <IconSvg name="clock" boxSize={ 5 } color="gray.500" verticalAlign="middle" isLoading={ isLoading } mr={ 2 }/>
-              <Skeleton isLoaded={ !isLoading } display="inline" whiteSpace="pre-wrap" lineHeight="20px">
+              <IconSvg
+                name="clock"
+                boxSize={ 5 }
+                color="gray.500"
+                verticalAlign="middle"
+                isLoading={ isLoading }
+                mr={ 2 }
+              />
+              <Skeleton
+                isLoaded={ !isLoading }
+                display="inline"
+                whiteSpace="pre-wrap"
+                lineHeight="20px"
+              >
                 { dayjs(query.data.registration_date).format('llll') }
               </Skeleton>
             </DetailsInfoItem.Value>
@@ -55,27 +75,49 @@ const NameDomainDetails = ({ query }: Props) => {
         { query.data?.expiry_date && (
           <>
             <DetailsInfoItem.Label
-            // eslint-disable-next-line max-len
+              // eslint-disable-next-line max-len
               hint="The date the name expires, upon which there is a grace period for the owner to renew. After grace period ends, the name is released to the market"
               isLoading={ isLoading }
             >
               Expiration date
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value>
-              <IconSvg name="clock" boxSize={ 5 } color="gray.500" verticalAlign="middle" isLoading={ isLoading } mr={ 2 } mt="-2px"/>
+              <IconSvg
+                name="clock"
+                boxSize={ 5 }
+                color="gray.500"
+                verticalAlign="middle"
+                isLoading={ isLoading }
+                mr={ 2 }
+                mt="-2px"
+              />
               { hasExpired && (
                 <>
-                  <Skeleton isLoaded={ !isLoading } display="inline" whiteSpace="pre-wrap" lineHeight="24px">
+                  <Skeleton
+                    isLoaded={ !isLoading }
+                    display="inline"
+                    whiteSpace="pre-wrap"
+                    lineHeight="24px"
+                  >
                     { dayjs(query.data.expiry_date).fromNow() }
                   </Skeleton>
                   <TextSeparator color="gray.500"/>
                 </>
               ) }
-              <Skeleton isLoaded={ !isLoading } display="inline" whiteSpace="pre-wrap" lineHeight="24px">
+              <Skeleton
+                isLoaded={ !isLoading }
+                display="inline"
+                whiteSpace="pre-wrap"
+                lineHeight="24px"
+              >
                 { dayjs(query.data.expiry_date).format('llll') }
               </Skeleton>
               <TextSeparator color="gray.500"/>
-              <Skeleton isLoaded={ !isLoading } color="text_secondary" display="inline">
+              <Skeleton
+                isLoaded={ !isLoading }
+                color="text_secondary"
+                display="inline"
+              >
                 <NameDomainExpiryStatus date={ query.data?.expiry_date }/>
               </Skeleton>
             </DetailsInfoItem.Value>
@@ -90,8 +132,7 @@ const NameDomainDetails = ({ query }: Props) => {
             >
               Resolver
             </DetailsInfoItem.Label>
-            <DetailsInfoItem.Value
-            >
+            <DetailsInfoItem.Value>
               <AddressEntity
                 address={ query.data.resolver_address }
                 isLoading={ isLoading }
@@ -108,10 +149,7 @@ const NameDomainDetails = ({ query }: Props) => {
             >
               Registrant
             </DetailsInfoItem.Label>
-            <DetailsInfoItem.Value
-              columnGap={ 2 }
-              flexWrap="nowrap"
-            >
+            <DetailsInfoItem.Value columnGap={ 2 } flexWrap="nowrap">
               <AddressEntity
                 address={ query.data.registrant }
                 isLoading={ isLoading }
@@ -120,7 +158,14 @@ const NameDomainDetails = ({ query }: Props) => {
                 <LinkInternal
                   flexShrink={ 0 }
                   display="inline-flex"
-                  href={ route({ pathname: '/name-domains', query: { owned_by: 'true', resolved_to: 'true', address: query.data.registrant.hash } }) }
+                  href={ route({
+                    pathname: '/name-domains',
+                    query: {
+                      owned_by: 'true',
+                      resolved_to: 'true',
+                      address: query.data.registrant.hash,
+                    },
+                  }) }
                 >
                   <IconSvg name="search" boxSize={ 5 } isLoading={ isLoading }/>
                 </LinkInternal>
@@ -137,19 +182,20 @@ const NameDomainDetails = ({ query }: Props) => {
             >
               Owner
             </DetailsInfoItem.Label>
-            <DetailsInfoItem.Value
-              columnGap={ 2 }
-              flexWrap="nowrap"
-            >
-              <AddressEntity
-                address={ query.data.owner }
-                isLoading={ isLoading }
-              />
+            <DetailsInfoItem.Value columnGap={ 2 } flexWrap="nowrap">
+              <AddressEntity address={ query.data.owner } isLoading={ isLoading }/>
               <Tooltip label="Lookup for related domain names">
                 <LinkInternal
                   flexShrink={ 0 }
                   display="inline-flex"
-                  href={ route({ pathname: '/name-domains', query: { owned_by: 'true', resolved_to: 'true', address: query.data.owner.hash } }) }
+                  href={ route({
+                    pathname: '/name-domains',
+                    query: {
+                      owned_by: 'true',
+                      resolved_to: 'true',
+                      address: query.data.owner.hash,
+                    },
+                  }) }
                 >
                   <IconSvg name="search" boxSize={ 5 } isLoading={ isLoading }/>
                 </LinkInternal>
@@ -166,10 +212,7 @@ const NameDomainDetails = ({ query }: Props) => {
             >
               Manager
             </DetailsInfoItem.Label>
-            <DetailsInfoItem.Value
-              columnGap={ 2 }
-              flexWrap="nowrap"
-            >
+            <DetailsInfoItem.Value columnGap={ 2 } flexWrap="nowrap">
               <AddressEntity
                 address={ query.data.wrapped_owner }
                 isLoading={ isLoading }
@@ -178,7 +221,14 @@ const NameDomainDetails = ({ query }: Props) => {
                 <LinkInternal
                   flexShrink={ 0 }
                   display="inline-flex"
-                  href={ route({ pathname: '/name-domains', query: { owned_by: 'true', resolved_to: 'true', address: query.data.wrapped_owner.hash } }) }
+                  href={ route({
+                    pathname: '/name-domains',
+                    query: {
+                      owned_by: 'true',
+                      resolved_to: 'true',
+                      address: query.data.wrapped_owner.hash,
+                    },
+                  }) }
                 >
                   <IconSvg name="search" boxSize={ 5 } isLoading={ isLoading }/>
                 </LinkInternal>
@@ -188,28 +238,48 @@ const NameDomainDetails = ({ query }: Props) => {
         ) }
 
         { query.data?.tokens.map((token) => {
-          const isProtocolBaseChain = stripTrailingSlash(query.data.protocol?.deployment_blockscout_base_url ?? '') === config.app.baseUrl;
+          const isProtocolBaseChain =
+            stripTrailingSlash(
+              query.data.protocol?.deployment_blockscout_base_url ?? '',
+            ) === config.app.baseUrl;
           const entityProps = {
             isExternal: !isProtocolBaseChain ? true : false,
-            href: !isProtocolBaseChain ? (
-              stripTrailingSlash(query.data.protocol?.deployment_blockscout_base_url ?? '') +
-            route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.contract_hash, id: token.id } })
-            ) : undefined,
+            href: !isProtocolBaseChain ?
+              stripTrailingSlash(
+                query.data.protocol?.deployment_blockscout_base_url ?? '',
+              ) +
+                route({
+                  pathname: '/token/instance',
+                  query: { hash: token.contract_hash, id: token.id },
+                }) :
+              undefined,
           };
 
           return (
             <React.Fragment key={ token.type }>
               <DetailsInfoItem.Label
-                hint={ `The ${ token.type === bens.TokenType.WRAPPED_DOMAIN_TOKEN ? 'wrapped ' : '' }token ID of this domain name NFT` }
+                hint={ `The ${
+                  token.type === bens.TokenType.WRAPPED_DOMAIN_TOKEN ?
+                    'wrapped ' :
+                    ''
+                }token ID of this domain name NFT` }
                 isLoading={ isLoading }
               >
-                { token.type === bens.TokenType.WRAPPED_DOMAIN_TOKEN ? 'Wrapped token ID' : 'Token ID' }
+                { token.type === bens.TokenType.WRAPPED_DOMAIN_TOKEN ?
+                  'Wrapped token ID' :
+                  'Token ID' }
               </DetailsInfoItem.Label>
               <DetailsInfoItem.Value
                 wordBreak="break-all"
                 whiteSpace="pre-wrap"
               >
-                <NftEntity { ...entityProps } hash={ token.contract_hash } id={ token.id } isLoading={ isLoading } noIcon/>
+                <NftEntity
+                  { ...entityProps }
+                  hash={ token.contract_hash }
+                  id={ token.id }
+                  isLoading={ isLoading }
+                  noIcon
+                />
               </DetailsInfoItem.Value>
             </React.Fragment>
           );
@@ -223,12 +293,15 @@ const NameDomainDetails = ({ query }: Props) => {
             >
               Other addresses
             </DetailsInfoItem.Label>
-            <DetailsInfoItem.Value
-              flexDir="column"
-              alignItems="flex-start"
-            >
+            <DetailsInfoItem.Value flexDir="column" alignItems="flex-start">
               { otherAddresses.map(([ type, address ]) => (
-                <Flex key={ type } columnGap={ 2 } minW="0" w="100%" overflow="hidden">
+                <Flex
+                  key={ type }
+                  columnGap={ 2 }
+                  minW="0"
+                  w="100%"
+                  overflow="hidden"
+                >
                   <Skeleton isLoaded={ !isLoading }>{ type }</Skeleton>
                   <AddressEntity
                     address={{ hash: address }}

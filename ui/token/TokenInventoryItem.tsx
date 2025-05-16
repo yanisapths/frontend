@@ -15,7 +15,6 @@ import TruncatedTextTooltip from 'ui/shared/TruncatedTextTooltip';
 type Props = { item: TokenInstance; token: TokenInfo; isLoading: boolean };
 
 const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
-
   const isMobile = useIsMobile();
 
   const mediaElement = (
@@ -28,7 +27,10 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
     />
   );
 
-  const url = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address, id: item.id } });
+  const url = route({
+    pathname: '/token/instance',
+    query: { hash: token.address, id: item.id },
+  });
 
   return (
     <Box
@@ -41,12 +43,12 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
       fontWeight={ 500 }
       lineHeight="20px"
     >
-      <Link href={ isLoading ? undefined : url }>
-        { mediaElement }
-      </Link>
+      <Link href={ isLoading ? undefined : url }>{ mediaElement }</Link>
       { item.id && (
         <Flex mb={ 2 } ml={ 1 }>
-          <Text whiteSpace="pre" variant="secondary">ID# </Text>
+          <Text whiteSpace="pre" variant="secondary">
+            ID#{ ' ' }
+          </Text>
           <TruncatedTextTooltip label={ item.id }>
             <Skeleton isLoaded={ !isLoading } overflow="hidden">
               <LinkInternal
@@ -65,7 +67,9 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
       ) }
       { item.owner && (
         <Flex mb={ 2 } ml={ 1 }>
-          <Text whiteSpace="pre" variant="secondary" mr={ 2 } lineHeight="24px">Owner</Text>
+          <Text whiteSpace="pre" variant="secondary" mr={ 2 } lineHeight="24px">
+            Owner
+          </Text>
           <AddressEntity
             address={ item.owner }
             isLoading={ isLoading }

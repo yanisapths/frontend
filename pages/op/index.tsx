@@ -1,14 +1,14 @@
 import type { NextPage } from 'next';
-import React from 'react';
+import dynamic from 'next/dynamic';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-import Block from 'ui/pages/Block';
+const UserOp = dynamic(() => import('ui/pages/UserOp'), { ssr: false });
 
 const Page: NextPage = () => {
   return (
-    <PageNextJs pathname="/block">
-      <Block/>
+    <PageNextJs pathname="/op">
+      <UserOp/>
     </PageNextJs>
   );
 };

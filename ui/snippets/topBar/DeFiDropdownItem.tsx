@@ -31,13 +31,18 @@ const DeFiDropdownItem = ({ item }: Props) => {
   const content = (
     <>
       <IconSvg name={ item.icon } boxSize={ 5 } mr={ 2 }/>
-      <Text as="span" fontSize="sm">{ item.text }</Text>
+      <Text as="span" fontSize="sm">
+        { item.text }
+      </Text>
     </>
   );
 
   return item.dappId ? (
     <LinkInternal
-      href={ route({ pathname: '/apps/[id]', query: { id: item.dappId, action: 'connect' } }) }
+      href={ route({
+        pathname: '/apps/id/',
+        query: { id: item.dappId, action: 'connect' },
+      }) }
       target="_self"
       { ...styles }
     >

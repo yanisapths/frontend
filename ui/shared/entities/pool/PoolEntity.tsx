@@ -17,19 +17,20 @@ import * as TokenEntity from '../token/TokenEntity';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'pool'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/pools/[hash]', query: { hash: props.pool.contract_address } });
+  const defaultHref = route({
+    pathname: '/pools/hash',
+    query: { hash: props.pool.contract_address },
+  });
 
   return (
-    <EntityBase.Link
-      { ...props }
-      href={ props.href ?? defaultHref }
-    >
+    <EntityBase.Link { ...props } href={ props.href ?? defaultHref }>
       { props.children }
     </EntityBase.Link>
   );
 });
 
-type IconProps = Pick<EntityProps, 'pool' | 'className'> & EntityBase.IconBaseProps;
+type IconProps = Pick<EntityProps, 'pool' | 'className'> &
+  EntityBase.IconBaseProps;
 
 const Icon = (props: IconProps) => {
   const bgColor = useColorModeValue('white', 'black');
@@ -79,7 +80,8 @@ const Icon = (props: IconProps) => {
   );
 };
 
-type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<EntityProps, 'pool'>;
+type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> &
+  Pick<EntityProps, 'pool'>;
 
 const Content = chakra((props: ContentProps) => {
   const nameString = getPoolTitle(props.pool);
@@ -121,9 +123,4 @@ const PoolEntity = (props: EntityProps) => {
 
 export default React.memo(chakra<As, EntityProps>(PoolEntity));
 
-export {
-  Container,
-  Link,
-  Icon,
-  Content,
-};
+export { Container, Link, Icon, Content };

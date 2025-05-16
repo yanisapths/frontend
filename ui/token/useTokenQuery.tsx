@@ -3,7 +3,7 @@ import { useAppContext } from 'lib/contexts/app';
 import * as tokenStubs from 'stubs/token';
 
 export default function useTokenQuery(hash: string) {
-  const { apiData } = useAppContext<'/token/[hash]'>();
+  const { apiData } = useAppContext<'/token'>();
 
   return useApiQuery('token', {
     pathParams: { hash },

@@ -14,13 +14,19 @@ const TokenEntityL1 = (props: TokenEntity.EntityProps) => {
     return null;
   }
 
-  const defaultHref = rollupFeature.parentChain.baseUrl + route({
-    pathname: '/token/[hash]',
-    query: { hash: props.token.address },
-  });
+  const defaultHref =
+    rollupFeature.parentChain.baseUrl +
+    route({
+      pathname: '/token',
+      query: { hash: props.token.address },
+    });
 
   return (
-    <TokenEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>
+    <TokenEntity.default
+      { ...props }
+      href={ props.href ?? defaultHref }
+      isExternal
+    />
   );
 };
 

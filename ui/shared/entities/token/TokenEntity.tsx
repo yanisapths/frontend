@@ -16,19 +16,20 @@ import { distributeEntityProps, getIconProps } from '../base/utils';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'token'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/token/[hash]', query: { ...props.query, hash: props.token.address } });
+  const defaultHref = route({
+    pathname: '/token',
+    query: { ...props.query, hash: props.token.address },
+  });
 
   return (
-    <EntityBase.Link
-      { ...props }
-      href={ props.href ?? defaultHref }
-    >
+    <EntityBase.Link { ...props } href={ props.href ?? defaultHref }>
       { props.children }
     </EntityBase.Link>
   );
 });
 
-type IconProps = Pick<EntityProps, 'token' | 'className'> & EntityBase.IconBaseProps;
+type IconProps = Pick<EntityProps, 'token' | 'className'> &
+  EntityBase.IconBaseProps;
 
 const Icon = (props: IconProps) => {
   if (props.noIcon) {
@@ -58,14 +59,21 @@ const Icon = (props: IconProps) => {
   );
 };
 
-type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<EntityProps, 'token' | 'jointSymbol' | 'onlySymbol'>;
+type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> &
+  Pick<EntityProps, 'token' | 'jointSymbol' | 'onlySymbol'>;
 
 const Content = chakra((props: ContentProps) => {
   const nameString = [
     !props.onlySymbol && (props.token.name ?? 'Unnamed token'),
-    props.onlySymbol && (props.token.symbol ?? props.token.name ?? 'Unnamed token'),
-    props.token.symbol && props.jointSymbol && !props.onlySymbol && `(${ props.token.symbol })`,
-  ].filter(Boolean).join(' ');
+    props.onlySymbol &&
+      (props.token.symbol ?? props.token.name ?? 'Unnamed token'),
+    props.token.symbol &&
+      props.jointSymbol &&
+      !props.onlySymbol &&
+      `(${ props.token.symbol })`,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <TruncatedTextTooltip label={ nameString }>
@@ -83,7 +91,10 @@ const Content = chakra((props: ContentProps) => {
   );
 });
 
-type SymbolProps = Pick<EntityProps, 'token' | 'isLoading' | 'noSymbol' | 'jointSymbol' | 'onlySymbol'>;
+type SymbolProps = Pick<
+  EntityProps,
+  'token' | 'isLoading' | 'noSymbol' | 'jointSymbol' | 'onlySymbol'
+>;
 
 const Symbol = (props: SymbolProps) => {
   const symbol = props.token.symbol;
@@ -118,15 +129,11 @@ const Symbol = (props: SymbolProps) => {
   );
 };
 
-type CopyProps = Omit<EntityBase.CopyBaseProps, 'text'> & Pick<EntityProps, 'token'>;
+type CopyProps = Omit<EntityBase.CopyBaseProps, 'text'> &
+  Pick<EntityProps, 'token'>;
 
 const Copy = (props: CopyProps) => {
-  return (
-    <EntityBase.Copy
-      { ...props }
-      text={ props.token.address }
-    />
-  );
+  return <EntityBase.Copy { ...props } text={ props.token.address }/>;
 };
 
 const Container = EntityBase.Container;
@@ -155,10 +162,4 @@ const TokenEntity = (props: EntityProps) => {
 
 export default React.memo(chakra<As, EntityProps>(TokenEntity));
 
-export {
-  Container,
-  Link,
-  Icon,
-  Content,
-  Copy,
-};
+export { Container, Link, Icon, Content, Copy };

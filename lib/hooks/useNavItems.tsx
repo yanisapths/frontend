@@ -45,8 +45,7 @@ export default function useNavItems(): ReturnType {
       text: 'Blocks',
       nextRoute: { pathname: '/blocks' as const },
       icon: 'block',
-      isActive:
-        pathname === '/blocks' || pathname === '/block/[height_or_hash]',
+      isActive: pathname === '/blocks' || pathname === '/block',
     };
     const txs: NavItem | null = {
       text: 'Transactions',
@@ -65,7 +64,7 @@ export default function useNavItems(): ReturnType {
         text: 'User operations',
         nextRoute: { pathname: '/ops' as const },
         icon: 'user_op',
-        isActive: pathname === '/ops' || pathname === '/op/[hash]',
+        isActive: pathname === '/ops' || pathname === '/op',
       } :
       null;
 
@@ -81,7 +80,7 @@ export default function useNavItems(): ReturnType {
         nextRoute: { pathname: '/name-domains' as const },
         icon: 'ENS',
         isActive:
-            pathname === '/name-domains' || pathname === '/name-domains/[name]',
+            pathname === '/name-domains' || pathname === '/name-domains/name',
       } :
       null;
     const validators = config.features.validators.isEnabled ?
@@ -89,8 +88,7 @@ export default function useNavItems(): ReturnType {
         text: 'Top validators',
         nextRoute: { pathname: '/validators' as const },
         icon: 'validator',
-        isActive:
-            pathname === '/validators' || pathname === '/validators/[id]',
+        isActive: pathname === '/validators' || pathname === '/validators/id',
       } :
       null;
     const rollupDeposits = {

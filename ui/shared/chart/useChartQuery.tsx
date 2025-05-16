@@ -9,15 +9,24 @@ import { STATS_INTERVALS } from 'ui/stats/constants';
 
 import formatDate from './utils/formatIntervalDate';
 
-export default function useChartQuery(id: string, resolution: Resolution, interval: StatsIntervalIds, enabled = true) {
-  const { apiData } = useAppContext<'/stats/[id]'>();
+export default function useChartQuery(
+  id: string,
+  resolution: Resolution,
+  interval: StatsIntervalIds,
+  enabled = true,
+) {
+  const { apiData } = useAppContext<'/stats'>();
 
   const selectedInterval = STATS_INTERVALS[interval];
 
   const endDate = selectedInterval.start ? formatDate(new Date()) : undefined;
-  const startDate = selectedInterval.start ? formatDate(selectedInterval.start) : undefined;
+  const startDate = selectedInterval.start ?
+    formatDate(selectedInterval.start) :
+    undefined;
 
-  const [ info, setInfo ] = React.useState<LineChart['info']>(apiData || undefined);
+  const [ info, setInfo ] = React.useState<LineChart['info']>(
+    apiData || undefined,
+  );
 
   const lineQuery = useApiQuery('stats_line', {
     pathParams: { id },
@@ -32,7 +41,8 @@ export default function useChartQuery(id: string, resolution: Resolution, interv
       placeholderData: {
         info: {
           title: 'Chart title placeholder',
-          description: 'Chart placeholder description chart placeholder description',
+          description:
+            'Chart placeholder description chart placeholder description',
           resolutions: [ 'DAY', 'WEEK', 'MONTH', 'YEAR' ],
           id: 'placeholder',
           units: undefined,
@@ -49,9 +59,18 @@ export default function useChartQuery(id: string, resolution: Resolution, interv
     }
   }, [ info, lineQuery.data?.info, lineQuery.isPlaceholderData ]);
 
-  const items = React.useMemo(() => lineQuery.data?.chart?.map((item) => {
-    return { date: new Date(item.date), date_to: new Date(item.date_to), value: Number(item.value), isApproximate: item.is_approximate };
-  }), [ lineQuery ]);
+  const items = React.useMemo(
+    () =>
+      lineQuery.data?.chart?.map((item) => {
+        return {
+          date: new Date(item.date),
+          date_to: new Date(item.date_to),
+          value: Number(item.value),
+          isApproximate: item.is_approximate,
+        };
+      }),
+    [ lineQuery ],
+  );
 
   return {
     items,

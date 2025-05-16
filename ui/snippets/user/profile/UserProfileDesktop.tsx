@@ -1,4 +1,10 @@
-import { PopoverBody, PopoverContent, PopoverTrigger, useDisclosure, type ButtonProps } from '@chakra-ui/react';
+import {
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  useDisclosure,
+  type ButtonProps,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -20,11 +26,17 @@ interface Props {
 }
 
 const initialScreen = {
-  type: config.features.blockchainInteraction.isEnabled ? 'select_method' as const : 'email' as const,
+  type: config.features.blockchainInteraction.isEnabled ?
+    ('select_method' as const) :
+    ('email' as const),
 };
 
-const UserProfileDesktop = ({ buttonSize, buttonVariant = 'header' }: Props) => {
-  const [ authInitialScreen, setAuthInitialScreen ] = React.useState<Screen>(initialScreen);
+const UserProfileDesktop = ({
+  buttonSize,
+  buttonVariant = 'header',
+}: Props) => {
+  const [ authInitialScreen, setAuthInitialScreen ] =
+    React.useState<Screen>(initialScreen);
   const router = useRouter();
 
   const authModal = useDisclosure();
@@ -35,12 +47,17 @@ const UserProfileDesktop = ({ buttonSize, buttonVariant = 'header' }: Props) => 
 
   const handleProfileButtonClick = React.useCallback(() => {
     if (profileQuery.data || web3Address) {
-      mixpanel.logEvent(mixpanel.EventTypes.ACCOUNT_ACCESS, { Action: 'Dropdown open' });
+      mixpanel.logEvent(mixpanel.EventTypes.ACCOUNT_ACCESS, {
+        Action: 'Dropdown open',
+      });
       profileMenu.onOpen();
       return;
     }
 
-    if (router.pathname === '/apps/[id]' && config.features.blockchainInteraction.isEnabled) {
+    if (
+      router.pathname === '/apps/id/' &&
+      config.features.blockchainInteraction.isEnabled
+    ) {
       setAuthInitialScreen({ type: 'connect_wallet', loginToRewards: true });
     }
 
@@ -53,7 +70,11 @@ const UserProfileDesktop = ({ buttonSize, buttonVariant = 'header' }: Props) => 
   }, [ authModal ]);
 
   const handleAddAddressClick = React.useCallback(() => {
-    setAuthInitialScreen({ type: 'connect_wallet', isAuth: true, loginToRewards: true });
+    setAuthInitialScreen({
+      type: 'connect_wallet',
+      isAuth: true,
+      loginToRewards: true,
+    });
     authModal.onOpen();
   }, [ authModal ]);
 
@@ -64,7 +85,13 @@ const UserProfileDesktop = ({ buttonSize, buttonVariant = 'header' }: Props) => 
 
   return (
     <>
-      <Popover openDelay={ 300 } placement="bottom-end" isLazy isOpen={ profileMenu.isOpen } onClose={ profileMenu.onClose }>
+      <Popover
+        openDelay={ 300 }
+        placement="bottom-end"
+        isLazy
+        isOpen={ profileMenu.isOpen }
+        onClose={ profileMenu.onClose }
+      >
         <PopoverTrigger>
           <UserProfileButton
             profileQuery={ profileQuery }

@@ -6,7 +6,7 @@ import useTimeAgoIncrement from 'lib/hooks/useTimeAgoIncrement';
 import Skeleton from 'ui/shared/chakra/Skeleton';
 
 type Props = {
-  timestamp?: string | number | null;
+  timestamp: string | number | null;
   fallbackText?: string;
   isLoading?: boolean;
   enableIncrement?: boolean;
@@ -20,10 +20,7 @@ const TimeAgoWithTooltip = ({
   enableIncrement,
   className,
 }: Props) => {
-  const timeAgo = useTimeAgoIncrement(
-    timestamp || '',
-    enableIncrement && !isLoading,
-  );
+  const timeAgo = useTimeAgoIncrement(timestamp, enableIncrement && !isLoading);
   if (!timestamp && !fallbackText) {
     return null;
   }
