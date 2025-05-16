@@ -7,7 +7,7 @@ import Transaction from 'ui/pages/Transaction';
 
 const Page: NextPage = () => {
   return (
-    <PageNextJs pathname="/tx/">
+    <PageNextJs pathname="/tx">
       <Transaction/>
     </PageNextJs>
   );
