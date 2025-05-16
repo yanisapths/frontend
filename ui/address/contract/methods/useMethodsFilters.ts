@@ -24,11 +24,16 @@ function getInitialMethodType(tab: string) {
   }
 }
 
-const METHOD_TABS_MATRIX: Array<Array<typeof CONTRACT_MAIN_TAB_IDS[number]>> = [
-  [ 'read_write_contract', 'read_contract', 'write_contract' ],
-  [ 'read_write_proxy', 'read_proxy', 'write_proxy' ],
-  [ 'read_write_custom_methods', 'read_custom_methods', 'write_custom_methods' ],
-];
+const METHOD_TABS_MATRIX: Array<Array<(typeof CONTRACT_MAIN_TAB_IDS)[number]>> =
+  [
+    [ 'read_write_contract', 'read_contract', 'write_contract' ],
+    [ 'read_write_proxy', 'read_proxy', 'write_proxy' ],
+    [
+      'read_write_custom_methods',
+      'read_custom_methods',
+      'write_custom_methods',
+    ],
+  ];
 
 interface MethodFilterType {
   type: 'method_type';
@@ -51,35 +56,51 @@ export default function useMethodsFilters({ abi }: Params) {
 
   const tab = getQueryParamString(router.query.tab);
 
-  const [ methodType, setMethodType ] = React.useState<MethodType>(getInitialMethodType(tab));
+  const [ methodType, setMethodType ] = React.useState<MethodType>(
+    getInitialMethodType(tab),
+  );
   const [ searchTerm, setSearchTerm ] = React.useState<string>('');
 
-  const changeTabInQuery = React.useCallback((methodType: MethodType) => {
-    const currentTab = getQueryParamString(router.query.tab);
-    const tabIndex = TYPE_FILTER_OPTIONS.findIndex(({ value }) => value === methodType);
-    const nextTab = METHOD_TABS_MATRIX.find((tabsSet) => tabsSet.includes(currentTab))?.[tabIndex];
+  const changeTabInQuery = React.useCallback(
+    (methodType: MethodType) => {
+      const currentTab = getQueryParamString(router.query.tab);
+      const tabIndex = TYPE_FILTER_OPTIONS.findIndex(
+        ({ value }) => value === methodType,
+      );
+      const nextTab = METHOD_TABS_MATRIX.find((tabsSet) =>
+        tabsSet.includes(currentTab),
+      )?.[tabIndex];
 
-    if (!nextTab) {
-      return;
-    }
+      if (!nextTab) {
+        return;
+      }
 
-    const queryForPathname = pickBy(router.query, (value, key) => router.pathname.includes(`[${ key }]`));
-    router.push(
-      { pathname: router.pathname, query: { ...queryForPathname, tab: nextTab } },
-      undefined,
-      { shallow: true },
-    );
+      const queryForPathname = pickBy(router.query, (value, key) =>
+        router.pathname.includes(`[${ String(key) }]`),
+      );
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...queryForPathname, tab: nextTab },
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [ router ],
+  );
 
-  }, [ router ]);
-
-  const onChange = React.useCallback((filters: MethodsFilters) => {
-    if (filters.type === 'method_type') {
-      setMethodType(filters.value);
-      changeTabInQuery(filters.value);
-    } else if (filters.type === 'method_name') {
-      setSearchTerm(filters.value);
-    }
-  }, [ changeTabInQuery ]);
+  const onChange = React.useCallback(
+    (filters: MethodsFilters) => {
+      if (filters.type === 'method_type') {
+        setMethodType(filters.value);
+        changeTabInQuery(filters.value);
+      } else if (filters.type === 'method_name') {
+        setSearchTerm(filters.value);
+      }
+    },
+    [ changeTabInQuery ],
+  );
 
   return React.useMemo(() => {
     const typeFilterFn = (() => {
@@ -116,7 +137,9 @@ export default function useMethodsFilters({ abi }: Params) {
       searchTerm,
       onChange,
       visibleItems: abi
-        .map((method, index) => typeFilterFn(method) && nameFilterFn(method) ? index : -1)
+        .map((method, index) =>
+          typeFilterFn(method) && nameFilterFn(method) ? index : -1,
+        )
         .filter((item) => item !== -1),
     };
   }, [ methodType, searchTerm, onChange, abi ]);
