@@ -156,6 +156,7 @@ const MarketplaceApp = () => {
     if (data) {
       metadata.update(
         { pathname: '/apps/id/', query: { id: data.id } },
+        // @ts-ignore
         { app_name: data.title },
       );
       setIsAutoConnectDisabled(!data.internalWallet);
