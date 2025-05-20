@@ -7,13 +7,16 @@ import PageNextJs from 'nextjs/PageNextJs';
 import config from 'configs/app';
 const rollupFeature = config.features.rollup;
 
-const Withdrawals = dynamic(() => {
-  if (rollupFeature.isEnabled && rollupFeature.type === 'arbitrum') {
-    return import('ui/pages/ArbitrumL2TxnWithdrawals');
-  }
+const Withdrawals = dynamic(
+  () => {
+    if (rollupFeature.isEnabled && rollupFeature.type === 'arbitrum') {
+      return import('ui/pages/ArbitrumL2TxnWithdrawals');
+    }
 
-  throw new Error('Txn withdrawals feature is not enabled.');
-}, { ssr: false });
+    throw new Error('Txn withdrawals feature is not enabled.');
+  },
+  { ssr: false },
+);
 
 const Page: NextPage = () => {
   return (
@@ -24,5 +27,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { txnWithdrawals as getServerSideProps } from 'nextjs/getServerSideProps';

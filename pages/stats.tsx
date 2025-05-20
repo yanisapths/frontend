@@ -14,5 +14,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { stats as getServerSideProps } from 'nextjs/getServerSideProps';

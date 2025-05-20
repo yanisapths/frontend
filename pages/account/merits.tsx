@@ -4,7 +4,9 @@ import React from 'react';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-const RewardsDashboard = dynamic(() => import('ui/pages/RewardsDashboard'), { ssr: false });
+const RewardsDashboard = dynamic(() => import('ui/pages/RewardsDashboard'), {
+  ssr: false,
+});
 
 const Page: NextPage = () => {
   return (
@@ -15,5 +17,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { account as getServerSideProps } from 'nextjs/getServerSideProps';

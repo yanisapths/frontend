@@ -20,9 +20,9 @@ const moduleExports = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  rules: {
-    "@stylistic/quotes": "off",
-  },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
   reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({

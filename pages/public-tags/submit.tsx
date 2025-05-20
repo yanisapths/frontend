@@ -14,5 +14,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { publicTagsSubmit as getServerSideProps } from 'nextjs/getServerSideProps';

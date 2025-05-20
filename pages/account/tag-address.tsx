@@ -4,7 +4,9 @@ import React from 'react';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-const PrivateTags = dynamic(() => import('ui/pages/PrivateTags'), { ssr: false });
+const PrivateTags = dynamic(() => import('ui/pages/PrivateTags'), {
+  ssr: false,
+});
 
 const Page: NextPage = () => {
   return (
@@ -15,5 +17,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { account as getServerSideProps } from 'nextjs/getServerSideProps';

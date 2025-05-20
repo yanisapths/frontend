@@ -10,8 +10,16 @@ type Props = ServerSidePropsCommon & {
 };
 
 const CustomErrorComponent = (props: Props) => {
-  const colorModeCookie = cookies.getFromCookieString(props.cookies || '', cookies.NAMES.COLOR_MODE);
-  return <NextErrorComponent statusCode={ props.statusCode } withDarkMode={ colorModeCookie === 'dark' }/>;
+  const colorModeCookie = cookies.getFromCookieString(
+    props.cookies || '',
+    cookies.NAMES.COLOR_MODE,
+  );
+  return (
+    <NextErrorComponent
+      statusCode={ props.statusCode }
+      withDarkMode={ colorModeCookie === 'dark' }
+    />
+  );
 };
 
 export default CustomErrorComponent;

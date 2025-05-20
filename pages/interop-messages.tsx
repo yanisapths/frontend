@@ -4,7 +4,9 @@ import React from 'react';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-const InteropMessages = dynamic(() => import('ui/pages/InteropMessages'), { ssr: false });
+const InteropMessages = dynamic(() => import('ui/pages/InteropMessages'), {
+  ssr: false,
+});
 
 const Page: NextPage = () => {
   return (
@@ -15,5 +17,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { interopMessages as getServerSideProps } from 'nextjs/getServerSideProps';

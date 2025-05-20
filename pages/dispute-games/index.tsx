@@ -4,7 +4,10 @@ import React from 'react';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-const DisputeGames = dynamic(() => import('ui/pages/OptimisticL2DisputeGames'), { ssr: false });
+const DisputeGames = dynamic(
+  () => import('ui/pages/OptimisticL2DisputeGames'),
+  { ssr: false },
+);
 
 const Page: NextPage = () => {
   return (
@@ -15,5 +18,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { disputeGames as getServerSideProps } from 'nextjs/getServerSideProps';

@@ -6,8 +6,6 @@ import { http } from 'viem';
 import { WagmiProvider, createConfig } from 'wagmi';
 import { mock } from 'wagmi/connectors';
 
-import type { Props as PageProps } from 'nextjs/getServerSideProps';
-
 import config from 'configs/app';
 import { AppContextProvider } from 'lib/contexts/app';
 import { MarketplaceContext } from 'lib/contexts/marketplace';
@@ -23,9 +21,6 @@ export type Props = {
   children: React.ReactNode;
   withSocket?: boolean;
   withWalletClient?: boolean;
-  appContext?: {
-    pageProps: PageProps;
-  };
   marketplaceContext?: {
     isAutoConnectDisabled: boolean;
     setIsAutoConnectDisabled: (isAutoConnectDisabled: boolean) => void;

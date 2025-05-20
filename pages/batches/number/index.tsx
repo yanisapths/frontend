@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-import type { Props } from 'nextjs/getServerSideProps';
 import PageNextJs from 'nextjs/PageNextJs';
 
 import config from 'configs/app';
@@ -32,9 +31,9 @@ const Batch = dynamic(
   { ssr: false },
 );
 
-const Page: NextPage<Props> = (props: Props) => {
+const Page: NextPage = () => {
   return (
-    <PageNextJs pathname="/batches/number" query={ props.query }>
+    <PageNextJs pathname="/batches/number">
       <Batch/>
     </PageNextJs>
   );

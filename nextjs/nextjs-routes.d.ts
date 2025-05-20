@@ -23,14 +23,6 @@ declare module "nextjs-routes" {
     | StaticRoute<"/address/contract-verification">
     | StaticRoute<"/address">
     | StaticRoute<"/advanced-filter">
-    | StaticRoute<"/api/config">
-    | StaticRoute<"/api/csrf">
-    | StaticRoute<"/api/healthz">
-    | StaticRoute<"/api/log">
-    | StaticRoute<"/api/media-type">
-    | StaticRoute<"/api/metrics">
-    | StaticRoute<"/api/monitoring/invalid-api-schema">
-    | StaticRoute<"/api/proxy">
     | StaticRoute<"/api-docs">
     | StaticRoute<"/apps/id">
     | StaticRoute<"/apps">
