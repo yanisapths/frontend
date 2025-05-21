@@ -41,7 +41,7 @@ const moduleExports = {
   // rewrites,
   // redirects,
   // headers,
-  output: "export",
+  // output: "export",
   productionBrowserSourceMaps: true,
   experimental: {
     staleTimes: {
