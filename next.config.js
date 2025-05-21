@@ -6,9 +6,9 @@ const withRoutes = require("nextjs-routes/config")({
   outDir: "nextjs",
 });
 
-const headers = require("./nextjs/headers");
-const redirects = require("./nextjs/redirects");
-const rewrites = require("./nextjs/rewrites");
+// const headers = require("./nextjs/headers");
+// const redirects = require("./nextjs/redirects");
+// const rewrites = require("./nextjs/rewrites");
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
@@ -38,10 +38,10 @@ const moduleExports = {
   // since all variables will be passed to the app only at runtime and there is now way to change Next.js config at this time
   // if you are stuck and strongly believe what you need some sort of flexibility here please fill free to join the discussion
   // https://github.com/blockscout/frontend/discussions/167
-  rewrites,
-  redirects,
-  headers,
-  output: "standalone",
+  // rewrites,
+  // redirects,
+  // headers,
+  output: "export",
   productionBrowserSourceMaps: true,
   experimental: {
     staleTimes: {
