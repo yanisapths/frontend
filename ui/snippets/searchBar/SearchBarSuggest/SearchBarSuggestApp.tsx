@@ -19,7 +19,12 @@ interface Props {
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => {
+const SearchBarSuggestApp = ({
+  data,
+  isMobile,
+  searchTerm,
+  onClick,
+}: Props) => {
   const router = useRouter();
   const logo = (
     <Image
@@ -43,9 +48,25 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
               textOverflow="ellipsis"
               ml={ 2 }
             >
-              <span dangerouslySetInnerHTML={{ __html: highlightText(data.title, searchTerm) }}/>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: highlightText(data.title, searchTerm),
+                }}
+              />
             </Text>
+<<<<<<< HEAD
             { data.external && <IconSvg name="link_external" color="icon.externalLink" boxSize={ 3 } verticalAlign="middle" flexShrink={ 0 }/> }
+=======
+            { data.external && (
+              <IconSvg
+                name="link_external"
+                color="icon_link_external"
+                boxSize={ 3 }
+                verticalAlign="middle"
+                flexShrink={ 0 }
+              />
+            ) }
+>>>>>>> new-version
           </Flex>
           <Text
             color="text.secondary"
@@ -67,7 +88,11 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
           w="200px"
           flexShrink={ 0 }
         >
-          <span dangerouslySetInnerHTML={{ __html: highlightText(data.title, searchTerm) }}/>
+          <span
+            dangerouslySetInnerHTML={{
+              __html: highlightText(data.title, searchTerm),
+            }}
+          />
         </Text>
         <Text
           color="text.secondary"
@@ -91,6 +116,7 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
     );
   })();
 
+<<<<<<< HEAD
   return (
     <SearchBarSuggestItemLink
       onClick={ onClick }
@@ -99,6 +125,38 @@ const SearchBarSuggestApp = ({ data, isMobile, searchTerm, onClick }: Props) => 
     >
       { content }
     </SearchBarSuggestItemLink>
+=======
+  if (data.external) {
+    return (
+      <NextLink
+        href={{
+          pathname: '/apps',
+          query: {
+            selectedAppId: data.id,
+          },
+        }}
+        passHref
+        shallow={ router.pathname === '/apps' }
+        legacyBehavior
+      >
+        <SearchBarSuggestItemLink onClick={ onClick }>
+          { content }
+        </SearchBarSuggestItemLink>
+      </NextLink>
+    );
+  }
+
+  return (
+    <NextLink
+      href={{ pathname: '/apps/id/', query: { id: data.id } }}
+      passHref
+      legacyBehavior
+    >
+      <SearchBarSuggestItemLink onClick={ onClick }>
+        { content }
+      </SearchBarSuggestItemLink>
+    </NextLink>
+>>>>>>> new-version
   );
 };
 

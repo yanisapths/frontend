@@ -14,16 +14,22 @@ const AddressEntityL1 = (props: AddressEntity.EntityProps) => {
     return null;
   }
 
-  const defaultHref = rollupFeature.parentChain.baseUrl + route({
-    pathname: '/address/[hash]',
-    query: {
-      ...props.query,
-      hash: props.address.hash,
-    },
-  });
+  const defaultHref =
+    rollupFeature.parentChain.baseUrl +
+    route({
+      pathname: '/address/',
+      query: {
+        ...props.query,
+        hash: props.address.hash,
+      },
+    });
 
   return (
-    <AddressEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>
+    <AddressEntity.default
+      { ...props }
+      href={ props.href ?? defaultHref }
+      isExternal
+    />
   );
 };
 

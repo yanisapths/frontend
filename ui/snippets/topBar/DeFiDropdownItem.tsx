@@ -22,8 +22,32 @@ const DeFiDropdownItem = ({ item }: Props) => {
       variant="menu"
     >
       <IconSvg name={ item.icon } boxSize={ 5 } mr={ 2 }/>
+<<<<<<< HEAD
       <Text as="span" fontSize="sm">{ item.text }</Text>
     </Link>
+=======
+      <Text as="span" fontSize="sm">
+        { item.text }
+      </Text>
+    </>
+  );
+
+  return item.dappId ? (
+    <LinkInternal
+      href={ route({
+        pathname: '/apps/id/',
+        query: { id: item.dappId, action: 'connect' },
+      }) }
+      target="_self"
+      { ...styles }
+    >
+      { content }
+    </LinkInternal>
+  ) : (
+    <LinkExternal href={ item.url } { ...styles }>
+      { content }
+    </LinkExternal>
+>>>>>>> new-version
   );
 };
 

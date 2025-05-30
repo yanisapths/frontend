@@ -14,5 +14,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { csvExport as getServerSideProps } from 'nextjs/getServerSideProps';

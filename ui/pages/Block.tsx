@@ -49,14 +49,113 @@ const BlockPageContent = () => {
 
   const blockQuery = useBlockQuery({ heightOrHash });
   const blockTxsQuery = useBlockTxsQuery({ heightOrHash, blockQuery, tab });
-  const blockWithdrawalsQuery = useBlockWithdrawalsQuery({ heightOrHash, blockQuery, tab });
-  const blockBlobTxsQuery = useBlockBlobTxsQuery({ heightOrHash, blockQuery, tab });
+  const blockWithdrawalsQuery = useBlockWithdrawalsQuery({
+    heightOrHash,
+    blockQuery,
+    tab,
+  });
+  const blockBlobTxsQuery = useBlockBlobTxsQuery({
+    heightOrHash,
+    blockQuery,
+    tab,
+  });
 
-  const hasPagination = !isMobile && (
-    (tab === 'txs' && blockTxsQuery.pagination.isVisible) ||
-    (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible)
+  const hasPagination =
+    !isMobile &&
+    ((tab === 'txs' && blockTxsQuery.pagination.isVisible) ||
+      (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible));
+
+  const tabs: Array<RoutedTab> = React.useMemo(
+    () =>
+      [
+        {
+          id: 'index',
+          title: 'Details',
+          component: (
+            <>
+              { blockQuery.isDegradedData && (
+                <ServiceDegradationWarning
+                  isLoading={ blockQuery.isPlaceholderData }
+                  mb={ 6 }
+                />
+              ) }
+              <BlockDetails query={ blockQuery }/>
+            </>
+          ),
+        },
+        {
+          id: 'txs',
+          title: 'Transactions',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning
+                  isLoading={ blockTxsQuery.isPlaceholderData }
+                  mb={ 6 }
+                />
+              ) }
+              <TxsWithFrontendSorting
+                query={ blockTxsQuery }
+                showBlockInfo={ false }
+                showSocketInfo={ false }
+                top={ hasPagination ? TABS_HEIGHT : 0 }
+              />
+            </>
+          ),
+        },
+        config.features.dataAvailability.isEnabled &&
+        blockQuery.data?.blob_transaction_count ?
+          {
+            id: 'blob_txs',
+            title: 'Blob txns',
+            component: (
+              <TxsWithFrontendSorting
+                query={ blockBlobTxsQuery }
+                showBlockInfo={ false }
+                showSocketInfo={ false }
+              />
+            ),
+          } :
+          null,
+        config.features.beaconChain.isEnabled &&
+        Boolean(blockQuery.data?.withdrawals_count) ?
+          {
+            id: 'withdrawals',
+            title: 'Withdrawals',
+            component: (
+              <>
+                { blockWithdrawalsQuery.isDegradedData && (
+                  <ServiceDegradationWarning
+                    isLoading={ blockWithdrawalsQuery.isPlaceholderData }
+                    mb={ 6 }
+                  />
+                ) }
+                <BlockWithdrawals
+                  blockWithdrawalsQuery={ blockWithdrawalsQuery }
+                />
+              </>
+            ),
+          } :
+          null,
+        blockQuery.data?.celo?.is_epoch_block ?
+          {
+            id: 'epoch_rewards',
+            title: 'Epoch rewards',
+            component: <BlockEpochRewards heightOrHash={ heightOrHash }/>,
+          } :
+          null,
+      ].filter(Boolean),
+    [
+      blockBlobTxsQuery,
+      blockQuery,
+      blockTxsQuery,
+      blockWithdrawalsQuery,
+      hasPagination,
+      heightOrHash,
+    ],
   );
 
+<<<<<<< HEAD
   const tabs: Array<TabItemRegular> = React.useMemo(() => ([
     {
       id: 'index',
@@ -104,6 +203,8 @@ const BlockPageContent = () => {
     } : null,
   ].filter(Boolean)), [ blockBlobTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery, hasPagination, heightOrHash ]);
 
+=======
+>>>>>>> new-version
   let pagination;
   if (tab === 'txs') {
     pagination = blockTxsQuery.pagination;
@@ -112,7 +213,8 @@ const BlockPageContent = () => {
   }
 
   const backLink = React.useMemo(() => {
-    const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/blocks');
+    const hasGoBackLink =
+      appProps.referrer && appProps.referrer.includes('/blocks');
 
     if (!hasGoBackLink) {
       return;
@@ -127,8 +229,15 @@ const BlockPageContent = () => {
   throwOnAbsentParamError(heightOrHash);
 
   if (blockQuery.isError) {
-    if (!blockQuery.isDegradedData && blockQuery.error.status === 404 && !heightOrHash.startsWith('0x')) {
-      router.push({ pathname: '/block/countdown/[height]', query: { height: heightOrHash } });
+    if (
+      !blockQuery.isDegradedData &&
+      blockQuery.error.status === 404 &&
+      !heightOrHash.startsWith('0x')
+    ) {
+      router.push({
+        pathname: '/block/countdown/height',
+        query: { height: heightOrHash },
+      });
       return null;
     } else {
       throwOnResourceLoadError(blockQuery);
@@ -168,7 +277,14 @@ const BlockPageContent = () => {
       <NetworkExplorers
         type="block"
         pathParam={ heightOrHash }
+<<<<<<< HEAD
         ml={{ base: config.UI.views.block.hiddenFields?.miner ? 0 : 3, lg: 'auto' }}
+=======
+        ml={{
+          base: config.UI.views.block.hiddenFields?.miner ? 0 : 3,
+          lg: 'auto',
+        }}
+>>>>>>> new-version
       />
     </>
   );
@@ -183,11 +299,25 @@ const BlockPageContent = () => {
         secondRow={ titleSecondRow }
         isLoading={ blockQuery.isPlaceholderData }
       />
+<<<<<<< HEAD
       { blockQuery.isPlaceholderData ? <RoutedTabsSkeleton tabs={ tabs }/> : (
         <RoutedTabs
           tabs={ tabs }
           listProps={ isMobile ? undefined : TAB_LIST_PROPS }
           rightSlot={ hasPagination ? <Pagination { ...(pagination as PaginationParams) }/> : null }
+=======
+      { blockQuery.isPlaceholderData ? (
+        <TabsSkeleton tabs={ tabs }/>
+      ) : (
+        <RoutedTabs
+          tabs={ tabs }
+          tabListProps={ isMobile ? undefined : TAB_LIST_PROPS }
+          rightSlot={
+            hasPagination ? (
+              <Pagination { ...(pagination as PaginationParams) }/>
+            ) : null
+          }
+>>>>>>> new-version
           stickyEnabled={ hasPagination }
         />
       ) }

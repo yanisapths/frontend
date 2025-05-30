@@ -19,13 +19,17 @@ interface Props {
 }
 
 const NameDomainHistoryTableItem = ({ isLoading, event, domain }: Props) => {
-  const isProtocolBaseChain = stripTrailingSlash(domain?.protocol?.deployment_blockscout_base_url ?? '') === config.app.baseUrl;
+  const isProtocolBaseChain =
+    stripTrailingSlash(
+      domain?.protocol?.deployment_blockscout_base_url ?? '',
+    ) === config.app.baseUrl;
   const txEntityProps = {
     isExternal: !isProtocolBaseChain ? true : false,
-    href: !isProtocolBaseChain ? (
-      stripTrailingSlash(domain?.protocol?.deployment_blockscout_base_url ?? '') +
-      route({ pathname: '/tx/[hash]', query: { hash: event.transaction_hash } })
-    ) : undefined,
+    href: !isProtocolBaseChain ?
+      stripTrailingSlash(
+        domain?.protocol?.deployment_blockscout_base_url ?? '',
+      ) + route({ pathname: '/tx/', query: { hash: event.transaction_hash } }) :
+      undefined,
   };
 
   return (
@@ -47,6 +51,7 @@ const NameDomainHistoryTableItem = ({ isLoading, event, domain }: Props) => {
           color="text.secondary"
           display="inline-block"
         />
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle">
         { event.from_address && <AddressEntity address={ event.from_address } isLoading={ isLoading } truncation="constant"/> }
@@ -55,6 +60,26 @@ const NameDomainHistoryTableItem = ({ isLoading, event, domain }: Props) => {
         { event.action && <Badge colorPalette="gray" loading={ isLoading }>{ event.action }</Badge> }
       </TableCell>
     </TableRow>
+=======
+      </Td>
+      <Td verticalAlign="middle">
+        { event.from_address && (
+          <AddressEntity
+            address={ event.from_address }
+            isLoading={ isLoading }
+            truncation="constant"
+          />
+        ) }
+      </Td>
+      <Td verticalAlign="middle">
+        { event.action && (
+          <Tag colorScheme="gray" isLoading={ isLoading }>
+            { event.action }
+          </Tag>
+        ) }
+      </Td>
+    </Tr>
+>>>>>>> new-version
   );
 };
 

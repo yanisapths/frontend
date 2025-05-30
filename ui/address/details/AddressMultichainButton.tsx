@@ -18,9 +18,22 @@ type Props = {
   onClick?: () => void;
 };
 
-const AddressMultichainButton = ({ item, addressHash, onClick, hasSingleProvider }: Props) => {
-
-  const buttonIcon = <Image src={ item.logoUrl } alt={ item.name } boxSize={ 5 } mr={ hasSingleProvider ? 2 : 0 } borderRadius="4px" overflow="hidden"/>;
+const AddressMultichainButton = ({
+  item,
+  addressHash,
+  onClick,
+  hasSingleProvider,
+}: Props) => {
+  const buttonIcon = (
+    <Image
+      src={ item.logoUrl }
+      alt={ item.name }
+      boxSize={ 5 }
+      mr={ hasSingleProvider ? 2 : 0 }
+      borderRadius="4px"
+      overflow="hidden"
+    />
+  );
 
   const buttonContent = hasSingleProvider ? (
     <>
@@ -31,12 +44,29 @@ const AddressMultichainButton = ({ item, addressHash, onClick, hasSingleProvider
     <Tooltip content={ capitalize(item.name) }>{ buttonIcon }</Tooltip>
   );
 
+<<<<<<< HEAD
+=======
+  const linkProps = {
+    variant: hasSingleProvider ? ('subtle' as const) : undefined,
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: 'sm',
+    lineHeight: 5,
+    fontWeight: 500,
+    onClick,
+  };
+
+>>>>>>> new-version
   try {
-    const portfolioUrlString = item.urlTemplate.replace(TEMPLATE_ADDRESS, addressHash);
+    const portfolioUrlString = item.urlTemplate.replace(
+      TEMPLATE_ADDRESS,
+      addressHash,
+    );
     const portfolioUrl = new URL(portfolioUrlString);
     portfolioUrl.searchParams.append('utm_source', 'blockscout');
     portfolioUrl.searchParams.append('utm_medium', 'address');
     const dappId = item.dappId;
+<<<<<<< HEAD
     const isExternal = typeof dappId !== 'string';
 
     return (
@@ -51,6 +81,22 @@ const AddressMultichainButton = ({ item, addressHash, onClick, hasSingleProvider
       >
         { buttonContent }
       </Link>
+=======
+    return typeof dappId === 'string' ? (
+      <LinkInternal
+        href={ route({
+          pathname: '/apps/id/',
+          query: { id: dappId, url: portfolioUrl.toString() },
+        }) }
+        { ...linkProps }
+      >
+        { buttonContent }
+      </LinkInternal>
+    ) : (
+      <LinkExternal href={ portfolioUrl.toString() } { ...linkProps }>
+        { buttonContent }
+      </LinkExternal>
+>>>>>>> new-version
     );
   } catch (error) {}
 

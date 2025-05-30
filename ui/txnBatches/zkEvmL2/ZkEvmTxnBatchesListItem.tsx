@@ -24,8 +24,9 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
 
   return (
     <ListItemMobileGrid.Container gridTemplateColumns="110px auto">
-
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Batch #</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Batch #
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <BatchEntityL2
           isLoading={ isLoading }
@@ -35,12 +36,16 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Status</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Status
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <ZkEvmL2TxnBatchStatus status={ item.status } isLoading={ isLoading }/>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Age</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Age
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <TimeAgoWithTooltip
           timestamp={ item.timestamp }
@@ -50,11 +55,22 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Txn count</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Txn count
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
+<<<<<<< HEAD
         <Link
           href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
           loading={ isLoading }
+=======
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
           fontWeight={ 600 }
           minW="40px"
         >
@@ -62,7 +78,9 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
         </Link>
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Verify tx hash</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Verify tx hash
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.verify_transaction_hash ? (
           <TxEntityL1
@@ -71,10 +89,14 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
             textStyle="sm"
             truncation="constant_long"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </ListItemMobileGrid.Value>
 
-      <ListItemMobileGrid.Label isLoading={ isLoading }>Sequence hash</ListItemMobileGrid.Label>
+      <ListItemMobileGrid.Label isLoading={ isLoading }>
+        Sequence hash
+      </ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         { item.sequence_transaction_hash ? (
           <TxEntityL1
@@ -83,9 +105,10 @@ const ZkEvmTxnBatchesListItem = ({ item, isLoading }: Props) => {
             textStyle="sm"
             truncation="constant_long"
           />
-        ) : <Text>Pending</Text> }
+        ) : (
+          <Text>Pending</Text>
+        ) }
       </ListItemMobileGrid.Value>
-
     </ListItemMobileGrid.Container>
   );
 };

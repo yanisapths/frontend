@@ -1,4 +1,17 @@
+<<<<<<< HEAD
 import { Box, Flex, chakra } from '@chakra-ui/react';
+=======
+import {
+  Button,
+  Box,
+  Flex,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  useDisclosure,
+  chakra,
+} from '@chakra-ui/react';
+>>>>>>> new-version
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -21,9 +34,15 @@ const DeFiDropdown = () => {
   const router = useRouter();
   const source = getPageType(router.pathname);
 
-  const handleClick = React.useCallback((content: string) => {
-    mixpanel.logEvent(mixpanel.EventTypes.BUTTON_CLICK, { Content: content, Source: source });
-  }, [ source ]);
+  const handleClick = React.useCallback(
+    (content: string) => {
+      mixpanel.logEvent(mixpanel.EventTypes.BUTTON_CLICK, {
+        Content: content,
+        Source: source,
+      });
+    },
+    [ source ],
+  );
 
   if (!feature.isEnabled) {
     return null;
@@ -37,16 +56,27 @@ const DeFiDropdown = () => {
   return items.length > 1 ? (
     <PopoverRoot>
       <PopoverTrigger>
+<<<<<<< HEAD
         <Button size="2xs" gap={ 0 }>
           <chakra.span display={{ base: 'none', lg: 'inline' }} whiteSpace="pre-wrap">
             Blockscout{ space }
+=======
+        <Button onClick={ onToggle } isActive={ isOpen } { ...buttonStyles }>
+          <chakra.span display={{ base: 'none', lg: 'inline' }} mr={ 1 }>
+            Blockscout
+>>>>>>> new-version
           </chakra.span>
           DeFi
-          <IconSvg name="arrows/east-mini" boxSize={ 4 } ml={ 1 } transform="rotate(-90deg)"/>
+          <IconSvg
+            name="arrows/east-mini"
+            boxSize={ 4 }
+            ml={ 1 }
+            transform="rotate(-90deg)"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent w="auto">
-        <PopoverBody >
+        <PopoverBody>
           <Flex flexDirection="column" gap={ 1 }>
             { items.map((item, index) => (
               <DeFiDropdownItem key={ index } item={ item }/>
@@ -56,16 +86,28 @@ const DeFiDropdown = () => {
       </PopoverContent>
     </PopoverRoot>
   ) : (
+<<<<<<< HEAD
 
     <Link
       href={
         items[0].dappId ?
           route({ pathname: '/apps/[id]', query: { id: items[0].dappId, action: 'connect' } }) :
+=======
+    <Button
+      as="a"
+      href={
+        items[0].dappId ?
+          route({
+            pathname: '/apps/id/',
+            query: { id: items[0].dappId, action: 'connect' },
+          }) :
+>>>>>>> new-version
           items[0].url
       }
       target={ items[0].dappId ? '_self' : '_blank' }
       asChild
     >
+<<<<<<< HEAD
       <Button onClick={ items[0].onClick } size="2xs">
         <IconSvg name={ items[0].icon } boxSize={ 3 } mr={{ base: 0, sm: 1 }}/>
         <Box display={{ base: 'none', sm: 'inline' }}>
@@ -73,6 +115,11 @@ const DeFiDropdown = () => {
         </Box>
       </Button>
     </Link>
+=======
+      <IconSvg name={ items[0].icon } boxSize={ 3 } mr={{ base: 0, sm: 1 }}/>
+      <Box display={{ base: 'none', sm: 'inline' }}>{ items[0].text }</Box>
+    </Button>
+>>>>>>> new-version
   );
 };
 

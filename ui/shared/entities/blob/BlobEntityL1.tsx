@@ -14,13 +14,19 @@ const BlobEntityL1 = (props: BlobEntity.EntityProps) => {
     return null;
   }
 
-  const defaultHref = rollupFeature.parentChain.baseUrl + route({
-    pathname: '/blobs/[hash]',
-    query: { hash: props.hash },
-  });
+  const defaultHref =
+    rollupFeature.parentChain.baseUrl +
+    route({
+      pathname: '/blobs/',
+      query: { hash: props.hash },
+    });
 
   return (
-    <BlobEntity.default { ...props } href={ props.href ?? defaultHref } isExternal/>
+    <BlobEntity.default
+      { ...props }
+      href={ props.href ?? defaultHref }
+      isExternal
+    />
   );
 };
 

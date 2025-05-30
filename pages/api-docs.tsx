@@ -11,7 +11,11 @@ const Page: NextPage = () => {
   return (
     <PageNextJs pathname="/api-docs">
       <PageTitle
-        title={ config.meta.seo.enhancedDataEnabled ? `${ config.chain.name } API documentation` : 'API documentation' }
+        title={
+          config.meta.seo.enhancedDataEnabled ?
+            `${ config.chain.name } API documentation` :
+            'API documentation'
+        }
       />
       <SwaggerUI/>
     </PageNextJs>
@@ -19,5 +23,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { apiDocs as getServerSideProps } from 'nextjs/getServerSideProps';

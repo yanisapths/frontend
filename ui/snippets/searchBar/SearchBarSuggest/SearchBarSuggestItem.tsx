@@ -23,38 +23,73 @@ interface Props {
   addressFormat?: AddressFormat;
 }
 
-const SearchBarSuggestItem = ({ data, isMobile, searchTerm, onClick, addressFormat }: Props) => {
-
+const SearchBarSuggestItem = ({
+  data,
+  isMobile,
+  searchTerm,
+  onClick,
+  addressFormat,
+}: Props) => {
   const url = (() => {
     switch (data.type) {
       case 'token': {
+<<<<<<< HEAD
         return route({ pathname: '/token/[hash]', query: { hash: data.address_hash } });
+=======
+        return route({
+          pathname: '/token',
+          query: { hash: data.address },
+        });
+>>>>>>> new-version
       }
       case 'contract':
       case 'address':
       case 'label':
       case 'metadata_tag': {
+<<<<<<< HEAD
         return route({ pathname: '/address/[hash]', query: { hash: data.address_hash } });
+=======
+        return route({ pathname: '/address/', query: { hash: data.address } });
+>>>>>>> new-version
       }
       case 'transaction': {
-        return route({ pathname: '/tx/[hash]', query: { hash: data.transaction_hash } });
+        return route({
+          pathname: '/tx/',
+          query: { hash: data.transaction_hash },
+        });
       }
       case 'block': {
         const isFutureBlock = data.timestamp === undefined;
         if (isFutureBlock) {
-          return route({ pathname: '/block/countdown/[height]', query: { height: String(data.block_number) } });
+          return route({
+            pathname: '/block/countdown/height',
+            query: { height: String(data.block_number) },
+          });
         }
 
-        return route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: String(data.block_hash) } });
+        return route({
+          pathname: '/block',
+          query: { height_or_hash: String(data.block_hash) },
+        });
       }
       case 'user_operation': {
-        return route({ pathname: '/op/[hash]', query: { hash: data.user_operation_hash } });
+        return route({
+          pathname: '/op',
+          query: { hash: data.user_operation_hash },
+        });
       }
       case 'blob': {
-        return route({ pathname: '/blobs/[hash]', query: { hash: data.blob_hash } });
+        return route({
+          pathname: '/blobs/',
+          query: { hash: data.blob_hash },
+        });
       }
       case 'ens_domain': {
+<<<<<<< HEAD
         return route({ pathname: '/address/[hash]', query: { hash: data.address_hash } });
+=======
+        return route({ pathname: '/address/', query: { hash: data.address } });
+>>>>>>> new-version
       }
     }
   })();
@@ -94,19 +129,44 @@ const SearchBarSuggestItem = ({ data, isMobile, searchTerm, onClick, addressForm
         );
       }
       case 'block': {
-        return <SearchBarSuggestBlock data={ data } searchTerm={ searchTerm } isMobile={ isMobile }/>;
+        return (
+          <SearchBarSuggestBlock
+            data={ data }
+            searchTerm={ searchTerm }
+            isMobile={ isMobile }
+          />
+        );
       }
       case 'transaction': {
-        return <SearchBarSuggestTx data={ data } searchTerm={ searchTerm } isMobile={ isMobile }/>;
+        return (
+          <SearchBarSuggestTx
+            data={ data }
+            searchTerm={ searchTerm }
+            isMobile={ isMobile }
+          />
+        );
       }
       case 'user_operation': {
-        return <SearchBarSuggestUserOp data={ data } searchTerm={ searchTerm } isMobile={ isMobile }/>;
+        return (
+          <SearchBarSuggestUserOp
+            data={ data }
+            searchTerm={ searchTerm }
+            isMobile={ isMobile }
+          />
+        );
       }
       case 'blob': {
         return <SearchBarSuggestBlob data={ data } searchTerm={ searchTerm }/>;
       }
       case 'ens_domain': {
-        return <SearchBarSuggestDomain data={ data } searchTerm={ searchTerm } isMobile={ isMobile } addressFormat={ addressFormat }/>;
+        return (
+          <SearchBarSuggestDomain
+            data={ data }
+            searchTerm={ searchTerm }
+            isMobile={ isMobile }
+            addressFormat={ addressFormat }
+          />
+        );
       }
     }
   })();

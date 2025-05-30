@@ -14,7 +14,10 @@ const GetGasButton = () => {
   const isMobile = useIsMobile(false);
 
   const onGetGasClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.BUTTON_CLICK, { Content: 'Get gas', Source: 'address' });
+    mixpanel.logEvent(mixpanel.EventTypes.BUTTON_CLICK, {
+      Content: 'Get gas',
+      Source: 'address',
+    });
   }, []);
 
   if (getGasFeature.isEnabled && !isMobile) {
@@ -28,6 +31,14 @@ const GetGasButton = () => {
       const url = urlObj.toString();
       const isInternal = typeof dappId === 'string';
 
+<<<<<<< HEAD
+=======
+      const Link = isInternal ? LinkInternal : LinkExternal;
+      const href = isInternal ?
+        route({ pathname: '/apps/id/', query: { id: dappId, url } }) :
+        url;
+
+>>>>>>> new-version
       return (
         <>
           <Box h="1px" w="8px" bg="border.divider" mx={ 1 }/>

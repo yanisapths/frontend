@@ -22,6 +22,7 @@ const OptimisticL2TxnBatchesTableItem = ({ item, isLoading }: Props) => {
   }
 
   return (
+<<<<<<< HEAD
     <TableRow>
       <TableCell verticalAlign="middle">
         <BatchEntityL2 number={ item.number } isLoading={ isLoading }/>
@@ -30,6 +31,23 @@ const OptimisticL2TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         { item.batch_data_container ? <OptimisticL2TxnBatchDA container={ item.batch_data_container } isLoading={ isLoading }/> : '-' }
       </TableCell>
       <TableCell verticalAlign="middle">
+=======
+    <Tr>
+      <Td verticalAlign="middle">
+        <BatchEntityL2 number={ item.internal_id } isLoading={ isLoading }/>
+      </Td>
+      <Td verticalAlign="middle">
+        { item.batch_data_container ? (
+          <OptimisticL2TxnBatchDA
+            container={ item.batch_data_container }
+            isLoading={ isLoading }
+          />
+        ) : (
+          '-'
+        ) }
+      </Td>
+      <Td verticalAlign="middle">
+>>>>>>> new-version
         <TimeAgoWithTooltip
           timestamp={ item.l1_timestamp }
           isLoading={ isLoading }
@@ -42,14 +60,26 @@ const OptimisticL2TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         <Skeleton loading={ isLoading } minW="40px" display="inline-block">
           { item.l1_transaction_hashes.length }
         </Skeleton>
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>
         <Link
           href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'blocks' } }) }
           loading={ isLoading }
+=======
+      </Td>
+      <Td verticalAlign="middle" isNumeric>
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.internal_id.toString(), tab: 'blocks' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
           justifyContent="flex-end"
           minW="40px"
         >
+<<<<<<< HEAD
           { item.l2_end_block_number - item.l2_start_block_number + 1 }
         </Link>
       </TableCell>
@@ -57,6 +87,20 @@ const OptimisticL2TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         <Link
           href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
           loading={ isLoading }
+=======
+          <Skeleton isLoaded={ !isLoading } minW="40px" display="inline-block">
+            { item.l2_block_end - item.l2_block_start + 1 }
+          </Skeleton>
+        </LinkInternal>
+      </Td>
+      <Td verticalAlign="middle" isNumeric>
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.internal_id.toString(), tab: 'txs' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
           justifyContent="flex-end"
           minW="40px"
         >

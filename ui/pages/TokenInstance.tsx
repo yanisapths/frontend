@@ -62,7 +62,10 @@ const TokenInstanceContent = () => {
     scrollRef,
     options: {
       enabled: Boolean(hash && id && (!tab || tab === 'token_transfers')),
-      placeholderData: getTokenInstanceTransfersStub(tokenQuery.data?.type, null),
+      placeholderData: getTokenInstanceTransfersStub(
+        tokenQuery.data?.type,
+        null,
+      ),
     },
   });
 
@@ -82,16 +85,38 @@ const TokenInstanceContent = () => {
     },
   });
 
-  const isLoading = tokenInstanceQuery.isPlaceholderData || tokenQuery.isPlaceholderData;
+  const isLoading =
+    tokenInstanceQuery.isPlaceholderData || tokenQuery.isPlaceholderData;
 
   React.useEffect(() => {
-    if (tokenInstanceQuery.data && !tokenInstanceQuery.isPlaceholderData && tokenQuery.data && !tokenQuery.isPlaceholderData) {
+    if (
+      tokenInstanceQuery.data &&
+      !tokenInstanceQuery.isPlaceholderData &&
+      tokenQuery.data &&
+      !tokenQuery.isPlaceholderData
+    ) {
       metadata.update(
+<<<<<<< HEAD
         { pathname: '/token/[hash]/instance/[id]', query: { hash: tokenQuery.data.address_hash, id: tokenInstanceQuery.data.id } },
+=======
+        {
+          pathname: '/token/instance',
+          query: {
+            hash: tokenQuery.data.address,
+            id: tokenInstanceQuery.data.id,
+          },
+        },
+        // @ts-ignore
+>>>>>>> new-version
         { symbol: tokenQuery.data.symbol ?? '' },
       );
     }
-  }, [ tokenInstanceQuery.data, tokenInstanceQuery.isPlaceholderData, tokenQuery.data, tokenQuery.isPlaceholderData ]);
+  }, [
+    tokenInstanceQuery.data,
+    tokenInstanceQuery.isPlaceholderData,
+    tokenQuery.data,
+    tokenQuery.isPlaceholderData,
+  ]);
 
   const tabs: Array<TabItemRegular> = [
     {
@@ -112,15 +137,29 @@ const TokenInstanceContent = () => {
       {
         id: 'holders',
         title: 'Holders',
+<<<<<<< HEAD
         component: <TokenHolders holdersQuery={ holdersQuery } token={ tokenQuery.data } shouldRender={ !isLoading } tabsHeight={ 80 }/>,
+=======
+        component: (
+          <TokenHolders
+            holdersQuery={ holdersQuery }
+            token={ tokenQuery.data }
+            shouldRender={ !isLoading }
+          />
+        ),
+>>>>>>> new-version
       } :
       undefined,
-    { id: 'metadata', title: 'Metadata', component: (
-      <TokenInstanceMetadata
-        data={ tokenInstanceQuery.data?.metadata }
-        isPlaceholderData={ isLoading }
-      />
-    ) },
+    {
+      id: 'metadata',
+      title: 'Metadata',
+      component: (
+        <TokenInstanceMetadata
+          data={ tokenInstanceQuery.data?.metadata }
+          isPlaceholderData={ isLoading }
+        />
+      ),
+    },
   ].filter(Boolean);
 
   throwOnResourceLoadError(tokenInstanceQuery);
@@ -144,7 +183,12 @@ const TokenInstanceContent = () => {
         hash={ hash }
       />
 
-      <TokenInstanceDetails data={ tokenInstanceQuery?.data } isLoading={ isLoading } scrollRef={ scrollRef } token={ tokenQuery.data }/>
+      <TokenInstanceDetails
+        data={ tokenInstanceQuery?.data }
+        isLoading={ isLoading }
+        scrollRef={ scrollRef }
+        token={ tokenQuery.data }
+      />
 
       { /* should stay before tabs to scroll up with pagination */ }
       <Box ref={ scrollRef }></Box>
@@ -153,7 +197,11 @@ const TokenInstanceContent = () => {
         tabs={ tabs }
         listProps={ isMobile ? { mt: 8 } : { mt: 3, py: 5, marginBottom: 0 } }
         isLoading={ isLoading }
-        rightSlot={ !isMobile && pagination?.isVisible ? <Pagination { ...pagination }/> : null }
+        rightSlot={
+          !isMobile && pagination?.isVisible ? (
+            <Pagination { ...pagination }/>
+          ) : null
+        }
         stickyEnabled={ !isMobile }
       />
 

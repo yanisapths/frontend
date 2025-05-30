@@ -19,7 +19,11 @@ const AddressEntityWithTokenFilter = (props: Props) => {
   }
 
   const defaultHref = route({
+<<<<<<< HEAD
     pathname: '/advanced-filter',
+=======
+    pathname: '/address/',
+>>>>>>> new-version
     query: {
       ...props.query,
       to_address_hashes_to_include: [ props.address.hash ],
@@ -29,9 +33,7 @@ const AddressEntityWithTokenFilter = (props: Props) => {
     },
   });
 
-  return (
-    <AddressEntity.default { ...props } href={ props.href ?? defaultHref }/>
-  );
+  return <AddressEntity.default { ...props } href={ props.href ?? defaultHref }/>;
 };
 
 export default chakra(AddressEntityWithTokenFilter);

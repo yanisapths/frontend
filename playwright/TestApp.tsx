@@ -5,8 +5,6 @@ import { http } from 'viem';
 import { WagmiProvider, createConfig } from 'wagmi';
 import { mock } from 'wagmi/connectors';
 
-import type { Props as PageProps } from 'nextjs/getServerSideProps';
-
 import config from 'configs/app';
 import { AppContextProvider } from 'lib/contexts/app';
 import { MarketplaceContext } from 'lib/contexts/marketplace';
@@ -22,9 +20,6 @@ export type Props = {
   children: React.ReactNode;
   withSocket?: boolean;
   withWalletClient?: boolean;
-  appContext?: {
-    pageProps: PageProps;
-  };
   marketplaceContext?: {
     isAutoConnectDisabled: boolean;
     setIsAutoConnectDisabled: (isAutoConnectDisabled: boolean) => void;
@@ -51,9 +46,7 @@ const wagmiConfig = createConfig({
   chains: [ currentChain ],
   connectors: [
     mock({
-      accounts: [
-        '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-      ],
+      accounts: [ '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' ],
     }),
   ],
   transports: {
@@ -61,28 +54,38 @@ const wagmiConfig = createConfig({
   },
 });
 
-const TestApp = ({ children, withSocket, appContext = defaultAppContext, marketplaceContext = defaultMarketplaceContext }: Props) => {
-  const [ queryClient ] = React.useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        retry: 0,
-      },
-    },
-  }));
+// @ts-ignore
+const TestApp = ({
+  children,
+  withSocket,
+  // @ts-ignore
+  appContext = defaultAppContext,
+  marketplaceContext = defaultMarketplaceContext,
+}: Props) => {
+  const [ queryClient ] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: 0,
+          },
+        },
+      }),
+  );
 
   return (
     <ChakraProvider>
       <QueryClientProvider client={ queryClient }>
-        <SocketProvider url={ withSocket ? `ws://${ config.app.host }:${ socketPort }` : undefined }>
+        <SocketProvider
+          url={ withSocket ? `ws://${ config.app.host }:${ socketPort }` : undefined }
+        >
           <AppContextProvider { ...appContext }>
             <MarketplaceContext.Provider value={ marketplaceContext }>
               <SettingsContextProvider>
                 <GrowthBookProvider>
                   <WagmiProvider config={ wagmiConfig }>
-                    <RewardsContextProvider>
-                      { children }
-                    </RewardsContextProvider>
+                    <RewardsContextProvider>{ children }</RewardsContextProvider>
                   </WagmiProvider>
                 </GrowthBookProvider>
               </SettingsContextProvider>

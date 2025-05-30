@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 import { Box, chakra, Flex } from '@chakra-ui/react';
+=======
+import {
+  Box,
+  chakra,
+  Flex,
+  Image,
+  Tooltip,
+  useColorModeValue,
+} from '@chakra-ui/react';
+>>>>>>> new-version
 import React from 'react';
 
 import type { ChainInfo } from 'types/api/interop';
@@ -43,19 +54,22 @@ const IconStub = () => {
 const AddressEntryInterop = (props: Props) => {
   const partsProps = distributeEntityProps(props);
 
-  const href = props.chain?.instance_url ? props.chain.instance_url.replace(/\/$/, '') + route({
-    pathname: '/address/[hash]',
-    query: {
-      ...props.query,
-      hash: props.address.hash,
-    },
-  }) : null;
+  const href = props.chain?.instance_url ?
+    props.chain.instance_url.replace(/\/$/, '') +
+      route({
+        pathname: '/address/',
+        query: {
+          ...props.query,
+          hash: props.address.hash,
+        },
+      }) :
+    null;
 
   const addressIcon = (
     <Box position="relative">
       <AddressEntity.Icon { ...partsProps.icon }/>
-      { !props.isLoading && (
-        props.chain?.chain_logo ? (
+      { !props.isLoading &&
+        (props.chain?.chain_logo ? (
           <Image
             position="absolute"
             bottom="-3px"
@@ -68,15 +82,22 @@ const AddressEntryInterop = (props: Props) => {
           />
         ) : (
           <IconStub/>
-        )
-      ) }
+        )) }
     </Box>
   );
 
   return (
     <AddressEntity.Container className={ props.className }>
       { props.chain && (
+<<<<<<< HEAD
         <Tooltip content={ `Address on ${ props.chain.chain_name ? props.chain.chain_name : 'external chain' } (chain id ${ props.chain.chain_id })` }>
+=======
+        <Tooltip
+          label={ `Address on ${
+            props.chain.chain_name ? props.chain.chain_name : 'external chain'
+          } (chain id ${ props.chain.chain_id })` }
+        >
+>>>>>>> new-version
           { addressIcon }
         </Tooltip>
       ) }

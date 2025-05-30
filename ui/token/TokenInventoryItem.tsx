@@ -15,7 +15,6 @@ import NftMedia from 'ui/shared/nft/NftMedia';
 type Props = { item: TokenInstance; token: TokenInfo; isLoading: boolean };
 
 const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
-
   const isMobile = useIsMobile();
 
   const mediaElement = (
@@ -28,7 +27,14 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
     />
   );
 
+<<<<<<< HEAD
   const url = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address_hash, id: item.id } });
+=======
+  const url = route({
+    pathname: '/token/instance',
+    query: { hash: token.address, id: item.id },
+  });
+>>>>>>> new-version
 
   return (
     <Box
@@ -40,12 +46,21 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
       textStyle="sm"
       fontWeight={ 500 }
     >
+<<<<<<< HEAD
       <Link href={ isLoading ? undefined : url } display="inline">
         { mediaElement }
       </Link>
       { item.id && (
         <Flex mb={ 2 } ml={ 1 }>
           <Text whiteSpace="pre" color="text.secondary">ID# </Text>
+=======
+      <Link href={ isLoading ? undefined : url }>{ mediaElement }</Link>
+      { item.id && (
+        <Flex mb={ 2 } ml={ 1 }>
+          <Text whiteSpace="pre" variant="secondary">
+            ID#{ ' ' }
+          </Text>
+>>>>>>> new-version
           <TruncatedTextTooltip label={ item.id }>
             <Skeleton loading={ isLoading } overflow="hidden">
               <Link
@@ -64,7 +79,13 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
       ) }
       { item.owner && (
         <Flex mb={ 2 } ml={ 1 }>
+<<<<<<< HEAD
           <Text whiteSpace="pre" color="text.secondary" mr={ 2 } lineHeight="24px">Owner</Text>
+=======
+          <Text whiteSpace="pre" variant="secondary" mr={ 2 } lineHeight="24px">
+            Owner
+          </Text>
+>>>>>>> new-version
           <AddressEntity
             address={ item.owner }
             isLoading={ isLoading }

@@ -1,4 +1,8 @@
 import { Box, Flex } from '@chakra-ui/react';
+<<<<<<< HEAD
+=======
+import { motion } from 'framer-motion';
+>>>>>>> new-version
 import React from 'react';
 
 import { route } from 'nextjs-routes';
@@ -17,7 +21,17 @@ type Props = {
   animation?: string;
 };
 
+<<<<<<< HEAD
 const LatestBatchItem = ({ number, timestamp, txCount, status, isLoading, animation }: Props) => {
+=======
+const LatestBatchItem = ({
+  number,
+  timestamp,
+  txCount,
+  status,
+  isLoading,
+}: Props) => {
+>>>>>>> new-version
   return (
     <Box
       animation={ animation }
@@ -46,8 +60,14 @@ const LatestBatchItem = ({ number, timestamp, txCount, status, isLoading, animat
           ml={ 2 }
         />
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between" w="100%" flexWrap="wrap">
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        w="100%"
+        flexWrap="wrap"
+      >
         <Flex alignItems="center">
+<<<<<<< HEAD
           <Skeleton loading={ isLoading } mr={ 2 }>Txn</Skeleton>
           <Link
             href={ route({ pathname: '/batches/[number]', query: { number: number.toString(), tab: 'txs' } }) }
@@ -55,6 +75,20 @@ const LatestBatchItem = ({ number, timestamp, txCount, status, isLoading, animat
           >
             { txCount }
           </Link>
+=======
+          <Skeleton isLoaded={ !isLoading } mr={ 2 }>
+            Txn
+          </Skeleton>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: number.toString(), tab: 'txs' },
+            }) }
+            isLoading={ isLoading }
+          >
+            <Skeleton isLoaded={ !isLoading }>{ txCount }</Skeleton>
+          </LinkInternal>
+>>>>>>> new-version
         </Flex>
         { status }
       </Flex>

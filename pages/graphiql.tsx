@@ -14,11 +14,14 @@ const GraphQL = dynamic(() => import('ui/graphQL/GraphQL'), {
 });
 
 const Page: NextPage = () => {
-
   return (
     <PageNextJs pathname="/graphiql">
       <PageTitle
-        title={ config.meta.seo.enhancedDataEnabled ? `GraphiQL ${ config.chain.name } interface` : 'GraphQL playground' }
+        title={
+          config.meta.seo.enhancedDataEnabled ?
+            `GraphiQL ${ config.chain.name } interface` :
+            'GraphQL playground'
+        }
       />
       <GraphQL/>
     </PageNextJs>
@@ -26,5 +29,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { graphIQl as getServerSideProps } from 'nextjs/getServerSideProps';

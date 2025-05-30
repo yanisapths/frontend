@@ -5,7 +5,10 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import type { FormFields } from './types';
 import type { SocketMessage } from 'lib/socket/types';
-import type { SmartContract, SmartContractVerificationMethodApi } from 'types/api/contract';
+import type {
+  SmartContract,
+  SmartContractVerificationMethodApi,
+} from 'types/api/contract';
 import type { SmartContractVerificationConfig } from 'types/client/contract';
 
 import { route } from 'nextjs-routes';
@@ -35,7 +38,12 @@ import ContractVerificationStylusGitHubRepo from './methods/ContractVerification
 import ContractVerificationVyperContract from './methods/ContractVerificationVyperContract';
 import ContractVerificationVyperMultiPartFile from './methods/ContractVerificationVyperMultiPartFile';
 import ContractVerificationVyperStandardInput from './methods/ContractVerificationVyperStandardInput';
-import { prepareRequestBody, formatSocketErrors, getDefaultValues, METHOD_LABELS } from './utils';
+import {
+  prepareRequestBody,
+  formatSocketErrors,
+  getDefaultValues,
+  METHOD_LABELS,
+} from './utils';
 
 interface Props {
   method?: SmartContractVerificationMethodApi;
@@ -43,40 +51,73 @@ interface Props {
   hash?: string;
 }
 
-const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Props) => {
+const ContractVerificationForm = ({
+  method: methodFromQuery,
+  config,
+  hash,
+}: Props) => {
   const formApi = useForm<FormFields>({
     mode: 'onBlur',
     defaultValues: getDefaultValues(methodFromQuery, config, hash, []),
   });
-  const { handleSubmit, watch, formState, setError, reset, getFieldState, getValues, clearErrors } = formApi;
+  const {
+    handleSubmit,
+    watch,
+    formState,
+    setError,
+    reset,
+    getFieldState,
+    getValues,
+    clearErrors,
+  } = formApi;
   const submitPromiseResolver = React.useRef<(value: unknown) => void>();
   const methodNameRef = React.useRef<string>();
   const activityToken = React.useRef<string | undefined>();
 
   const apiFetch = useApiFetch();
+<<<<<<< HEAD
   const { trackContract, trackContractConfirm } = useRewardsActivity();
   const onFormSubmit: SubmitHandler<FormFields> = React.useCallback(async(data) => {
     const body = prepareRequestBody(data);
+=======
+  const toast = useToast();
 
-    if (!hash) {
-      try {
-        const response = await apiFetch<'contract', SmartContract>('contract', {
-          pathParams: { hash: data.address.toLowerCase() },
-        });
+  const onFormSubmit: SubmitHandler<FormFields> = React.useCallback(
+    async(data) => {
+      const body = prepareRequestBody(data);
+>>>>>>> new-version
 
-        const isVerifiedContract = 'is_verified' in response && response?.is_verified && !response.is_partially_verified;
-        if (isVerifiedContract) {
-          setError('address', { message: 'Contract has already been verified' });
+      if (!hash) {
+        try {
+          const response = await apiFetch<'contract', SmartContract>(
+            'contract',
+            {
+              pathParams: { hash: data.address.toLowerCase() },
+            },
+          );
+
+          const isVerifiedContract =
+            'is_verified' in response &&
+            response?.is_verified &&
+            !response.is_partially_verified;
+          if (isVerifiedContract) {
+            setError('address', {
+              message: 'Contract has already been verified',
+            });
+            return Promise.resolve();
+          }
+        } catch (error) {
+          const statusCode = getErrorObjStatusCode(error);
+          const message =
+            statusCode === 404 ?
+              'Address is not a smart contract' :
+              'Something went wrong';
+          setError('address', { message });
           return Promise.resolve();
         }
-      } catch (error) {
-        const statusCode = getErrorObjStatusCode(error);
-        const message = statusCode === 404 ? 'Address is not a smart contract' : 'Something went wrong';
-        setError('address', { message });
-        return Promise.resolve();
       }
-    }
 
+<<<<<<< HEAD
     try {
       const activityResponse = await trackContract(data.address);
       activityToken.current = activityResponse?.token;
@@ -95,6 +136,29 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
       submitPromiseResolver.current = resolve;
     });
   }, [ apiFetch, hash, setError, trackContract ]);
+=======
+      try {
+        await apiFetch('contract_verification_via', {
+          pathParams: {
+            method: data.method.value,
+            hash: data.address.toLowerCase(),
+          },
+          fetchParams: {
+            method: 'POST',
+            body,
+          },
+        });
+      } catch (error) {
+        return;
+      }
+
+      return new Promise((resolve) => {
+        submitPromiseResolver.current = resolve;
+      });
+    },
+    [ apiFetch, hash, setError ],
+  );
+>>>>>>> new-version
 
   const handleFormChange = React.useCallback(() => {
     clearErrors('root');
@@ -103,35 +167,63 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
   const address = watch('address');
   const addressState = getFieldState('address');
 
-  const handleNewSocketMessage: SocketMessage.ContractVerification['handler'] = React.useCallback(async(payload) => {
-    if (payload.status === 'error') {
-      const errors = formatSocketErrors(payload.errors);
+  const handleNewSocketMessage: SocketMessage.ContractVerification['handler'] =
+    React.useCallback(
+      async(payload) => {
+        if (payload.status === 'error') {
+          const errors = formatSocketErrors(payload.errors);
 
-      const existingErrors = errors.filter(Boolean).filter(([ field ]) => getValues(field));
-      if (existingErrors.length) {
-        existingErrors.forEach(([ field, error ]) => setError(field, error));
-      } else {
-        const globalErrors = Object.entries(payload.errors).map(([ , value ]) => value.join(', '));
-        const rootError = capitalizeFirstLetter(globalErrors.join('\n\n'));
-        setError('root', { message: rootError });
-      }
+          const existingErrors = errors
+            .filter(Boolean)
+            .filter(([ field ]) => getValues(field));
+          if (existingErrors.length) {
+            existingErrors.forEach(([ field, error ]) => setError(field, error));
+          } else {
+            const globalErrors = Object.entries(payload.errors).map(
+              ([ , value ]) => value.join(', '),
+            );
+            const rootError = capitalizeFirstLetter(globalErrors.join('\n\n'));
+            setError('root', { message: rootError });
+          }
 
-      await delay(100); // have to wait a little bit, otherwise isSubmitting status will not be updated
-      submitPromiseResolver.current?.(null);
-      return;
-    }
+          await delay(100); // have to wait a little bit, otherwise isSubmitting status will not be updated
+          submitPromiseResolver.current?.(null);
+          return;
+        }
 
+<<<<<<< HEAD
     toaster.success({
       title: 'Success',
       description: 'Contract is successfully verified.',
     });
+=======
+        toast({
+          position: 'top-right',
+          title: 'Success',
+          description: 'Contract is successfully verified.',
+          status: 'success',
+          variant: 'subtle',
+          isClosable: true,
+        });
+>>>>>>> new-version
 
-    mixpanel.logEvent(
-      mixpanel.EventTypes.CONTRACT_VERIFICATION,
-      { Status: 'Finished', Method: methodNameRef.current || '' },
-      { send_immediately: true },
+        mixpanel.logEvent(
+          mixpanel.EventTypes.CONTRACT_VERIFICATION,
+          { Status: 'Finished', Method: methodNameRef.current || '' },
+          { send_immediately: true },
+        );
+
+        window.location.assign(
+          route({
+            pathname: '/address/',
+            query: { hash: address, tab: 'contract' },
+          }),
+        );
+      },
+      [ setError, toast, address, getValues ],
     );
 
+<<<<<<< HEAD
     if (activityToken.current) {
       await trackContractConfirm(activityToken.current);
       activityToken.current = undefined;
@@ -140,6 +232,8 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
     window.location.assign(route({ pathname: '/address/[hash]', query: { hash: address, tab: 'contract' } }));
   }, [ setError, address, getValues, trackContractConfirm ]);
 
+=======
+>>>>>>> new-version
   const handleSocketError = React.useCallback(() => {
     if (!formState.isSubmitting) {
       return;
@@ -147,6 +241,7 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
 
     submitPromiseResolver.current?.(null);
 
+<<<<<<< HEAD
     toaster.error({
       title: 'Error',
       description: 'There was an error with socket connection. Try again later.',
@@ -155,6 +250,24 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
   // otherwise it will resubscribe to channel, but we don't want that since in that case we might miss verification result message
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ ]);
+=======
+    const toastId = 'socket-error';
+    !toast.isActive(toastId) &&
+      toast({
+        id: toastId,
+        position: 'top-right',
+        title: 'Error',
+        description:
+          'There was an error with socket connection. Try again later.',
+        status: 'error',
+        variant: 'subtle',
+        isClosable: true,
+      });
+    // callback should not change when form is submitted
+    // otherwise it will resubscribe to channel, but we don't want that since in that case we might miss verification result message
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ toast ]);
+>>>>>>> new-version
 
   const channel = useSocketChannel({
     topic: `addresses:${ address?.toLowerCase() }`,
@@ -170,14 +283,24 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
 
   const methods = React.useMemo(() => {
     return {
-      'flattened-code': <ContractVerificationFlattenSourceCode config={ config }/>,
+      'flattened-code': (
+        <ContractVerificationFlattenSourceCode config={ config }/>
+      ),
       'standard-input': <ContractVerificationStandardInput config={ config }/>,
       sourcify: <ContractVerificationSourcify/>,
       'multi-part': <ContractVerificationMultiPartFile config={ config }/>,
       'vyper-code': <ContractVerificationVyperContract config={ config }/>,
+<<<<<<< HEAD
       'vyper-multi-part': <ContractVerificationVyperMultiPartFile config={ config }/>,
       'vyper-standard-input': <ContractVerificationVyperStandardInput config={ config }/>,
       'solidity-hardhat': <ContractVerificationSolidityHardhat config={ config }/>,
+=======
+      'vyper-multi-part': <ContractVerificationVyperMultiPartFile/>,
+      'vyper-standard-input': <ContractVerificationVyperStandardInput/>,
+      'solidity-hardhat': (
+        <ContractVerificationSolidityHardhat config={ config }/>
+      ),
+>>>>>>> new-version
       'solidity-foundry': <ContractVerificationSolidityFoundry/>,
       'stylus-github-repository': <ContractVerificationStylusGitHubRepo config={ config }/>,
     };
@@ -189,13 +312,18 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
 
   useUpdateEffect(() => {
     if (methodValue) {
-      reset(getDefaultValues(methodValue, config, hash || address, licenseType));
+      reset(
+        getDefaultValues(methodValue, config, hash || address, licenseType),
+      );
 
       const methodName = METHOD_LABELS[methodValue];
-      mixpanel.logEvent(mixpanel.EventTypes.CONTRACT_VERIFICATION, { Status: 'Method selected', Method: methodName });
+      mixpanel.logEvent(mixpanel.EventTypes.CONTRACT_VERIFICATION, {
+        Status: 'Method selected',
+        Method: methodName,
+      });
       methodNameRef.current = methodName;
     }
-  // !!! should run only when method is changed
+    // !!! should run only when method is changed
   }, [ methodValue ]);
 
   return (
@@ -205,14 +333,35 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
         onSubmit={ handleSubmit(onFormSubmit) }
         onChange={ handleFormChange }
       >
-        <Grid as="section" columnGap="30px" rowGap={{ base: 2, lg: 5 }} templateColumns={{ base: '1fr', lg: 'minmax(auto, 680px) minmax(0, 340px)' }}>
+        <Grid
+          as="section"
+          columnGap="30px"
+          rowGap={{ base: 2, lg: 5 }}
+          templateColumns={{
+            base: '1fr',
+            lg: 'minmax(auto, 680px) minmax(0, 340px)',
+          }}
+        >
           { !hash && <ContractVerificationFieldAddress/> }
           <ContractVerificationFieldLicenseType/>
-          <ContractVerificationFieldMethod methods={ config.verification_options }/>
+          <ContractVerificationFieldMethod
+            methods={ config.verification_options }
+          />
         </Grid>
         { content }
+<<<<<<< HEAD
         { formState.errors.root?.message && <Text color="text.error" mt={ 4 } fontSize="sm" whiteSpace="pre-wrap">{ formState.errors.root.message }</Text> }
         { Boolean(method) && methodValue !== 'solidity-hardhat' && methodValue !== 'solidity-foundry' && (
+=======
+        { formState.errors.root?.message && (
+          <Text color="error" mt={ 4 } fontSize="sm" whiteSpace="pre-wrap">
+            { formState.errors.root.message }
+          </Text>
+        ) }
+        { Boolean(method) &&
+          method.value !== 'solidity-hardhat' &&
+          method.value !== 'solidity-foundry' && (
+>>>>>>> new-version
           <Button
             size="md"
             type="submit"

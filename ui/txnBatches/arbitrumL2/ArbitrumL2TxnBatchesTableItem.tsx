@@ -37,8 +37,14 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
       </TableCell>
       <TableCell verticalAlign="middle">
         <HStack gap={ 1 }>
-          <ArbitrumL2TxnBatchStatus status={ item.commitment_transaction.status } isLoading={ isLoading }/>
-          <ArbitrumL2TxnBatchDA dataContainer={ item.batch_data_container } isLoading={ isLoading }/>
+          <ArbitrumL2TxnBatchStatus
+            status={ item.commitment_transaction.status }
+            isLoading={ isLoading }
+          />
+          <ArbitrumL2TxnBatchDA
+            dataContainer={ item.batch_data_container }
+            isLoading={ isLoading }
+          />
         </HStack>
       </TableCell>
       <TableCell verticalAlign="middle">
@@ -46,11 +52,21 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
           number={ item.commitment_transaction.block_number }
           isLoading={ isLoading }
         />
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle">
         <Skeleton loading={ isLoading } display="inline-block">{ item.blocks_count ? item.blocks_count.toLocaleString() : 'N/A' }</Skeleton>
       </TableCell>
       <TableCell pr={ 12 } verticalAlign="middle">
+=======
+      </Td>
+      <Td verticalAlign="middle">
+        <Skeleton isLoaded={ !isLoading } display="inline-block">
+          { item.blocks_count ? item.blocks_count.toLocaleString() : 'N/A' }
+        </Skeleton>
+      </Td>
+      <Td pr={ 12 } verticalAlign="middle">
+>>>>>>> new-version
         <TxEntityL1
           hash={ item.commitment_transaction.hash }
           isLoading={ isLoading }
@@ -64,12 +80,23 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
           isLoading={ isLoading }
           color="text.secondary"
         />
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle">
         <Link
           href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
           loading={ isLoading }
           minW="40px"
+=======
+      </Td>
+      <Td verticalAlign="middle">
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
         >
           { item.transactions_count.toLocaleString() }
         </Link>

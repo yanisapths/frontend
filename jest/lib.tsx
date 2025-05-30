@@ -21,24 +21,26 @@ const PAGE_PROPS = {
 };
 
 const TestApp = ({ children }: { children: React.ReactNode }) => {
-  const [ queryClient ] = React.useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        retry: 0,
-      },
-    },
-  }));
+  const [ queryClient ] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: 0,
+          },
+        },
+      }),
+  );
 
   return (
     <ChakraProvider>
       <QueryClientProvider client={ queryClient }>
+        { /* @ts-ignore */ }
         <AppContextProvider pageProps={ PAGE_PROPS }>
           <ScrollDirectionProvider>
             <GrowthBookProvider>
-              <SocketProvider>
-                { children }
-              </SocketProvider>
+              <SocketProvider>{ children }</SocketProvider>
             </GrowthBookProvider>
           </ScrollDirectionProvider>
         </AppContextProvider>

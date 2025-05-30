@@ -4,7 +4,9 @@ import React from 'react';
 
 import PageNextJs from 'nextjs/PageNextJs';
 
-const Transactions = dynamic(() => import('ui/pages/Transactions'), { ssr: false });
+const Transactions = dynamic(() => import('ui/pages/Transactions'), {
+  ssr: false,
+});
 
 const Page: NextPage = () => {
   return (
@@ -15,5 +17,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { base as getServerSideProps } from 'nextjs/getServerSideProps';

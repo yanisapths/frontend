@@ -17,8 +17,13 @@ interface Props<Pathname extends Route['pathname']> {
   apiData?: PageProps<Pathname>['apiData'];
 }
 
-const PageNextJs = <Pathname extends Route['pathname']>(props: Props<Pathname>) => {
-  const { title, description, opengraph, canonical } = metadata.generate(props, props.apiData);
+const PageNextJs = <Pathname extends Route['pathname']>(
+  props: Props<Pathname>,
+) => {
+  const { title, description, opengraph, canonical } = metadata.generate(
+    props,
+    props.apiData,
+  );
 
   useGetCsrfToken();
   useAdblockDetect();
@@ -29,13 +34,19 @@ const PageNextJs = <Pathname extends Route['pathname']>(props: Props<Pathname>) 
   return (
     <>
       <Head>
-        <title>{ title }</title>
+        <title>
+          { title !== 'undefined | Blockscout' ?
+            title :
+            'ARISE blockchain explorer' }
+        </title>
         <meta name="description" content={ description }/>
         { canonical && <link rel="canonical" href={ canonical }/> }
 
         { /* OG TAGS */ }
         <meta property="og:title" content={ opengraph.title }/>
-        { opengraph.description && <meta property="og:description" content={ opengraph.description }/> }
+        { opengraph.description && (
+          <meta property="og:description" content={ opengraph.description }/>
+        ) }
         <meta property="og:image" content={ opengraph.imageUrl }/>
         <meta property="og:type" content="website"/>
 
@@ -43,7 +54,9 @@ const PageNextJs = <Pathname extends Route['pathname']>(props: Props<Pathname>) 
         <meta name="twitter:card" content="summary_large_image"/>
         <meta property="twitter:domain" content={ config.app.host }/>
         <meta name="twitter:title" content={ opengraph.title }/>
-        { opengraph.description && <meta name="twitter:description" content={ opengraph.description }/> }
+        { opengraph.description && (
+          <meta name="twitter:description" content={ opengraph.description }/>
+        ) }
         <meta property="twitter:image" content={ opengraph.imageUrl }/>
       </Head>
       { props.children }

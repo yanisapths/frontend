@@ -28,18 +28,28 @@ const TokenSelect = () => {
   const queryClient = useQueryClient();
 
   const addressHash = getQueryParamString(router.query.hash);
-  const addressResourceKey = getResourceKey('address', { pathParams: { hash: addressHash } });
+  const addressResourceKey = getResourceKey('address', {
+    pathParams: { hash: addressHash },
+  });
 
-  const addressQueryData = queryClient.getQueryData<Address>(addressResourceKey);
+  const addressQueryData =
+    queryClient.getQueryData<Address>(addressResourceKey);
 
-  const { data, isError, isPending } = useFetchTokens({ hash: addressQueryData?.hash });
-  const tokensResourceKey = getResourceKey('address_tokens', { pathParams: { hash: addressQueryData?.hash }, queryParams: { type: 'ERC-20' } });
+  const { data, isError, isPending } = useFetchTokens({
+    hash: addressQueryData?.hash,
+  });
+  const tokensResourceKey = getResourceKey('address_tokens', {
+    pathParams: { hash: addressQueryData?.hash },
+    queryParams: { type: 'ERC-20' },
+  });
   const tokensIsFetching = useIsFetching({ queryKey: tokensResourceKey });
 
   const handleIconButtonClick = React.useCallback(() => {
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Tokens show all (icon)' });
+    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+      Type: 'Tokens show all (icon)',
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [ ]);
+  }, []);
 
   if (isPending) {
     return (
@@ -57,9 +67,11 @@ const TokenSelect = () => {
 
   return (
     <Flex columnGap={ 3 } mt={{ base: 1, lg: 0 }}>
-      { isMobile ?
-        <TokenSelectMobile data={ data } isLoading={ tokensIsFetching === 1 }/> :
+      { isMobile ? (
+        <TokenSelectMobile data={ data } isLoading={ tokensIsFetching === 1 }/>
+      ) : (
         <TokenSelectDesktop data={ data } isLoading={ tokensIsFetching === 1 }/>
+<<<<<<< HEAD
       }
       <Tooltip content="Show all tokens">
         <Link
@@ -72,6 +84,19 @@ const TokenSelect = () => {
             variant="icon_secondary"
             size="md"
             onClick={ handleIconButtonClick }
+=======
+      ) }
+      <Tooltip label="Show all tokens">
+        <Box>
+          <NextLink
+            href={{
+              pathname: '/address/',
+              query: { hash: addressHash, tab: 'tokens' },
+            }}
+            passHref
+            legacyBehavior
+            scroll={ false }
+>>>>>>> new-version
           >
             <IconSvg name="wallet"/>
           </IconButton>

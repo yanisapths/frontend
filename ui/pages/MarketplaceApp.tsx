@@ -27,10 +27,11 @@ import { getAppUrl } from '../marketplace/utils';
 
 const feature = config.features.marketplace;
 
-const IFRAME_SANDBOX_ATTRIBUTE = 'allow-forms allow-orientation-lock ' +
-'allow-pointer-lock allow-popups-to-escape-sandbox ' +
-'allow-same-origin allow-scripts ' +
-'allow-top-navigation-by-user-activation allow-popups';
+const IFRAME_SANDBOX_ATTRIBUTE =
+  'allow-forms allow-orientation-lock ' +
+  'allow-pointer-lock allow-popups-to-escape-sandbox ' +
+  'allow-same-origin allow-scripts ' +
+  'allow-top-navigation-by-user-activation allow-popups';
 
 const IFRAME_ALLOW_ATTRIBUTE = 'clipboard-read; clipboard-write;';
 
@@ -61,8 +62,11 @@ const MarketplaceAppContent = ({ address, data, isPending, appUrl }: Props) => {
       const message = {
         blockscoutColorMode: colorMode,
         blockscoutRootUrl: config.app.baseUrl + route({ pathname: '/' }),
-        blockscoutAddressExplorerUrl: config.app.baseUrl + route({ pathname: '/address/[hash]', query: { hash: '' } }),
-        blockscoutTransactionExplorerUrl: config.app.baseUrl + route({ pathname: '/tx/[hash]', query: { hash: '' } }),
+        blockscoutAddressExplorerUrl:
+          config.app.baseUrl +
+          route({ pathname: '/address/', query: { hash: '' } }),
+        blockscoutTransactionExplorerUrl:
+          config.app.baseUrl + route({ pathname: '/tx/', query: { hash: '' } }),
         blockscoutNetworkName: config.chain.name,
         blockscoutNetworkId: Number(config.chain.id),
         blockscoutNetworkCurrency: config.chain.currency,
@@ -74,16 +78,16 @@ const MarketplaceAppContent = ({ address, data, isPending, appUrl }: Props) => {
   }, [ isFrameLoading, data, colorMode, iframeRef ]);
 
   return (
-    <Center
-      flexGrow={ 1 }
-      mx={{ base: -4, lg: -6 }}
-    >
-      { (isFrameLoading) && (
-        <ContentLoader/>
-      ) }
+    <Center flexGrow={ 1 } mx={{ base: -4, lg: -6 }}>
+      { isFrameLoading && <ContentLoader/> }
 
+<<<<<<< HEAD
       { (data && isReady) && (
         <chakra.iframe
+=======
+      { data && isReady && (
+        <Box
+>>>>>>> new-version
           key={ iframeKey }
           allow={ IFRAME_ALLOW_ATTRIBUTE }
           ref={ iframeRef }
@@ -105,28 +109,42 @@ const MarketplaceApp = () => {
   const apiFetch = useApiFetch();
   const router = useRouter();
   const id = getQueryParamString(router.query.id);
-  const { address, sendTransaction, signMessage, signTypedData } = useMarketplaceWallet(id);
+  const { address, sendTransaction, signMessage, signTypedData } =
+    useMarketplaceWallet(id);
   useAutoConnectWallet();
 
-  const { data: securityReports, isLoading: isSecurityReportsLoading } = useSecurityReports();
+  const { data: securityReports, isLoading: isSecurityReportsLoading } =
+    useSecurityReports();
 
-  const query = useQuery<unknown, ResourceError<unknown>, MarketplaceAppOverview>({
+  const query = useQuery<
+    unknown,
+    ResourceError<unknown>,
+    MarketplaceAppOverview
+  >({
     queryKey: [ 'marketplace-dapps', id ],
     queryFn: async() => {
       if (!feature.isEnabled) {
         return null;
       } else if ('configUrl' in feature) {
-        const result = await fetch<Array<MarketplaceAppOverview>, unknown>(feature.configUrl, undefined, { resource: 'marketplace-dapps' });
+        const result = await fetch<Array<MarketplaceAppOverview>, unknown>(
+          feature.configUrl,
+          undefined,
+          { resource: 'marketplace-dapps' },
+        );
         if (!Array.isArray(result)) {
           throw result;
         }
-        const item = result.find((app: MarketplaceAppOverview) => app.id === id);
+        const item = result.find(
+          (app: MarketplaceAppOverview) => app.id === id,
+        );
         if (!item) {
           throw { status: 404 };
         }
         return item;
       } else {
-        return apiFetch('marketplace_dapp', { pathParams: { chainId: config.chain.id, dappId: id } });
+        return apiFetch('marketplace_dapp', {
+          pathParams: { chainId: config.chain.id, dappId: id },
+        });
       }
     },
     enabled: feature.isEnabled,
@@ -134,12 +152,16 @@ const MarketplaceApp = () => {
   const { data, isPending } = query;
   const { setIsAutoConnectDisabled } = useMarketplaceContext();
 
-  const appUrl = useMemo(() => getAppUrl(data?.url, router), [ data?.url, router ]);
+  const appUrl = useMemo(
+    () => getAppUrl(data?.url, router),
+    [ data?.url, router ],
+  );
 
   useEffect(() => {
     if (data) {
       metadata.update(
-        { pathname: '/apps/[id]', query: { id: data.id } },
+        { pathname: '/apps/id/', query: { id: data.id } },
+        // @ts-ignore
         { app_name: data.title },
       );
       setIsAutoConnectDisabled(!data.internalWallet);
@@ -164,7 +186,12 @@ const MarketplaceApp = () => {
         signMessage={ signMessage }
         signTypedData={ signTypedData }
       >
-        <MarketplaceAppContent address={ address } data={ data } isPending={ isPending } appUrl={ appUrl }/>
+        <MarketplaceAppContent
+          address={ address }
+          data={ data }
+          isPending={ isPending }
+          appUrl={ appUrl }
+        />
       </DappscoutIframeProvider>
     </Flex>
   );

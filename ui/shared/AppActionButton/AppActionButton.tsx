@@ -1,4 +1,14 @@
+<<<<<<< HEAD
 import { Text, chakra } from '@chakra-ui/react';
+=======
+import {
+  Button,
+  Image,
+  Text,
+  useColorModeValue,
+  chakra,
+} from '@chakra-ui/react';
+>>>>>>> new-version
 import React from 'react';
 
 import type { AddressMetadataTagFormatted } from 'types/client/addressMetadata';
@@ -18,14 +28,34 @@ type Props = {
 };
 
 const AppActionButton = ({ data, className, txHash, source }: Props) => {
+<<<<<<< HEAD
   const { appID, textColor, bgColor, appActionButtonText, appLogoURL, appMarketplaceURL } = data;
+=======
+  const defaultTextColor = useColorModeValue('blue.600', 'blue.300');
+  const defaultBg = useColorModeValue('gray.100', 'gray.700');
 
-  const actionURL = appMarketplaceURL?.replace('{chainId}', config.chain.id || '').replace('{txHash}', txHash || '');
+  const {
+    appID,
+    textColor,
+    bgColor,
+    appActionButtonText,
+    appLogoURL,
+    appMarketplaceURL,
+  } = data;
+>>>>>>> new-version
+
+  const actionURL = appMarketplaceURL
+    ?.replace('{chainId}', config.chain.id || '')
+    .replace('{txHash}', txHash || '');
 
   const handleClick = React.useCallback(() => {
     const info = appID || actionURL;
     if (info) {
-      mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Action button', Info: info, Source: source });
+      mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+        Type: 'Action button',
+        Info: info,
+        Source: source,
+      });
     }
   }, [ source, appID, actionURL ]);
 
@@ -55,8 +85,20 @@ const AppActionButton = ({ data, className, txHash, source }: Props) => {
   return (
     <Link
       className={ className }
+<<<<<<< HEAD
       href={ isExternal ? actionURL : route({ pathname: '/apps/[id]', query: { id: appID, action: 'connect', ...(actionURL ? { url: actionURL } : {}) } }) }
       external={ isExternal }
+=======
+      as="a"
+      href={ route({
+        pathname: '/apps/id/',
+        query: {
+          id: appID,
+          action: 'connect',
+          ...(actionURL ? { url: actionURL } : {}),
+        },
+      }) }
+>>>>>>> new-version
       onClick={ handleClick }
       variant="underlaid"
       iconColor={ textColor }

@@ -43,6 +43,7 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
           isLoading={ isLoading }
           color="text.secondary"
         />
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle">
         <Link
@@ -50,6 +51,16 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
           minW="40px"
           my={ 1 }
           loading={ isLoading }
+=======
+      </Td>
+      <Td verticalAlign="middle">
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
         >
           { item.transactions_count }
         </Link>
@@ -63,9 +74,17 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
             truncation="constant_long"
             noIcon
           />
+<<<<<<< HEAD
         ) : <Text>Pending</Text> }
       </TableCell>
       <TableCell pr={ 12 } verticalAlign="middle">
+=======
+        ) : (
+          <Text>Pending</Text>
+        ) }
+      </Td>
+      <Td pr={ 12 } verticalAlign="middle">
+>>>>>>> new-version
         { item.sequence_transaction_hash ? (
           <TxEntityL1
             isLoading={ isLoading }
@@ -74,9 +93,17 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
             truncation="constant_long"
             noIcon
           />
+<<<<<<< HEAD
         ) : <Text>Pending</Text> }
       </TableCell>
     </TableRow>
+=======
+        ) : (
+          <Text>Pending</Text>
+        ) }
+      </Td>
+    </Tr>
+>>>>>>> new-version
   );
 };
 

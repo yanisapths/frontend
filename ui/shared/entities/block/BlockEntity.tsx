@@ -7,32 +7,29 @@ import * as EntityBase from 'ui/shared/entities/base/components';
 
 import { distributeEntityProps } from '../base/utils';
 
-type LinkProps = EntityBase.LinkBaseProps & Partial<Pick<EntityProps, 'hash' | 'number'>>;
+type LinkProps = EntityBase.LinkBaseProps &
+  Partial<Pick<EntityProps, 'hash' | 'number'>>;
 
 const Link = chakra((props: LinkProps) => {
   const heightOrHash = props.hash ?? String(props.number);
-  const defaultHref = route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash } });
+  const defaultHref = route({
+    pathname: '/block',
+    query: { height_or_hash: heightOrHash },
+  });
 
   return (
-    <EntityBase.Link
-      { ...props }
-      href={ props.href ?? defaultHref }
-    >
+    <EntityBase.Link { ...props } href={ props.href ?? defaultHref }>
       { props.children }
     </EntityBase.Link>
   );
 });
 
 const Icon = (props: EntityBase.IconBaseProps) => {
-  return (
-    <EntityBase.Icon
-      { ...props }
-      name={ props.name ?? 'block_slim' }
-    />
-  );
+  return <EntityBase.Icon { ...props } name={ props.name ?? 'block_slim' }/>;
 };
 
-type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<EntityProps, 'number'>;
+type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> &
+  Pick<EntityProps, 'number'>;
 
 const Content = chakra((props: ContentProps) => {
   return (
@@ -66,9 +63,4 @@ const BlockEntity = (props: EntityProps) => {
 
 export default React.memo(chakra(BlockEntity));
 
-export {
-  Container,
-  Link,
-  Icon,
-  Content,
-};
+export { Container, Link, Icon, Content };

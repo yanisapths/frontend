@@ -1,4 +1,17 @@
+<<<<<<< HEAD
 import { Box, Center, Flex, Grid } from '@chakra-ui/react';
+=======
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  useColorModeValue,
+  Grid,
+  Button,
+} from '@chakra-ui/react';
+>>>>>>> new-version
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -43,12 +56,17 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
     if (!data?.result?.EstimateTimeInSec) {
       return;
     }
-    const fileBlob = createIcsFileBlob({ blockHeight: height, date: dayjs().add(Number(data.result.EstimateTimeInSec), 's') });
+    const fileBlob = createIcsFileBlob({
+      blockHeight: height,
+      date: dayjs().add(Number(data.result.EstimateTimeInSec), 's'),
+    });
     downloadBlob(fileBlob, `Block #${ height } creation event.ics`);
   }, [ data?.result?.EstimateTimeInSec, height ]);
 
   const handleTimerFinish = React.useCallback(() => {
-    window.location.assign(route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: height } }));
+    window.location.assign(
+      route({ pathname: '/block', query: { height_or_hash: height } }),
+    );
   }, [ height ]);
 
   React.useEffect(() => {
@@ -62,14 +80,32 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
   }
 
   if (isPending || !data?.result) {
-    return <Center h="100%"><ContentLoader/></Center>;
+    return (
+      <Center h="100%">
+        <ContentLoader/>
+      </Center>
+    );
   }
 
   return (
     <Center h="100%" alignItems={{ base: 'flex-start', lg: 'center' }}>
-      <Flex flexDir="column" w="fit-content" maxW={{ base: '100%', lg: '700px', xl: '1000px' }}>
-        <Flex columnGap={ 8 } alignItems="flex-start" justifyContent={{ base: 'space-between', lg: undefined }} w="100%">
-          <Box maxW={{ base: 'calc(100% - 65px - 32px)', lg: 'calc(100% - 125px - 32px)' }}>
+      <Flex
+        flexDir="column"
+        w="fit-content"
+        maxW={{ base: '100%', lg: '700px', xl: '1000px' }}
+      >
+        <Flex
+          columnGap={ 8 }
+          alignItems="flex-start"
+          justifyContent={{ base: 'space-between', lg: undefined }}
+          w="100%"
+        >
+          <Box
+            maxW={{
+              base: 'calc(100% - 65px - 32px)',
+              lg: 'calc(100% - 125px - 32px)',
+            }}
+          >
             <Heading
               level="1"
             >
@@ -77,7 +113,11 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
             </Heading>
             <Box mt={ 2 } color="text.secondary">
               <Box fontWeight={ 600 }>Estimated target date</Box>
-              <Box>{ dayjs().add(Number(data.result.EstimateTimeInSec), 's').format('llll') }</Box>
+              <Box>
+                { dayjs()
+                  .add(Number(data.result.EstimateTimeInSec), 's')
+                  .format('llll') }
+              </Box>
             </Box>
             <Flex columnGap={ 2 } mt={ 3 }>
               <Link
@@ -86,9 +126,17 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
                 textStyle="sm"
                 px={ 2 }
                 display="inline-flex"
-                href={ createGoogleCalendarLink({ blockHeight: height, timeFromNow: Number(data.result.EstimateTimeInSec) }) }
+                href={ createGoogleCalendarLink({
+                  blockHeight: height,
+                  timeFromNow: Number(data.result.EstimateTimeInSec),
+                }) }
               >
-                <Image src="/static/google_calendar.svg" alt="Google calendar logo" boxSize={ 5 } mr={ 2 }/>
+                <Image
+                  src="/static/google_calendar.svg"
+                  alt="Google calendar logo"
+                  boxSize={ 5 }
+                  mr={ 2 }
+                />
                 <span>Google</span>
               </Link>
               <Button
@@ -102,7 +150,16 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
                 display="inline-flex"
                 onClick={ handleAddToAppleCalClick }
               >
+<<<<<<< HEAD
                 <Image src="/static/apple_calendar.svg" alt="Apple calendar logo" boxSize={ 5 }/>
+=======
+                <Image
+                  src="/static/apple_calendar.svg"
+                  alt="Apple calendar logo"
+                  boxSize={ 5 }
+                  mr={ 2 }
+                />
+>>>>>>> new-version
                 <span>Apple</span>
               </Button>
             </Flex>
@@ -111,7 +168,11 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
             name="block_slim"
             w={{ base: '65px', lg: '125px' }}
             h={{ base: '75px', lg: '140px' }}
+<<<<<<< HEAD
             color={{ _light: 'gray.300', _dark: 'gray.600' }}
+=======
+            color={ iconColor }
+>>>>>>> new-version
             flexShrink={ 0 }
           />
         </Flex>
@@ -121,9 +182,21 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
             onFinish={ handleTimerFinish }
           />
         ) }
-        <Grid gridTemplateColumns="repeat(2, calc(50% - 4px))" columnGap={ 2 } mt={ 2 }>
-          <StatsWidget label="Remaining blocks" value={ data.result.RemainingBlock } icon="apps_slim"/>
-          <StatsWidget label="Current block" value={ data.result.CurrentBlock } icon="block_slim"/>
+        <Grid
+          gridTemplateColumns="repeat(2, calc(50% - 4px))"
+          columnGap={ 2 }
+          mt={ 2 }
+        >
+          <StatsWidget
+            label="Remaining blocks"
+            value={ data.result.RemainingBlock }
+            icon="apps_slim"
+          />
+          <StatsWidget
+            label="Current block"
+            value={ data.result.CurrentBlock }
+            icon="block_slim"
+          />
         </Grid>
         { !hideCapybaraRunner && <CapybaraRunner/> }
       </Flex>

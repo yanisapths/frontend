@@ -33,6 +33,7 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
           fontWeight={ 600 }
           noIcon
         />
+<<<<<<< HEAD
       </TableCell>
       <TableCell verticalAlign="middle">
         <ScrollL2TxnBatchDA container={ item.data_availability?.batch_data_container } isLoading={ isLoading }/>
@@ -41,6 +42,24 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         <ScrollL2TxnBatchStatus status={ item.confirmation_transaction.hash ? 'Finalized' : 'Committed' } isLoading={ isLoading }/>
       </TableCell>
       <TableCell verticalAlign="middle">
+=======
+      </Td>
+      <Td verticalAlign="middle">
+        <ScrollL2TxnBatchDA
+          container={ item.data_availability?.batch_data_container }
+          isLoading={ isLoading }
+        />
+      </Td>
+      <Td verticalAlign="middle">
+        <ScrollL2TxnBatchStatus
+          status={
+            item.confirmation_transaction.hash ? 'Finalized' : 'Committed'
+          }
+          isLoading={ isLoading }
+        />
+      </Td>
+      <Td verticalAlign="middle">
+>>>>>>> new-version
         <BlockEntityL1
           number={ item.commitment_transaction.block_number }
           isLoading={ isLoading }
@@ -67,15 +86,26 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
             number={ item.confirmation_transaction.block_number }
             isLoading={ isLoading }
           />
+<<<<<<< HEAD
         ) : <Skeleton loading={ isLoading } display="inline-block">Pending</Skeleton> }
       </TableCell>
       <TableCell verticalAlign="middle">
+=======
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
+      </Td>
+      <Td verticalAlign="middle">
+>>>>>>> new-version
         { item.confirmation_transaction.hash ? (
           <TxEntityL1
             hash={ item.confirmation_transaction.hash }
             isLoading={ isLoading }
             truncation="constant_long"
           />
+<<<<<<< HEAD
         ) : <Skeleton loading={ isLoading } display="inline-block">Pending</Skeleton> }
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>
@@ -90,6 +120,34 @@ const TxnBatchesTableItem = ({ item, isLoading }: Props) => {
         <Link
           href={ route({ pathname: '/batches/[number]', query: { number: item.number.toString(), tab: 'txs' } }) }
           loading={ isLoading }
+=======
+        ) : (
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            Pending
+          </Skeleton>
+        ) }
+      </Td>
+      <Td verticalAlign="middle" isNumeric>
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'blocks' },
+          }) }
+          isLoading={ isLoading }
+        >
+          <Skeleton isLoaded={ !isLoading }>
+            { (item.end_block - item.start_block + 1).toLocaleString() }
+          </Skeleton>
+        </LinkInternal>
+      </Td>
+      <Td verticalAlign="middle" isNumeric>
+        <LinkInternal
+          href={ route({
+            pathname: '/batches/number',
+            query: { number: item.number.toString(), tab: 'txs' },
+          }) }
+          isLoading={ isLoading }
+>>>>>>> new-version
         >
           { item.transactions_count.toLocaleString() }
         </Link>

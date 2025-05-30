@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 import { chakra, Flex, Text } from '@chakra-ui/react';
+=======
+import type { As } from '@chakra-ui/react';
+import {
+  Box,
+  chakra,
+  Flex,
+  Image,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Text,
+} from '@chakra-ui/react';
+>>>>>>> new-version
 import React from 'react';
 
 import type * as bens from '@blockscout/bens-types';
@@ -17,13 +32,13 @@ import { distributeEntityProps, getIconProps } from '../base/utils';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'domain'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/name-domains/[name]', query: { name: props.domain } });
+  const defaultHref = route({
+    pathname: '/name-domains/name',
+    query: { name: props.domain },
+  });
 
   return (
-    <EntityBase.Link
-      { ...props }
-      href={ props.href ?? defaultHref }
-    >
+    <EntityBase.Link { ...props } href={ props.href ?? defaultHref }>
       { props.children }
     </EntityBase.Link>
   );
@@ -73,6 +88,7 @@ const Icon = (props: IconProps) => {
     );
 
     return (
+<<<<<<< HEAD
       <Tooltip
         content={ content }
         variant="popover"
@@ -100,15 +116,83 @@ const Icon = (props: IconProps) => {
           fallback={ icon }
         />
       </Tooltip>
+=======
+      <Popover trigger="hover" isLazy placement="bottom-start">
+        <PopoverTrigger>
+          <Box flexShrink={ 0 }>
+            <Image
+              src={ props.protocol.icon_url }
+              boxSize={ styles.boxSize }
+              borderRadius="sm"
+              mr={ 2 }
+              alt={ `${ props.protocol.title } protocol icon` }
+              fallback={ icon }
+              fallbackStrategy={
+                props.protocol.icon_url ? 'onError' : 'beforeLoadOrError'
+              }
+            />
+          </Box>
+        </PopoverTrigger>
+        <Portal>
+          <PopoverContent
+            maxW={{ base: '100vw', lg: '440px' }}
+            minW="250px"
+            w="fit-content"
+          >
+            <PopoverBody display="flex" flexDir="column" rowGap={ 3 }>
+              <Flex alignItems="center">
+                <Image
+                  src={ props.protocol.icon_url }
+                  boxSize={ 5 }
+                  borderRadius="sm"
+                  mr={ 2 }
+                  alt={ `${ props.protocol.title } protocol icon` }
+                  fallback={ icon }
+                  fallbackStrategy={
+                    props.protocol.icon_url ? 'onError' : 'beforeLoadOrError'
+                  }
+                />
+                <div>
+                  <span>{ props.protocol.short_name }</span>
+                  <chakra.span color="text_secondary" whiteSpace="pre">
+                    { ' ' }
+                    { props.protocol.tld_list.map((tld) => `.${ tld }`).join(' ') }
+                  </chakra.span>
+                </div>
+              </Flex>
+              <Text fontSize="sm">{ props.protocol.description }</Text>
+              { props.protocol.docs_url && (
+                <LinkExternal
+                  href={ props.protocol.docs_url }
+                  display="inline-flex"
+                  alignItems="center"
+                  fontSize="sm"
+                >
+                  <IconSvg
+                    name="docs"
+                    boxSize={ 5 }
+                    color="text_secondary"
+                    mr={ 2 }
+                  />
+                  <span>Documentation</span>
+                </LinkExternal>
+              ) }
+            </PopoverBody>
+          </PopoverContent>
+        </Portal>
+      </Popover>
+>>>>>>> new-version
     );
   }
 
   return icon;
 };
 
-type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<EntityProps, 'domain'>;
+type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> &
+  Pick<EntityProps, 'domain'>;
 
 const Content = chakra((props: ContentProps) => {
+<<<<<<< HEAD
   return (
     <EntityBase.Content
       { ...props }
@@ -116,17 +200,16 @@ const Content = chakra((props: ContentProps) => {
       truncation="tail"
     />
   );
+=======
+  return <TruncatedValue isLoading={ props.isLoading } value={ props.domain }/>;
+>>>>>>> new-version
 });
 
-type CopyProps = Omit<EntityBase.CopyBaseProps, 'text'> & Pick<EntityProps, 'domain'>;
+type CopyProps = Omit<EntityBase.CopyBaseProps, 'text'> &
+  Pick<EntityProps, 'domain'>;
 
 const Copy = (props: CopyProps) => {
-  return (
-    <EntityBase.Copy
-      { ...props }
-      text={ props.domain }
-    />
-  );
+  return <EntityBase.Copy { ...props } text={ props.domain }/>;
 };
 
 const Container = EntityBase.Container;
@@ -151,10 +234,4 @@ const EnsEntity = (props: EntityProps) => {
 
 export default React.memo(chakra(EnsEntity));
 
-export {
-  Container,
-  Link,
-  Icon,
-  Content,
-  Copy,
-};
+export { Container, Link, Icon, Content, Copy };

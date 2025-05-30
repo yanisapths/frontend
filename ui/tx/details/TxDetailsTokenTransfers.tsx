@@ -16,14 +16,33 @@ interface Props {
 }
 
 const TOKEN_TRANSFERS_TYPES = [
-  { title: 'Tokens transferred', hint: 'List of tokens transferred in the transaction', type: 'token_transfer' },
-  { title: 'Tokens minted', hint: 'List of tokens minted in the transaction', type: 'token_minting' },
-  { title: 'Tokens burnt', hint: 'List of tokens burnt in the transaction', type: 'token_burning' },
-  { title: 'Tokens created', hint: 'List of tokens created in the transaction', type: 'token_spawning' },
+  {
+    title: 'Tokens transferred',
+    hint: 'List of tokens transferred in the transaction',
+    type: 'token_transfer',
+  },
+  {
+    title: 'Tokens minted',
+    hint: 'List of tokens minted in the transaction',
+    type: 'token_minting',
+  },
+  {
+    title: 'Tokens burnt',
+    hint: 'List of tokens burnt in the transaction',
+    type: 'token_burning',
+  },
+  {
+    title: 'Tokens created',
+    hint: 'List of tokens created in the transaction',
+    type: 'token_spawning',
+  },
 ];
 
 const TxDetailsTokenTransfers = ({ data, txHash, isOverflow }: Props) => {
-  const viewAllUrl = route({ pathname: '/tx/[hash]', query: { hash: txHash, tab: 'token_transfers' } });
+  const viewAllUrl = route({
+    pathname: '/tx/',
+    query: { hash: txHash, tab: 'token_transfers' },
+  });
 
   const transferGroups = TOKEN_TRANSFERS_TYPES.map((group) => ({
     ...group,
@@ -39,12 +58,17 @@ const TxDetailsTokenTransfers = ({ data, txHash, isOverflow }: Props) => {
 
         return (
           <React.Fragment key={ type }>
+<<<<<<< HEAD
             <DetailedInfo.ItemLabel
               hint={ hint }
             >
               { title }
             </DetailedInfo.ItemLabel>
             <DetailedInfo.ItemValue position="relative">
+=======
+            <DetailsInfoItem.Label hint={ hint }>{ title }</DetailsInfoItem.Label>
+            <DetailsInfoItem.Value position="relative">
+>>>>>>> new-version
               <Flex
                 flexDirection="column"
                 alignItems="flex-start"
@@ -52,7 +76,9 @@ const TxDetailsTokenTransfers = ({ data, txHash, isOverflow }: Props) => {
                 w="100%"
                 overflow="hidden"
               >
-                { items.map((item, index) => <TokenTransferSnippet key={ index } data={ item }/>) }
+                { items.map((item, index) => (
+                  <TokenTransferSnippet key={ index } data={ item }/>
+                )) }
               </Flex>
             </DetailedInfo.ItemValue>
           </React.Fragment>
@@ -60,12 +86,26 @@ const TxDetailsTokenTransfers = ({ data, txHash, isOverflow }: Props) => {
       }) }
       { isOverflow && (
         <>
+<<<<<<< HEAD
           <Box hideBelow="lg"><GridItem></GridItem></Box>
           <GridItem fontSize="sm" alignItems="center" display="inline-flex" pl={{ base: '28px', lg: 0 }}>
             <IconSvg name="token" boxSize={ 6 }/>
             <Link href={ viewAllUrl }>
               View all
             </Link>
+=======
+          <Show above="lg" ssr={ false }>
+            <GridItem></GridItem>
+          </Show>
+          <GridItem
+            fontSize="sm"
+            alignItems="center"
+            display="inline-flex"
+            pl={{ base: '28px', lg: 0 }}
+          >
+            <IconSvg name="token" boxSize={ 6 }/>
+            <LinkInternal href={ viewAllUrl }>View all</LinkInternal>
+>>>>>>> new-version
           </GridItem>
         </>
       ) }

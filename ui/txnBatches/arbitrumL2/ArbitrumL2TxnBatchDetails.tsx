@@ -35,16 +35,22 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
 
   const { data, isPlaceholderData, isError, error } = query;
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
-    const increment = direction === 'next' ? +1 : -1;
-    const nextId = String(data.number + increment);
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.number + increment);
 
-    router.push({ pathname: '/batches/[number]', query: { number: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push(
+        { pathname: '/batches/number', query: { number: nextId } },
+        undefined,
+      );
+    },
+    [ data, router ],
+  );
 
   if (isError) {
     if (isCustomAppError(error)) {
@@ -64,7 +70,10 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 3, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(min-content, 200px) minmax(0, 1fr)' }}
+      templateColumns={{
+        base: 'minmax(0, 1fr)',
+        lg: 'minmax(min-content, 200px) minmax(0, 1fr)',
+      }}
       overflow="hidden"
     >
       <DetailedInfo.ItemLabel
@@ -72,11 +81,17 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
         hint="Batch number indicates the length of batches produced by grouping L2 blocks to be proven on L1"
       >
         Txn batch number
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Skeleton loading={ isPlaceholderData }>
           { data.number }
         </Skeleton>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.number }</Skeleton>
+>>>>>>> new-version
         <PrevNext
           ml={ 6 }
           onClick={ handlePrevNextClick }
@@ -92,6 +107,7 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
         hint="Date and time at which batch is submitted to L1"
       >
         Timestamp
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         { data.commitment_transaction.timestamp ?
@@ -99,30 +115,76 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
           'Undefined'
         }
       </DetailedInfo.ItemValue>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        { data.commitment_transaction.timestamp ? (
+          <DetailsTimestamp
+            timestamp={ data.commitment_transaction.timestamp }
+            isLoading={ isPlaceholderData }
+          />
+        ) : (
+          'Undefined'
+        ) }
+      </DetailsInfoItem.Value>
+>>>>>>> new-version
 
       <DetailedInfo.ItemLabel
         isLoading={ isPlaceholderData }
         hint="Number of transactions in this batch"
       >
         Transactions
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Link loading={ isPlaceholderData } href={ route({ pathname: '/batches/[number]', query: { number: data.number.toString(), tab: 'txs' } }) }>
           { data.transactions_count.toLocaleString() } transaction{ data.transactions_count === 1 ? '' : 's' }
         </Link>
       </DetailedInfo.ItemValue>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.number.toString(), tab: 'txs' },
+            }) }
+          >
+            { data.transactions_count.toLocaleString() } transaction
+            { data.transactions_count === 1 ? '' : 's' }
+          </LinkInternal>
+        </Skeleton>
+      </DetailsInfoItem.Value>
+>>>>>>> new-version
 
       <DetailedInfo.ItemLabel
         isLoading={ isPlaceholderData }
         hint="Number of L2 blocks in this batch"
       >
         Blocks
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Link loading={ isPlaceholderData } href={ route({ pathname: '/batches/[number]', query: { number: data.number.toString(), tab: 'blocks' } }) }>
           { blocksCount.toLocaleString() } block{ blocksCount === 1 ? '' : 's' }
         </Link>
       </DetailedInfo.ItemValue>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.number.toString(), tab: 'blocks' },
+            }) }
+          >
+            { blocksCount.toLocaleString() } block{ blocksCount === 1 ? '' : 's' }
+          </LinkInternal>
+        </Skeleton>
+      </DetailsInfoItem.Value>
+>>>>>>> new-version
 
       <DetailedInfo.ItemLabel
         isLoading={ isPlaceholderData }
@@ -158,9 +220,19 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
             hint="Where the batch data is stored"
           >
             Batch data container
+<<<<<<< HEAD
           </DetailedInfo.ItemLabel><DetailedInfo.ItemValue>
             <ArbitrumL2TxnBatchDA dataContainer={ data.data_availability.batch_data_container } isLoading={ isPlaceholderData }/>
           </DetailedInfo.ItemValue>
+=======
+          </DetailsInfoItem.Label>
+          <DetailsInfoItem.Value>
+            <ArbitrumL2TxnBatchDA
+              dataContainer={ data.data_availability.batch_data_container }
+              isLoading={ isPlaceholderData }
+            />
+          </DetailsInfoItem.Value>
+>>>>>>> new-version
         </>
       ) }
 
@@ -169,10 +241,17 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
         hint="The hash of the state before the batch"
       >
         Before acc
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue flexWrap="nowrap" >
         <Skeleton loading={ isPlaceholderData } overflow="hidden">
           <HashStringShortenDynamic hash={ data.before_acc_hash }/>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value flexWrap="nowrap">
+        <Skeleton isLoaded={ !isPlaceholderData } overflow="hidden">
+          <HashStringShortenDynamic hash={ data.before_acc }/>
+>>>>>>> new-version
         </Skeleton>
         <CopyToClipboard text={ data.before_acc_hash } isLoading={ isPlaceholderData }/>
       </DetailedInfo.ItemValue>
@@ -190,6 +269,7 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
         <CopyToClipboard text={ data.after_acc_hash } isLoading={ isPlaceholderData }/>
       </DetailedInfo.ItemValue>
 
+<<<<<<< HEAD
       { (data.data_availability.batch_data_container === 'in_anytrust' || data.data_availability.batch_data_container === 'in_celestia') && (
         <CollapsibleDetails
           loading={ isPlaceholderData }
@@ -201,6 +281,54 @@ const ArbitrumL2TxnBatchDetails = ({ query }: Props) => {
 
           { data.data_availability.batch_data_container === 'in_anytrust' && (
             <ArbitrumL2TxnBatchDetailsAnyTrustDA data={ data.data_availability }/>
+=======
+      { (data.data_availability.batch_data_container === 'in_anytrust' ||
+        data.data_availability.batch_data_container === 'in_celestia') && (
+        <>
+          { /* CUT */ }
+          <GridItem colSpan={{ base: undefined, lg: 2 }}>
+            <Element name="BatchDetails__cutLink">
+              <Skeleton
+                isLoaded={ !isPlaceholderData }
+                mt={ 6 }
+                display="inline-block"
+              >
+                <Link
+                  fontSize="sm"
+                  textDecorationLine="underline"
+                  textDecorationStyle="dashed"
+                  onClick={ handleCutClick }
+                >
+                  { isExpanded ?
+                    'Hide data availability info' :
+                    'Show data availability info' }
+                </Link>
+              </Skeleton>
+            </Element>
+          </GridItem>
+
+          { /* ADDITIONAL INFO */ }
+          { isExpanded && !isPlaceholderData && (
+            <>
+              <GridItem
+                colSpan={{ base: undefined, lg: 2 }}
+                mt={{ base: 1, lg: 4 }}
+              />
+
+              { data.data_availability.batch_data_container ===
+                'in_anytrust' && (
+                <ArbitrumL2TxnBatchDetailsAnyTrustDA
+                  data={ data.data_availability }
+                />
+              ) }
+              { data.data_availability.batch_data_container ===
+                'in_celestia' && (
+                <ArbitrumL2TxnBatchDetailsCelestiaDA
+                  data={ data.data_availability }
+                />
+              ) }
+            </>
+>>>>>>> new-version
           ) }
           { data.data_availability.batch_data_container === 'in_celestia' && (
             <ArbitrumL2TxnBatchDetailsCelestiaDA data={ data.data_availability }/>

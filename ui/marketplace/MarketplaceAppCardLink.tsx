@@ -15,11 +15,22 @@ type Props = {
   className?: string;
 };
 
-const MarketplaceAppCardLink = ({ url, external, id, title, onClick, className }: Props) => {
-  const handleClick = React.useCallback((event: MouseEvent) => {
-    onClick?.(event, id);
-  }, [ onClick, id ]);
+const MarketplaceAppCardLink = ({
+  url,
+  external,
+  id,
+  title,
+  onClick,
+  className,
+}: Props) => {
+  const handleClick = React.useCallback(
+    (event: MouseEvent) => {
+      onClick?.(event, id);
+    },
+    [ onClick, id ],
+  );
 
+<<<<<<< HEAD
   return (
     <LinkOverlay
       href={ external ? url : route({ pathname: '/apps/[id]', query: { id } }) }
@@ -30,6 +41,27 @@ const MarketplaceAppCardLink = ({ url, external, id, title, onClick, className }
     >
       { title }
     </LinkOverlay>
+=======
+  return external ? (
+    <LinkOverlay
+      href={ url }
+      isExternal={ true }
+      marginRight={ 2 }
+      className={ className }
+    >
+      { title }
+    </LinkOverlay>
+  ) : (
+    <NextLink
+      href={{ pathname: '/apps/id/', query: { id } }}
+      passHref
+      legacyBehavior
+    >
+      <LinkOverlay onClick={ handleClick } marginRight={ 2 } className={ className }>
+        { title }
+      </LinkOverlay>
+    </NextLink>
+>>>>>>> new-version
   );
 };
 

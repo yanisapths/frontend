@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { createListCollection, Flex, Text } from '@chakra-ui/react';
+=======
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, Flex, Link, Text } from '@chakra-ui/react';
+>>>>>>> new-version
 import type { NextRouter } from 'next/router';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -11,7 +16,11 @@ import config from 'configs/app';
 import { useAppContext } from 'lib/contexts/app';
 import throwOnResourceLoadError from 'lib/errors/throwOnResourceLoadError';
 import useIsMobile from 'lib/hooks/useIsMobile';
+<<<<<<< HEAD
 import * as metadata from 'lib/metadata';
+=======
+import isBrowser from 'lib/isBrowser';
+>>>>>>> new-version
 import * as mixpanel from 'lib/mixpanel/index';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { Button } from 'toolkit/chakra/button';
@@ -47,10 +56,17 @@ const getIntervalByResolution = (resolution: Resolution): StatsIntervalIds => {
   }
 };
 
-const getIntervalFromQuery = (router: NextRouter): StatsIntervalIds | undefined => {
+const getIntervalFromQuery = (
+  router: NextRouter,
+): StatsIntervalIds | undefined => {
   const intervalFromQuery = getQueryParamString(router.query.interval);
 
-  if (!intervalFromQuery || !Object.values(StatsIntervalId).includes(intervalFromQuery as StatsIntervalIds)) {
+  if (
+    !intervalFromQuery ||
+    !Object.values(StatsIntervalId).includes(
+      intervalFromQuery as StatsIntervalIds,
+    )
+  ) {
     return undefined;
   }
 
@@ -60,7 +76,10 @@ const getIntervalFromQuery = (router: NextRouter): StatsIntervalIds | undefined 
 const getResolutionFromQuery = (router: NextRouter) => {
   const resolutionFromQuery = getQueryParamString(router.query.resolution);
 
-  if (!resolutionFromQuery || !Resolution[resolutionFromQuery as keyof typeof Resolution]) {
+  if (
+    !resolutionFromQuery ||
+    !Resolution[resolutionFromQuery as keyof typeof Resolution]
+  ) {
     return DEFAULT_RESOLUTION;
   }
 
@@ -73,8 +92,11 @@ const Chart = () => {
   const intervalFromQuery = getIntervalFromQuery(router);
   const resolutionFromQuery = getResolutionFromQuery(router);
   const defaultResolution = resolutionFromQuery || DEFAULT_RESOLUTION;
-  const [ intervalState, setIntervalState ] = React.useState<StatsIntervalIds | undefined>(intervalFromQuery);
-  const [ resolution, setResolution ] = React.useState<Resolution>(defaultResolution);
+  const [ intervalState, setIntervalState ] = React.useState<
+    StatsIntervalIds | undefined
+  >(intervalFromQuery);
+  const [ resolution, setResolution ] =
+    React.useState<Resolution>(defaultResolution);
   const { zoomRange, handleZoom, handleZoomReset } = useZoom();
 
   const interval = intervalState || getIntervalByResolution(resolution);
@@ -86,7 +108,8 @@ const Chart = () => {
 
   const appProps = useAppContext();
   const backLink = React.useMemo(() => {
-    const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/stats');
+    const hasGoBackLink =
+      appProps.referrer && appProps.referrer.includes('/stats');
 
     if (!hasGoBackLink) {
       return;
@@ -98,6 +121,7 @@ const Chart = () => {
     };
   }, [ appProps.referrer ]);
 
+<<<<<<< HEAD
   const onIntervalChange = React.useCallback((interval: StatsIntervalIds) => {
     setIntervalState(interval);
     router.push(
@@ -115,11 +139,37 @@ const Chart = () => {
     router.push({
       pathname: router.pathname,
       query: { ...router.query, resolution: value[0] },
+=======
+  const onIntervalChange = React.useCallback(
+    (interval: StatsIntervalIds) => {
+      setIntervalState(interval);
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, interval },
+        },
+        undefined,
+        { shallow: true },
+      );
+>>>>>>> new-version
     },
-    undefined,
-    { shallow: true },
-    );
-  }, [ setResolution, router ]);
+    [ setIntervalState, router ],
+  );
+
+  const onResolutionChange = React.useCallback(
+    (resolution: Resolution) => {
+      setResolution(resolution);
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, resolution },
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [ setResolution, router ],
+  );
 
   const handleReset = React.useCallback(() => {
     handleZoomReset();
@@ -128,14 +178,11 @@ const Chart = () => {
 
   const { items, info, lineQuery } = useChartQuery(id, resolution, interval);
 
-  React.useEffect(() => {
-    if (info && !config.meta.seo.enhancedDataEnabled) {
-      metadata.update({ pathname: '/stats/[id]', query: { id } }, info);
-    }
-  }, [ info, id ]);
-
   const onShare = React.useCallback(async() => {
-    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, { Type: 'Share chart', Info: id });
+    mixpanel.logEvent(mixpanel.EventTypes.PAGE_WIDGET, {
+      Type: 'Share chart',
+      Info: id,
+    });
     try {
       await window.navigator.share({
         title: info?.title,
@@ -147,7 +194,11 @@ const Chart = () => {
 
   if (lineQuery.isError) {
     if (isCustomAppError(lineQuery.error)) {
-      throwOnResourceLoadError({ resource: 'stats_line', error: lineQuery.error, isError: true });
+      throwOnResourceLoadError({
+        resource: 'stats_line',
+        error: lineQuery.error,
+        isError: true,
+      });
     }
   }
 
@@ -170,11 +221,17 @@ const Chart = () => {
 
   const resolutionCollection = React.useMemo(() => {
     const resolutions = lineQuery.data?.info?.resolutions || [];
+<<<<<<< HEAD
     const items = STATS_RESOLUTIONS
       .filter((resolution) => resolutions.includes(resolution.id))
       .map((resolution) => ({ value: resolution.id, label: resolution.title }));
 
     return createListCollection<SelectOption>({ items });
+=======
+    return STATS_RESOLUTIONS.filter((resolution) =>
+      resolutions.includes(resolution.id),
+    ).map((resolution) => ({ value: resolution.id, label: resolution.title }));
+>>>>>>> new-version
   }, [ lineQuery.data?.info?.resolutions ]);
 
   return (
@@ -191,12 +248,15 @@ const Chart = () => {
         <Flex alignItems="center" gap={{ base: 3, lg: 6 }} maxW="100%">
           <Flex alignItems="center" gap={ 3 }>
             { !isMobile && <Text>Period</Text> }
-            <ChartIntervalSelect interval={ interval } onIntervalChange={ onIntervalChange }/>
+            <ChartIntervalSelect
+              interval={ interval }
+              onIntervalChange={ onIntervalChange }
+            />
           </Flex>
-          { (
-            (info?.resolutions && info?.resolutions.length > 1) ||
-            (!info && lineQuery.data?.info?.resolutions && lineQuery.data?.info?.resolutions.length > 1)
-          ) && (
+          { ((info?.resolutions && info?.resolutions.length > 1) ||
+            (!info &&
+              lineQuery.data?.info?.resolutions &&
+              lineQuery.data?.info?.resolutions.length > 1)) && (
             <Flex alignItems="center" gap={ 3 }>
               <Skeleton loading={ isInfoLoading }>
                 { isMobile ? 'Res.' : 'Resolution' }
@@ -211,9 +271,14 @@ const Chart = () => {
               />
             </Flex>
           ) }
+<<<<<<< HEAD
           { (Boolean(zoomRange)) && (
             <Button
               variant="link"
+=======
+          { Boolean(zoomRange) && (
+            <Link
+>>>>>>> new-version
               onClick={ handleReset }
               display="flex"
               alignItems="center"
@@ -226,10 +291,12 @@ const Chart = () => {
         </Flex>
         <Flex alignItems="center" gap={ 3 }>
           { /* TS thinks window.navigator.share can't be undefined, but it can */ }
-          { /* eslint-disable-next-line @typescript-eslint/no-explicit-any */ }
-          { !isMobile && (isInBrowser && ((window.navigator.share as any) ?
-            shareButton :
-            (
+          { }
+          { !isMobile &&
+            isInBrowser &&
+            ((window.navigator.share as any) ? (
+              shareButton
+            ) : (
               <CopyToClipboard
                 text={ config.app.baseUrl + router.asPath }
                 type="link"
@@ -238,8 +305,7 @@ const Chart = () => {
                 variant="icon_secondary"
                 size="md"
               />
-            )
-          )) }
+            )) }
           { (hasItems || lineQuery.isPlaceholderData) && (
             <ChartMenu
               items={ items }
@@ -256,13 +322,7 @@ const Chart = () => {
           ) }
         </Flex>
       </Flex>
-      <Flex
-        ref={ ref }
-        flexGrow={ 1 }
-        h="50vh"
-        mt={ 3 }
-        position="relative"
-      >
+      <Flex ref={ ref } flexGrow={ 1 } h="50vh" mt={ 3 } position="relative">
         <ChartWidgetContent
           isError={ lineQuery.isError }
           items={ items }

@@ -18,21 +18,43 @@ test.describe.configure({ mode: 'serial' });
 test.beforeEach(async({ mockApiResponse, mockAssetResponse, mockTextAd }) => {
   await mockApiResponse('token', tokenMock.tokenInfo, { pathParams: { hash } });
   await mockApiResponse('address', addressMock.token, { pathParams: { hash } });
-  await mockApiResponse('token_instance', tokenInstanceMock.unique, { pathParams: { hash, id } });
-  await mockApiResponse('token_instance_transfers', { items: [], next_page_params: null }, { pathParams: { hash, id } });
-  await mockApiResponse('token_instance_transfers_count', { transfers_count: 420 }, { pathParams: { hash, id } });
+  await mockApiResponse('token_instance', tokenInstanceMock.unique, {
+    pathParams: { hash, id },
+  });
+  await mockApiResponse(
+    'token_instance_transfers',
+    { items: [], next_page_params: null },
+    { pathParams: { hash, id } },
+  );
+  await mockApiResponse(
+    'token_instance_transfers_count',
+    { transfers_count: 420 },
+    { pathParams: { hash, id } },
+  );
   await mockTextAd();
   for (const marketplace of config.UI.views.nft.marketplaces) {
-    await mockAssetResponse(marketplace.logo_url, './playwright/mocks/image_svg.svg');
+    await mockAssetResponse(
+      marketplace.logo_url,
+      './playwright/mocks/image_svg.svg',
+    );
   }
-  await mockAssetResponse(tokenInstanceMock.base.image_url as string, './playwright/mocks/image_md.jpg');
+  await mockAssetResponse(
+    tokenInstanceMock.base.image_url as string,
+    './playwright/mocks/image_md.jpg',
+  );
 });
 
-test('metadata update', async({ render, page, createSocket, mockApiResponse, mockAssetResponse }) => {
+test('metadata update', async({
+  render,
+  page,
+  createSocket,
+  mockApiResponse,
+  mockAssetResponse,
+}) => {
   const hooksConfig = {
     router: {
       query: { hash, id, tab: 'metadata' },
-      pathname: '/token/[hash]/instance/[id]',
+      pathname: '/token/instance',
     },
   };
   const newMetadata = {
@@ -47,10 +69,19 @@ test('metadata update', async({ render, page, createSocket, mockApiResponse, moc
     name: 'Carmelo Anthony',
     description: 'Updated description',
   };
-  await mockApiResponse('token_instance_refresh_metadata', {} as never, { pathParams: { hash, id } });
-  await mockAssetResponse(newMetadata.image_url, './playwright/mocks/image_long.jpg');
+  await mockApiResponse('token_instance_refresh_metadata', {} as never, {
+    pathParams: { hash, id },
+  });
+  await mockAssetResponse(
+    newMetadata.image_url,
+    './playwright/mocks/image_long.jpg',
+  );
 
-  const component = await render(<TokenInstance/>, { hooksConfig }, { withSocket: true });
+  const component = await render(
+    <TokenInstance/>,
+    { hooksConfig },
+    { withSocket: true },
+  );
   const socket = await createSocket();
 
   // take a screenshot of initial state
@@ -64,11 +95,16 @@ test('metadata update', async({ render, page, createSocket, mockApiResponse, moc
   await page.getByRole('menuitem', { name: 'Refresh metadata' }).click();
 
   // join socket channel
-  const channel = await socketServer.joinChannel(socket, `token_instances:${ hash.toLowerCase() }`);
+  const channel = await socketServer.joinChannel(
+    socket,
+    `token_instances:${ hash.toLowerCase() }`,
+  );
 
   // check that button is disabled
   await page.getByLabel('Address menu').click();
-  await expect(page.getByRole('menuitem', { name: 'Refresh metadata' })).toBeDisabled();
+  await expect(
+    page.getByRole('menuitem', { name: 'Refresh metadata' }),
+  ).toBeDisabled();
   await page.getByLabel('Address menu').click();
 
   // take a screenshot of loading state
@@ -101,11 +137,15 @@ test('metadata update failed', async({ render, page }) => {
   const hooksConfig = {
     router: {
       query: { hash, id, tab: 'metadata' },
-      pathname: '/token/[hash]/instance/[id]',
+      pathname: '/token/instance',
     },
   };
 
-  const component = await render(<TokenInstance/>, { hooksConfig }, { withSocket: true });
+  const component = await render(
+    <TokenInstance/>,
+    { hooksConfig },
+    { withSocket: true },
+  );
 
   // open the menu, click the button and submit form
   await page.getByLabel('Address menu').click();
@@ -113,7 +153,9 @@ test('metadata update failed', async({ render, page }) => {
 
   // check that button is not disabled
   await page.getByLabel('Address menu').click();
-  await expect(page.getByRole('menuitem', { name: 'Refresh metadata' })).toBeEnabled();
+  await expect(
+    page.getByRole('menuitem', { name: 'Refresh metadata' }),
+  ).toBeEnabled();
   await page.getByLabel('Address menu').click();
 
   // take a screenshot of error state

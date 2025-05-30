@@ -20,6 +20,7 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
 
   if (!blockQuery.data.celo.is_epoch_block) {
     const celoConfig = config.features.celo;
+<<<<<<< HEAD
     const epochBlockNumber = celoConfig.isEnabled && celoConfig.L2UpgradeBlock && blockQuery.data.height <= celoConfig.L2UpgradeBlock ?
       blockQuery.data.celo.epoch_number * celoConfig.BLOCKS_PER_EPOCH :
       undefined;
@@ -28,6 +29,36 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
         <Tag variant="clickable">Epoch #{ blockQuery.data.celo.epoch_number }</Tag>
       </Link>
     ) : <Tag>Epoch #{ blockQuery.data.celo.epoch_number }</Tag>;
+=======
+    const epochBlockNumber =
+      celoConfig.isEnabled &&
+      celoConfig.L2UpgradeBlock &&
+      blockQuery.data.height <= celoConfig.L2UpgradeBlock ?
+        blockQuery.data.celo.epoch_number * celoConfig.BLOCKS_PER_EPOCH :
+        undefined;
+    const tag = (
+      <Tag
+        colorScheme={ epochBlockNumber ? 'gray-blue' : 'gray' }
+        onClick={ epochBlockNumber ? undefined : onToggle }
+        onMouseEnter={ onOpen }
+        onMouseLeave={ onClose }
+      >
+        Epoch #{ blockQuery.data.celo.epoch_number }
+      </Tag>
+    );
+    const content = epochBlockNumber ? (
+      <LinkInternal
+        href={ route({
+          pathname: '/block',
+          query: { height_or_hash: String(epochBlockNumber) },
+        }) }
+      >
+        { tag }
+      </LinkInternal>
+    ) : (
+      tag
+    );
+>>>>>>> new-version
 
     return (
       <Tooltip
@@ -44,7 +75,19 @@ const BlockCeloEpochTag = ({ blockQuery }: Props) => {
       key="epoch-tag"
       content="Displays the epoch finalized by this block"
     >
+<<<<<<< HEAD
       <Tag bgColor="celo" color="blackAlpha.800" > Finalized epoch #{ blockQuery.data.celo.epoch_number } </Tag>
+=======
+      <Tag
+        bgColor="celo"
+        color="blackAlpha.800"
+        onClick={ onToggle }
+        onMouseEnter={ onOpen }
+        onMouseLeave={ onClose }
+      >
+        Finalized epoch #{ blockQuery.data.celo.epoch_number }
+      </Tag>
+>>>>>>> new-version
     </Tooltip>
   );
 };

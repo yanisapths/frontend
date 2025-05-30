@@ -31,16 +31,27 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
 
   const { data, isError, error, isPlaceholderData } = query;
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
+<<<<<<< HEAD
     const increment = direction === 'next' ? +1 : -1;
     const nextId = String(data.number + increment);
+=======
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.internal_id + increment);
+>>>>>>> new-version
 
-    router.push({ pathname: '/batches/[number]', query: { number: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push(
+        { pathname: '/batches/number', query: { number: nextId } },
+        undefined,
+      );
+    },
+    [ data, router ],
+  );
 
   if (isError) {
     if (isCustomAppError(error)) {
@@ -60,7 +71,10 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
     <Grid
       columnGap={ 8 }
       rowGap={{ base: 3, lg: 3 }}
-      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(min-content, 200px) minmax(0, 1fr)' }}
+      templateColumns={{
+        base: 'minmax(0, 1fr)',
+        lg: 'minmax(min-content, 200px) minmax(0, 1fr)',
+      }}
       overflow="hidden"
     >
       <DetailedInfo.ItemLabel
@@ -68,11 +82,17 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         hint="Batch ID indicates the length of batches produced by grouping L2 blocks to be proven on L1"
       >
         Batch ID
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Skeleton loading={ isPlaceholderData }>
           { data.number }
         </Skeleton>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.internal_id }</Skeleton>
+>>>>>>> new-version
         <PrevNext
           ml={ 6 }
           onClick={ handlePrevNextClick }
@@ -88,6 +108,7 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         hint="Date and time at which batch is submitted to L1"
       >
         Timestamp
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         { data.l1_timestamp ?
@@ -95,12 +116,26 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
           'Undefined'
         }
       </DetailedInfo.ItemValue>
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        { data.l1_timestamp ? (
+          <DetailsTimestamp
+            timestamp={ data.l1_timestamp }
+            isLoading={ isPlaceholderData }
+          />
+        ) : (
+          'Undefined'
+        ) }
+      </DetailsInfoItem.Value>
+>>>>>>> new-version
 
       <DetailedInfo.ItemLabel
         isLoading={ isPlaceholderData }
         hint="Number of transactions in this batch"
       >
         Transactions
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Skeleton loading={ isPlaceholderData }>
@@ -108,6 +143,21 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
             { data.transactions_count.toLocaleString() } transaction{ data.transactions_count === 1 ? '' : 's' }
           </Link>
           { ' ' }in this batch
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.internal_id.toString(), tab: 'txs' },
+            }) }
+          >
+            { data.transaction_count.toLocaleString() } transaction
+            { data.transaction_count === 1 ? '' : 's' }
+          </LinkInternal>{ ' ' }
+          in this batch
+>>>>>>> new-version
         </Skeleton>
       </DetailedInfo.ItemValue>
 
@@ -116,6 +166,7 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         hint="Number of L2 blocks in this batch"
       >
         Blocks
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue>
         <Skeleton loading={ isPlaceholderData }>
@@ -123,6 +174,20 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
             { blocksCount.toLocaleString() } block{ blocksCount === 1 ? '' : 's' }
           </Link>
           { ' ' }in this batch
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value>
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          <LinkInternal
+            href={ route({
+              pathname: '/batches/number',
+              query: { number: data.internal_id.toString(), tab: 'blocks' },
+            }) }
+          >
+            { blocksCount.toLocaleString() } block{ blocksCount === 1 ? '' : 's' }
+          </LinkInternal>{ ' ' }
+          in this batch
+>>>>>>> new-version
         </Skeleton>
       </DetailedInfo.ItemValue>
 
@@ -131,11 +196,30 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
         hint="Where the batch data is stored"
       >
         Batch data container
+<<<<<<< HEAD
       </DetailedInfo.ItemLabel>
       <DetailedInfo.ItemValue flexDir="column" alignItems="flex-start" rowGap={ 2 }>
         <OptimisticL2TxnBatchDA container={ data.batch_data_container } isLoading={ isPlaceholderData }/>
         { data.batch_data_container === 'in_blob4844' && data.blobs &&
           <OptimisticL2TxnBatchBlobEip4844 blobs={ data.blobs } isLoading={ isPlaceholderData }/> }
+=======
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value
+        flexDir="column"
+        alignItems="flex-start"
+        rowGap={ 2 }
+      >
+        <OptimisticL2TxnBatchDA
+          container={ data.batch_data_container }
+          isLoading={ isPlaceholderData }
+        />
+        { data.batch_data_container === 'in_blob4844' && data.blobs && (
+          <OptimisticL2TxnBatchBlobEip4844
+            blobs={ data.blobs }
+            isLoading={ isPlaceholderData }
+          />
+        ) }
+>>>>>>> new-version
         { data.batch_data_container === 'in_calldata' && (
           <OptimisticL2TxnBatchBlobCallData
             l1TxHashes={ data.l1_transaction_hashes }
@@ -143,9 +227,19 @@ const OptimisticL2TxnBatchDetails = ({ query }: Props) => {
             isLoading={ isPlaceholderData }
           />
         ) }
+<<<<<<< HEAD
         { data.batch_data_container === 'in_celestia' && data.blobs &&
           <OptimisticL2TxnBatchBlobCelestia blobs={ data.blobs } isLoading={ isPlaceholderData }/> }
       </DetailedInfo.ItemValue>
+=======
+        { data.batch_data_container === 'in_celestia' && data.blobs && (
+          <OptimisticL2TxnBatchBlobCelestia
+            blobs={ data.blobs }
+            isLoading={ isPlaceholderData }
+          />
+        ) }
+      </DetailsInfoItem.Value>
+>>>>>>> new-version
     </Grid>
   );
 };

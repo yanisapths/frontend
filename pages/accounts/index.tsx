@@ -15,5 +15,3 @@ const Page: NextPage = () => {
 };
 
 export default Page;
-
-export { accounts as getServerSideProps } from 'nextjs/getServerSideProps';

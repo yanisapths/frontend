@@ -39,19 +39,32 @@ interface Props {
 }
 
 const ItemPrimitive = ({ abiParameter, data, level, hideLabel }: Props) => {
-
   const value = (() => {
     if (abiParameter.type === 'address' && typeof data === 'string') {
       return (
         <>
+<<<<<<< HEAD
           <Link href={ route({ pathname: '/address/[hash]', query: { hash: data } }) }>{ data }</Link>
           <CopyToClipboard text={ data } boxSize={ 4 } verticalAlign="sub"/>
+=======
+          <LinkInternal
+            href={ route({ pathname: '/address/', query: { hash: data } }) }
+          >
+            { data }
+          </LinkInternal>
+          <CopyToClipboard text={ data } size={ 4 } verticalAlign="sub"/>
+>>>>>>> new-version
         </>
       );
     }
 
     const intMatch = matchInt(abiParameter.type);
-    if (intMatch && typeof data === 'bigint' && intMatch.max > INT_TOOLTIP_THRESHOLD && data > INT_TOOLTIP_THRESHOLD) {
+    if (
+      intMatch &&
+      typeof data === 'bigint' &&
+      intMatch.max > INT_TOOLTIP_THRESHOLD &&
+      data > INT_TOOLTIP_THRESHOLD
+    ) {
       const dividedValue = BigNumber(data.toString()).div(WEI);
       return (
         <Tooltip content={ dividedValue.toLocaleString() + ' ETH' }>
